@@ -4,6 +4,7 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
+import { permanentRedirect, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -22,9 +23,17 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     }, 3000);
   }
 
+  const router = useRouter();
+  async function googleLogin(event: React.SyntheticEvent) {
+    //redirect to google auth
+    event.preventDefault();
+    setIsLoading(true);
+    router.push("http://localhost:8080/api/users/login/google");
+  }
+
   return (
     <div className={cn("grid gap-6", className)} {...props}>
-      <form onSubmit={onSubmit}>
+      {/* <form onSubmit={onSubmit}>
         <div className="grid gap-2">
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="email">
@@ -57,14 +66,15 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
             Or continue with
           </span>
         </div>
-      </div>
-      <Button variant="outline" type="button" disabled={isLoading}>
-        {isLoading ? (
-          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-        ) : (
-          <Icons.gitHub className="mr-2 h-4 w-4" />
-        )}{" "}
-        GitHub
+      </div> */}
+      <Button
+        variant="outline"
+        type="button"
+        disabled={isLoading}
+        onClick={googleLogin}
+      >
+        {<Icons.google className="mr-2 h-4 w-4" />}
+        Google
       </Button>
     </div>
   );
