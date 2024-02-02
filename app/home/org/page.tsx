@@ -1,6 +1,17 @@
 import { Button } from "@/components/ui/button";
+import { cookies } from "next/headers";
 
-export default function Org() {
+async function getOrgsData() {
+  const token = cookies().get("token");
+  const res = await fetch("http://localhost:8080/api/org", {
+    headers: { Authorization: "Bearer " + token!.value },
+  });
+  const data = await res.json();
+  return data;
+}
+
+export default async function Org() {
+  const orgs: any[] = await getOrgsData();
   return (
     <>
       <body className="bg-gray-50">
@@ -23,26 +34,6 @@ export default function Org() {
               className="border-2 border-gray-200 rounded py-2 px-4 w-full"
             />
           </div>
-
-          {/* <div className="flex mb-4 space-x-4">
-            <div className="flex-1">
-              <select className="border-2 border-gray-200 rounded py-2 px-4 w-full">
-                <option>Status</option>
-                <option>To do</option>
-                <option>In Progress</option>
-                <option>Done</option>
-              </select>
-            </div>
-            <div className="flex-1">
-              <select className="border-2 border-gray-200 rounded py-2 px-4 w-full">
-                <option>Priority</option>
-                <option>High</option>
-                <option>Medium</option>
-                <option>Low</option>
-              </select>
-            </div>
-          </div> */}
-
           <div className="bg-white shadow overflow-hidden rounded-lg">
             <table className="min-w-full">
               <thead className="bg-gray-100">
@@ -50,38 +41,38 @@ export default function Org() {
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Name
                   </th>
-                  {/* <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Title
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Description
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
-                  </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Priority
-                  </th> */}
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Action
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                <tr>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <Button>TASK-0828</Button>
-                  </td>
-                  {/* <td className="px-6 py-4 whitespace-nowrap">Documentation</td>
-                  <td className="px-6 py-4 whitespace-nowrap">In Progress</td>
-                  <td className="px-6 py-4 whitespace-nowrap">Medium</td> */}
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <a
-                      href="#"
-                      className="text-indigo-600 hover:text-indigo-900"
+              {orgs ? (
+                orgs.map((org) => (
+                  <tbody
+                    key={org.id}
+                    className="bg-white divide-y divide-gray-200"
+                  >
+                    <td key={org.id} className="px-6 py-4 whitespace-nowrap">
+                      <Button>{org.name}</Button>
+                    </td>
+                    <td
+                      key={org.id}
+                      className="px-6 py-4 text-right whitespace-nowrap"
                     >
-                      Edit
-                    </a>
-                  </td>
-                </tr>
-              </tbody>
+                      {org.description}
+                    </td>
+                  </tbody>
+                ))
+              ) : (
+                <tbody className="bg-white divide-y divide-gray-200">
+                  <tr>
+                    <td></td>
+                  </tr>
+                </tbody>
+              )}
             </table>
           </div>
 
