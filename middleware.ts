@@ -3,6 +3,10 @@ import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
   //case logged in and token in url
+
+  const response = NextResponse.next();
+  response.headers.set("Access-Control-Allow-Origin", "*");
+
   const url = request.nextUrl;
   const token = url.searchParams.get("token");
   if (token) {
@@ -19,7 +23,6 @@ export function middleware(request: NextRequest) {
   }
   // case token in cookie
   console.log("yes, token in the cookie ");
-  const response = NextResponse.next();
   return response;
 }
 

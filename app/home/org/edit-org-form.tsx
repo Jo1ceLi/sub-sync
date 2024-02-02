@@ -16,17 +16,17 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Org } from "./edit-org-dialog";
 
-const formSchema = z.object({
+export const formSchema = z.object({
   name: z.string().max(20),
-  description: z.string().max(20),
-  app_id: z.string().min(5).max(5),
-  app_key: z.string().min(64).max(64),
-  partner_key: z.string().min(64).max(64),
-  non_3D_mid: z.string(),
+  description: z.string(),
+  app_id: z.string(), //.min(5).max(5),
+  app_key: z.string(), //.min(64).max(64),
+  partner_key: z.string(), //.min(64).max(64),
+  non_3D_mid: z.string(), //,
   mid_with_3D: z.string(),
 });
 
-export function OrgForm(props: { org: Org }) {
+export function OrgForm(props: { org: Org; token: string }) {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -42,10 +42,29 @@ export function OrgForm(props: { org: Org }) {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    console.log("orgid", props.org.id);
+    const response = await fetch(
+      `http://localhost:8080/api/org/${props.org.id}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({
+          ...values,
+          id: props.org.id,
+          token: props.token,
+        }),
+        headers: {
+          Authorization: "Bearer " + props.token,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    const json = await response.json();
+    console.log("json=", json);
+    // console.log(json);
   }
 
   return (

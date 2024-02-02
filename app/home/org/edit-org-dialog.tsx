@@ -35,7 +35,7 @@ export async function DialogDemo(props: { orgId: string; token: string }) {
           </DialogDescription> */}
         </DialogHeader>
 
-        <OrgForm org={org} />
+        <OrgForm org={org} token={props.token} />
         {/* 
         <DialogFooter>
           <Button type="submit">Save changes</Button>
