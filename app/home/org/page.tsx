@@ -1,5 +1,16 @@
 import { Button } from "@/components/ui/button";
+import { DialogHeader, DialogFooter } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from "@radix-ui/react-dialog";
+import { Label } from "@radix-ui/react-label";
 import { cookies } from "next/headers";
+import { DialogDemo } from "./edit-org-dialog";
 
 async function getOrgsData() {
   const token = cookies().get("token");
@@ -11,6 +22,7 @@ async function getOrgsData() {
 }
 
 export default async function Org() {
+  const token = cookies().get("token")!.value;
   const orgs: any[] = await getOrgsData();
   return (
     <>
@@ -63,6 +75,12 @@ export default async function Org() {
                       className="px-6 py-4 text-right whitespace-nowrap"
                     >
                       {org.description}
+                    </td>
+                    <td
+                      key={org.id}
+                      className="px-6 py-4 text-right whitespace-nowrap"
+                    >
+                      <DialogDemo orgId={org.id} token={token} />
                     </td>
                   </tbody>
                 ))
