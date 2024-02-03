@@ -45,26 +45,17 @@ export function OrgForm(props: { org: Org; token: string }) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log("orgid", props.org.id);
-    const response = await fetch(
-      `http://localhost:8080/api/org/${props.org.id}`,
-      {
-        method: "PATCH",
-        body: JSON.stringify({
-          ...values,
-          id: props.org.id,
-          token: props.token,
-        }),
-        headers: {
-          Authorization: "Bearer " + props.token,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    const json = await response.json();
-    console.log("json=", json);
-    // console.log(json);
+    const res = await fetch(`/home/org/${props.org.id}`, {
+      method: "PATCH",
+      body: JSON.stringify(values),
+      headers: {
+        Authorization: "Bearer " + props.token,
+        "Content-Type": "application/json",
+      },
+    });
+    if (res.ok) {
+      console.log("okokok");
+    }
   }
 
   return (
