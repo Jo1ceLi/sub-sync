@@ -26,41 +26,36 @@ export const formSchema = z.object({
   mid_with_3D: z.string(),
 });
 
-export function OrgForm(props: { org: Org; token: string }) {
+export function OrgForm({
+  org,
+  update,
+}: {
+  org: Org;
+  update: (values: z.infer<typeof formSchema>) => Promise<void>;
+}) {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: props.org.name,
-      description: props.org.description,
-      app_id: props.org.app_id,
-      app_key: props.org.app_key,
-      partner_key: props.org.partner_key,
-      non_3D_mid: props.org.non_3D_mid,
-      mid_with_3D: props.org.mid_with_3D,
+      name: org.name,
+      description: org.description,
+      app_id: org.app_id,
+      app_key: org.app_key,
+      partner_key: org.partner_key,
+      non_3D_mid: org.non_3D_mid,
+      mid_with_3D: org.mid_with_3D,
     },
   });
 
   // 2. Define a submit handler.
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    const res = await fetch(`/home/org/${props.org.id}`, {
-      method: "PATCH",
-      body: JSON.stringify(values),
-      headers: {
-        Authorization: "Bearer " + props.token,
-        "Content-Type": "application/json",
-      },
-    });
-    if (res.ok) {
-      console.log("okokok");
-    }
-  }
+
+  const handleSubmit = async (values: z.infer<typeof formSchema>) => {
+    await update(values);
+  };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-2">
         <FormField
           control={form.control}
           name="name"
