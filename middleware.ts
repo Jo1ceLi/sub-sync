@@ -8,11 +8,11 @@ export function middleware(request: NextRequest) {
   response.headers.set("Access-Control-Allow-Origin", "*");
 
   const url = request.nextUrl;
-  const token = url.searchParams.get("token");
-  if (token) {
+  const tokenInSearchParam = url.searchParams.get("token");
+  if (tokenInSearchParam) {
     url.searchParams.delete("token");
     const response = NextResponse.redirect(url);
-    response.cookies.set("token", token);
+    response.cookies.set("token", tokenInSearchParam);
     return response;
   }
   // case token not in url, nor in cookie
