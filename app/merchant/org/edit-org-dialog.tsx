@@ -41,7 +41,7 @@ export async function OrgDialog(props: { orgId: string; token: string }) {
 
     if (res.ok) {
       console.log("okokok");
-      revalidatePath("/home/org");
+      revalidatePath("/merchant/org");
     }
   };
 
