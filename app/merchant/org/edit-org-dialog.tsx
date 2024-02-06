@@ -2,17 +2,14 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { OrgForm, formSchema } from "./edit-org-form";
+import { EditOrgForm } from "./edit-org-form";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
+import { formSchema } from "./org-form";
 
 async function getOrgById(id: string, token: string) {
   const res = await fetch(`http://localhost:8080/api/org/${id}`, {
@@ -22,7 +19,7 @@ async function getOrgById(id: string, token: string) {
   return data;
 }
 
-export async function OrgDialog(props: { orgId: string; token: string }) {
+export async function EditOrgDialog(props: { orgId: string; token: string }) {
   const org = await getOrgById(props.orgId, props.token);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
@@ -58,7 +55,7 @@ export async function OrgDialog(props: { orgId: string; token: string }) {
           </DialogDescription> */}
         </DialogHeader>
 
-        <OrgForm org={org} update={onSubmit} />
+        <EditOrgForm org={org} update={onSubmit} />
         {/* 
         <DialogFooter>
           <Button type="submit">Save changes</Button>

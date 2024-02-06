@@ -10,7 +10,8 @@ import {
 } from "@radix-ui/react-dialog";
 import { Label } from "@radix-ui/react-label";
 import { cookies } from "next/headers";
-import { OrgDialog } from "./edit-org-dialog";
+import { EditOrgDialog } from "./edit-org-dialog";
+import { CreateOrgDialog } from "./create-org-dialog";
 
 async function getOrgsData() {
   const token = cookies().get("token");
@@ -37,6 +38,8 @@ export default async function Org() {
               perspiciatis quae quia quidem reiciendis rem reprehenderit
               sapiente.
             </p>
+
+            <CreateOrgDialog token={token} />
           </div>
 
           <div className="mb-4">
@@ -80,7 +83,7 @@ export default async function Org() {
                       key={org.id}
                       className="px-6 py-4 text-right whitespace-nowrap"
                     >
-                      <OrgDialog orgId={org.id} token={token} />
+                      <EditOrgDialog orgId={org.id} token={token} />
                     </td>
                   </tbody>
                 ))
