@@ -28,7 +28,7 @@ export function ClientAuthForm({ className, ...props }: UserAuthFormProps) {
     //redirect to google auth
     event.preventDefault();
     setIsLoading(true);
-    router.push("http://localhost:8080/api/users/login/line");
+    router.push("http://localhost:8080/api/auth/login/line");
   }
 
   return (
