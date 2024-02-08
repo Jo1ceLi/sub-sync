@@ -29,9 +29,12 @@ export default async function Home({ params }: { params: { id: string } }) {
     const oid = params["id"];
     const token = cookies().get("token");
     if (oid) {
-      const res = await fetch(`http://localhost:8080/api/client/org/${oid}`, {
-        headers: { Authorization: "Bearer " + token!.value },
-      });
+      const res = await fetch(
+        `${process.env.BACKEND_HOST}/api/client/org/${oid}`,
+        {
+          headers: { Authorization: "Bearer " + token!.value },
+        }
+      );
       return await res.json();
     }
   };
@@ -39,7 +42,7 @@ export default async function Home({ params }: { params: { id: string } }) {
   const getOrgsByClientToken = async () => {
     const token = cookies().get("token");
     if (token) {
-      const res = await fetch(`http://localhost:8080/api/client/org`, {
+      const res = await fetch(`${process.env.BACKEND_HOST}/api/client/org`, {
         headers: { Authorization: "Bearer " + token.value },
       });
       const orgs = (await res.json()) as any[];

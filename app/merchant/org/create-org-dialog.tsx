@@ -19,7 +19,7 @@ export async function CreateOrgDialog(props: { token: string }) {
     console.log("server values", values);
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    const res = await fetch(`http://localhost:8080/api/org`, {
+    const res = await fetch(`${process.env.BACKEND_HOST}/api/org`, {
       method: "POST",
       body: JSON.stringify(values),
       headers: {

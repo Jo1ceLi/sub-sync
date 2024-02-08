@@ -28,7 +28,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     //redirect to google auth
     event.preventDefault();
     setIsLoading(true);
-    router.push("http://localhost:8080/api/auth/login/google");
+    router.push(`${process.env.BACKEND_HOST}/api/auth/login/google`);
   }
 
   return (

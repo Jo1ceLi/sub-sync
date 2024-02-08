@@ -12,7 +12,7 @@ import { revalidatePath } from "next/cache";
 import { formSchema } from "./org-form";
 
 async function getOrgById(id: string, token: string) {
-  const res = await fetch(`http://localhost:8080/api/org/${id}`, {
+  const res = await fetch(`${process.env.BACKEND_HOST}/api/org/${id}`, {
     headers: { Authorization: "Bearer " + token },
   });
   const data = await res.json();
@@ -27,14 +27,17 @@ export async function EditOrgDialog(props: { orgId: string; token: string }) {
     console.log("server values", values);
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    const res = await fetch(`http://localhost:8080/api/org/${props.orgId}`, {
-      method: "PATCH",
-      body: JSON.stringify(values),
-      headers: {
-        Authorization: "Bearer " + props.token,
-        "Content-Type": "application/json",
-      },
-    });
+    const res = await fetch(
+      `${process.env.BACKEND_HOST}/api/org/${props.orgId}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(values),
+        headers: {
+          Authorization: "Bearer " + props.token,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
     if (res.ok) {
       console.log("okokok");

@@ -23,7 +23,7 @@ export function ClientAuthForm({
     event.preventDefault();
     setIsLoading(true);
     router.push(
-      `http://localhost:8080/api/auth/login/line?redirect_url=${props.redirecturl}`
+      `process.env.BACKEND_HOST/api/auth/login/line?redirect_url=${props.redirecturl}`
     );
   }
 

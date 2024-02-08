@@ -15,7 +15,7 @@ import { CreateOrgDialog } from "./create-org-dialog";
 
 async function getOrgsData() {
   const token = cookies().get("token");
-  const res = await fetch("http://localhost:8080/api/org", {
+  const res = await fetch(`${process.env.BACKEND_HOST}/api/org`, {
     headers: { Authorization: "Bearer " + token!.value },
   });
   const data = await res.json();
