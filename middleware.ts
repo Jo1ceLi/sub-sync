@@ -18,9 +18,18 @@ export function middleware(request: NextRequest) {
   // case token not in url, nor in cookie
   const tokenInCookie = request.cookies.get("token");
   const urlStartWithMerchant = request.nextUrl.pathname.startsWith("/merchant");
+  const urlStartWithClient = request.nextUrl.pathname.startsWith("/client");
   if (!tokenInCookie && urlStartWithMerchant === true) {
     console.log("notoken back to home");
     return NextResponse.redirect(new URL("/merchant/login", request.url));
+  } else if (!tokenInCookie && urlStartWithClient) {
+    console.log("client notoken back to login ");
+    const href = request.nextUrl.href;
+    console.log(request.nextUrl);
+    // console.log("path=", p);
+    return NextResponse.redirect(
+      new URL(`/client/login?redirect_url=${href}`, request.url)
+    );
   }
   // case token in cookie
   console.log("yes, token in the cookie ");
@@ -38,6 +47,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * - home (exact match for "home")
      */
-    "/((?!api|_next/static|_next/image|favicon.ico|merchant/login$).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|client/login$|merchant/login$).*)",
   ],
 };

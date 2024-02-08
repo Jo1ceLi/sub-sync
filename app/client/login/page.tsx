@@ -12,7 +12,17 @@ export const metadata: Metadata = {
   description: "Authentication forms built using the components.",
 };
 
-export default function AuthenticationPage() {
+export default function AuthenticationPage({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
+  const getRedirectUrl = () => {
+    const redirectUrl = searchParams["redirect_url"];
+    console.log("redurl=", redirectUrl);
+    return redirectUrl as string;
+  };
+  const redirectUrl = getRedirectUrl();
   return (
     <>
       <div className="md:hidden">
@@ -77,7 +87,7 @@ export default function AuthenticationPage() {
                 Enter your email below to create your account
               </p> */}
             </div>
-            <ClientAuthForm />
+            <ClientAuthForm redirecturl={redirectUrl} />
             <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{" "}
               <Link

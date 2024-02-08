@@ -11,24 +11,20 @@ import { Label } from "@/components/ui/label";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export function ClientAuthForm({ className, ...props }: UserAuthFormProps) {
+export function ClientAuthForm({
+  className,
+  ...props
+}: UserAuthFormProps & { redirecturl: string }) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
-
-  async function onSubmit(event: React.SyntheticEvent) {
-    event.preventDefault();
-    setIsLoading(true);
-
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
-  }
 
   const router = useRouter();
   async function lineLogin(event: React.SyntheticEvent) {
     //redirect to google auth
     event.preventDefault();
     setIsLoading(true);
-    router.push("http://localhost:8080/api/auth/login/line");
+    router.push(
+      `http://localhost:8080/api/auth/login/line?redirect_url=${props.redirecturl}`
+    );
   }
 
   return (

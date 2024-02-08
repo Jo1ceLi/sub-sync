@@ -1,44 +1,57 @@
 import { Button } from "@/registry/new-york/ui/button";
 import { cookies } from "next/headers";
 import Image from "next/image";
-import { JoinButton } from "./join-btn";
+import { JoinButton } from "../../join-btn";
+import { redirect } from "next/navigation";
 
-export default async function Home({
-  searchParams,
-}: {
-  searchParams: { [key: string]: string | string[] | undefined };
-}) {
+export default async function Home({ params }: { params: { id: string } }) {
   const joinAction = async () => {
     "use server";
-    console.log("server action");
     const token = cookies().get("token");
-    console.log("token=", token);
-    const oid = searchParams["oid"];
-    const res = await fetch(
-      `http://localhost:8080/api/client/join?oid=${oid}`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: "Bearer " + token!.value,
-        },
+    const oid = params["id"];
+    if (token && oid) {
+      const res = await fetch(
+        `http://localhost:8080/api/client/join/org/${oid}`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: "Bearer " + token.value,
+          },
+        }
+      );
+      if (res.ok) {
+        redirect(`/client/org/${oid}`);
       }
-    );
-    console.log("json=", await res.json());
+    }
   };
 
   const getOrgById = async () => {
-    console.log("server search param", searchParams);
-    const mid = searchParams["oid"];
+    const oid = params["id"];
     const token = cookies().get("token");
-    if (mid) {
-      const res = await fetch(`http://localhost:8080/api/client/org/${mid}`, {
+    if (oid) {
+      const res = await fetch(`http://localhost:8080/api/client/org/${oid}`, {
         headers: { Authorization: "Bearer " + token!.value },
       });
       return await res.json();
     }
-    //how to get url from server component?
   };
+
+  const getOrgsByClientToken = async () => {
+    const token = cookies().get("token");
+    if (token) {
+      const res = await fetch(`http://localhost:8080/api/client/org`, {
+        headers: { Authorization: "Bearer " + token.value },
+      });
+      const orgs = (await res.json()) as any[];
+      const oid = params.id;
+      if (orgs.some((o: any) => o.id === oid)) {
+        redirect(`/client/org/${oid}`);
+      }
+    }
+  };
+
   const org = await getOrgById();
+  await getOrgsByClientToken();
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
