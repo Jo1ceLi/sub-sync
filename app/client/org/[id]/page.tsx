@@ -1,8 +1,15 @@
 import { cookies } from "next/headers";
 import CreateCard from "../../components/create-card-card";
 import { redirect } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/registry/new-york/ui/button";
 
 interface Card {
   id: string;
@@ -15,7 +22,7 @@ interface Card {
 }
 
 export default async function OrgID({ params }: { params: any }) {
-  const createcardaction = async (prime: string) => {
+  const createcardaction = async (prime: string, alias: string) => {
     "use server";
     const token = cookies().get("token");
     const oid = params["id"];
@@ -25,6 +32,7 @@ export default async function OrgID({ params }: { params: any }) {
         {
           method: "POST",
           body: JSON.stringify({
+            alias: alias,
             prime: prime,
             result_url: {
               frontend_redirect_url: "https://google.com.tw",
@@ -78,15 +86,22 @@ export default async function OrgID({ params }: { params: any }) {
                   <CardTitle>信用卡</CardTitle>
                 </CardHeader>
                 <CardContent className="grid grid-cols-2 gap-4">
-                  <Label className="font-bold">發卡網路</Label>
+                  <Label className="font-bold self-center">卡片別名</Label>
+                  <div className="text-slate-600">
+                    {c.alias === "" ? c.id : c.alias}
+                  </div>
+                  <Label className="font-bold self-center">發卡網路</Label>
                   <div className="text-slate-600">{c.network}</div>
-                  <Label className="font-bold">末四碼</Label>
+                  <Label className="font-bold self-center">末四碼</Label>
                   <div className="text-slate-600">{c.last_four}</div>
-                  <Label className="font-bold">卡種</Label>
+                  <Label className="font-bold self-center">卡種</Label>
                   <div className="text-slate-600"> {c.funding}</div>
-                  <Label className="font-bold">到期年月</Label>
+                  <Label className="font-bold self-center">到期年月</Label>
                   <div className="text-slate-600">{c.expiry}</div>
                 </CardContent>
+                <CardFooter>
+                  <Button className="w-full">刪除</Button>
+                </CardFooter>
               </Card>
             );
           })}

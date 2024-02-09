@@ -8,15 +8,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Button } from "@/registry/new-york/ui/button";
 import { Label } from "@radix-ui/react-label";
 import Script from "next/script";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 
 export default function CreateCard({
   createcardaction,
 }: {
-  createcardaction: (prime: string) => Promise<any>;
+  createcardaction: (prime: string, alias: string) => Promise<any>;
 }) {
   const tappayInit = () => {
     const fields = {
@@ -103,12 +104,14 @@ export default function CreateCard({
         return;
       }
       // alert("get prime 成功，prime: " + result.card.prime);
-      await createcardaction(result.card.prime);
+      await createcardaction(result.card.prime, alias);
 
       // send prime to your server, to pay with Pay by Prime API .
       // Pay By Prime Docs: https://docs.tappaysdk.com/tutorial/zh/back.html#pay-by-prime-api
     });
   };
+
+  const [alias, setAlias] = useState("");
   return (
     <>
       <Script
@@ -124,8 +127,14 @@ export default function CreateCard({
         </CardHeader>
         <CardContent className="grid gap-6">
           <div className="grid gap-1">
-            <Label htmlFor="number">Card number</Label>
+            <Label>Alias</Label>
+            <Input
+              className="border-2 border-black rounded-lg max-h-8 focus-visible:ring-3"
+              placeholder="Alias"
+              onChange={(e) => setAlias(e.target.value)}
+            />
 
+            <Label htmlFor="number">Card number</Label>
             <div
               className="pl-2 border-2 border-black rounded-lg max-h-8 tpfield"
               id="card-number"
@@ -133,7 +142,7 @@ export default function CreateCard({
 
             <Label htmlFor="month">Expires</Label>
             <div
-              className="pl-2 border-2 border-black rounded-lg max-h-8	tpfield"
+              className="pl-2 border-2 border-black rounded-lg max-h-8 tpfield"
               id="card-expiration-date"
             ></div>
 
