@@ -3,10 +3,15 @@ import type { NextRequest } from "next/server";
 
 export function middleware(request: NextRequest) {
   //case logged in and token in url
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-url", request.nextUrl.href);
+  const response = NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
 
-  const response = NextResponse.next();
   response.headers.set("Access-Control-Allow-Origin", "*");
-
   const url = request.nextUrl;
   const tokenInSearchParam = url.searchParams.get("token");
   if (tokenInSearchParam) {

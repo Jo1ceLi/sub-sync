@@ -1,154 +1,42 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@radix-ui/react-label";
-import Script from "next/script";
-import { FormEvent } from "react";
+import { cookies } from "next/headers";
+import CreateCard from "../../components/create-card-card";
+import { redirect } from "next/navigation";
 
 export default function OrgID({ params }: { params: any }) {
-  const tappayInit = () => {
-    const fields = {
-      number: {
-        // css selector
-        element: "#card-number",
-        placeholder: "**** **** **** ****",
-      },
-      expirationDate: {
-        // DOM object
-        element: document.getElementById("card-expiration-date"),
-        placeholder: "MM / YY",
-      },
-      ccv: {
-        element: "#card-ccv",
-        placeholder: "ccv",
-      },
-    };
-    TPDirect.setupSDK(
-      127916,
-      "app_2PmavdqZ17zccOzag9Mgo1ZWDtRqEFYyt0QFQRnufZcF5TlT1HNC4prlBiyG",
-      "sandbox"
-    );
-    TPDirect.card.setup({
-      fields: fields,
-      styles: {
-        // Style all elements
-        input: {
-          color: "gray",
-        },
-        // Styling ccv field
-        "input.ccv": {
-          // 'font-size': '16px'
-        },
-        // Styling expiration-date field
-        "input.expiration-date": {
-          // 'font-size': '16px'
-        },
-        // Styling card-number field
-        "input.card-number": {
-          // 'font-size': '16px'
-        },
-        // style focus state
-        ":focus": {
-          // 'color': 'black'
-        },
-        // style valid state
-        ".valid": {
-          color: "green",
-        },
-        // style invalid state
-        ".invalid": {
-          color: "red",
-        },
-        // Media queries
-        // Note that these apply to the iframe, not the root window.
-        "@media screen and (max-width: 400px)": {
-          input: {
-            color: "orange",
+  const createcardaction = async (prime: string) => {
+    "use server";
+    const token = cookies().get("token");
+    const oid = params["id"];
+    if (token && oid) {
+      const res = await fetch(
+        `${process.env.BACKEND_HOST}/api/client/org/${oid}/card`,
+        {
+          method: "POST",
+          body: JSON.stringify({
+            prime: prime,
+            result_url: {
+              frontend_redirect_url: "https://google.com.tw",
+              go_back_url: "https://google.com.tw",
+            },
+          }),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token.value,
           },
-        },
-      },
-      // 此設定會顯示卡號輸入正確後，會顯示前六後四碼信用卡卡號
-      isMaskCreditCardNumber: true,
-      maskCreditCardNumberRange: {
-        beginIndex: 6,
-        endIndex: 11,
-      },
-    });
-  };
-
-  const getPrime = (e: FormEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    // 取得 TapPay Fields 的 status
-    const tappayStatus = TPDirect.card.getTappayFieldsStatus();
-    // 確認是否可以 getPrime
-    if (tappayStatus.canGetPrime === false) {
-      alert("can not get prime");
-      return;
-    }
-    // Get prime
-    TPDirect.card.getPrime((result: any) => {
-      if (result.status !== 0) {
-        alert("get prime error " + result.msg);
-        return;
+        }
+      );
+      if (res.ok) {
+        const body = await res.json();
+        redirect(body.url);
       }
-      alert("get prime 成功，prime: " + result.card.prime);
-
-      // send prime to your server, to pay with Pay by Prime API .
-      // Pay By Prime Docs: https://docs.tappaysdk.com/tutorial/zh/back.html#pay-by-prime-api
-    });
+    }
   };
   return (
     <>
-      <Script
-        src={"https://js.tappaysdk.com/sdk/tpdirect/v5.17.1"}
-        onReady={() => tappayInit()}
-      />
       <div className="container mx-auto">
         HELLO FROM ORG {params.id}
         <div className="grid lg:grid-cols-3 gap-4">
-          <Card>
-            <CardHeader>
-              <CardTitle>添加信用卡至{}</CardTitle>
-              <CardDescription>
-                Add a new payment method to your account.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="grid gap-6">
-              <div className="grid gap-1">
-                <Label htmlFor="number">Card number</Label>
-
-                <div
-                  className="pl-2 border-2 border-black rounded-lg max-h-8 tpfield"
-                  id="card-number"
-                ></div>
-
-                <Label htmlFor="month">Expires</Label>
-                <div
-                  className="pl-2 border-2 border-black rounded-lg max-h-8	tpfield"
-                  id="card-expiration-date"
-                ></div>
-
-                <Label htmlFor="cvc">CCV</Label>
-                <div
-                  className="pl-2 border-2 border-black rounded-lg max-h-8 tpfield"
-                  id="card-ccv"
-                ></div>
-              </div>
-            </CardContent>
-            <CardFooter>
-              <Button onClick={getPrime} className="w-full">
-                Continue
-              </Button>
-            </CardFooter>
-          </Card>
+          <CreateCard createcardaction={createcardaction} />
           <div className="relative  bg-slate-700">
             <div className="bg-yellow-700	absolute left-0 top-0 h-16 w-16 ...">
               01
@@ -156,7 +44,7 @@ export default function OrgID({ params }: { params: any }) {
           </div>
           <div className="relative  bg-slate-700">
             <div className="bg-yellow-700	absolute left-0 top-0 h-16 w-16 ...">
-              01
+              02
             </div>
           </div>
         </div>
