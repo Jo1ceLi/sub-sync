@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Form,
   FormControl,
@@ -11,7 +13,17 @@ import { Button } from "@/registry/new-york/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Org } from "./edit-org-dialog";
+
+export type Org = {
+  id: string;
+  name: string;
+  description: string;
+  app_id: string;
+  app_key: string;
+  partner_key: string;
+  non_3D_mid: string;
+  mid_with_3D: string;
+};
 
 export const formSchema = z.object({
   name: z.string().max(20),
@@ -26,9 +38,11 @@ export const formSchema = z.object({
 export function OrgForm({
   org,
   action,
+  setOpen,
 }: {
-  org?: Org;
-  action?: (values: z.infer<typeof formSchema>) => Promise<void>;
+  org?: Org | null;
+  action: (...args: any) => Promise<void>;
+  setOpen: (open: boolean) => void;
 }) {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -45,8 +59,12 @@ export function OrgForm({
   });
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
-    if (action) {
+    if (org) {
+      await action(org.id, values);
+      setOpen(false);
+    } else {
       await action(values);
+      setOpen(false);
     }
   };
 
