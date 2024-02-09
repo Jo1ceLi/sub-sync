@@ -12,6 +12,7 @@ import { Label } from "@radix-ui/react-label";
 import { cookies } from "next/headers";
 import { OrgDialog } from "./org-dialog";
 import { patchOrgAction, postOrgAction } from "./org-server-action";
+import { DeleteOrgBtn } from "./delete-org-btn";
 
 async function getOrgsData() {
   const token = cookies().get("token");
@@ -23,8 +24,8 @@ async function getOrgsData() {
 }
 
 export default async function Org() {
-  const token = cookies().get("token")!.value;
   const orgs: any[] = await getOrgsData();
+  console.log("orgs=", orgs);
   return (
     <>
       <body className="bg-gray-50">
@@ -84,7 +85,8 @@ export default async function Org() {
                       className="px-6 py-4 text-right whitespace-nowrap"
                     >
                       <OrgDialog org={org} action={patchOrgAction} />
-                      <OrgDialog org={org} action={patchOrgAction} />
+                      <DeleteOrgBtn id={org.id} />
+                      {/* <OrgDialog org={org} action={patchOrgAction} /> */}
                     </td>
                   </tbody>
                 ))

@@ -48,3 +48,21 @@ export const postOrgAction = async (values: z.infer<typeof formSchema>) => {
     revalidatePath("/merchant/org");
   }
 };
+
+export const deleteAction = async (id: string) => {
+  "use server";
+  const token = cookies().get("token");
+  // Do something with the form values.
+  // ✅ This will be type-safe and validated.
+  const res = await fetch(`${process.env.BACKEND_HOST}/api/org/${id}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: "Bearer " + token!.value,
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (res.ok) {
+    revalidatePath("/merchant/org");
+  }
+};
