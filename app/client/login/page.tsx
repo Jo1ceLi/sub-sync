@@ -19,8 +19,7 @@ export default function AuthenticationPage({
 }) {
   const getRedirectUrl = () => {
     const redirectUrl = searchParams["redirect_url"];
-    console.log("redurl=", redirectUrl);
-    return redirectUrl as string;
+    return `${process.env.BACKEND_HOST}/api/auth/login/line?redirect_url=${redirectUrl}`;
   };
   const redirectUrl = getRedirectUrl();
   return (

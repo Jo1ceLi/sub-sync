@@ -22,9 +22,7 @@ export function ClientAuthForm({
     //redirect to google auth
     event.preventDefault();
     setIsLoading(true);
-    router.push(
-      `process.env.BACKEND_HOST/api/auth/login/line?redirect_url=${props.redirecturl}`
-    );
+    router.push(props.redirecturl);
   }
 
   return (
