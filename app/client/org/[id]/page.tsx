@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/registry/new-york/ui/button";
+import { DeleteCardButton } from "../../components/delete-card-btn";
+import { revalidatePath } from "next/cache";
 
 interface Card {
   id: string;
@@ -52,6 +54,27 @@ export default async function OrgID({ params }: { params: any }) {
     }
   };
 
+  const deleteCardAction = async (id: string) => {
+    "use server";
+    const token = cookies().get("token");
+    const oid = params["id"];
+    if (token && oid) {
+      const res = await fetch(
+        `${process.env.BACKEND_HOST}/api/client/org/${oid}/cards/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token.value,
+          },
+        }
+      );
+      if (res.ok) {
+        revalidatePath("/client/org/" + oid);
+      }
+    }
+  };
+
   const getCards = async () => {
     const token = cookies().get("token");
     const oid = params["id"];
@@ -78,7 +101,10 @@ export default async function OrgID({ params }: { params: any }) {
       <div className="container mx-auto">
         HELLO FROM ORG {params.id}
         <div className="grid lg:grid-cols-2 gap-4">
-          <CreateCard createcardaction={createcardaction} />
+          {cards?.length === 0 && (
+            <CreateCard createcardaction={createcardaction} />
+          )}
+
           {cards?.map((c) => {
             return (
               <Card key={c.id}>
@@ -100,7 +126,11 @@ export default async function OrgID({ params }: { params: any }) {
                   <div className="text-slate-600">{c.expiry}</div>
                 </CardContent>
                 <CardFooter>
-                  <Button className="w-full">刪除</Button>
+                  <DeleteCardButton
+                    text="刪除"
+                    id={c.id}
+                    deletecard={deleteCardAction}
+                  />
                 </CardFooter>
               </Card>
             );
