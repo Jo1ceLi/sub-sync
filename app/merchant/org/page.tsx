@@ -85,7 +85,7 @@ export default async function Org() {
                       className="px-6 py-4 text-right whitespace-nowrap"
                     >
                       <OrgDialog org={org} action={patchOrgAction} />
-                      <DeleteOrgBtn id={org.id} />
+                      {orgs.length <= 1 ? <></> : <DeleteOrgBtn id={org.id} />}
                       {/* <OrgDialog org={org} action={patchOrgAction} /> */}
                     </td>
                   </tbody>
