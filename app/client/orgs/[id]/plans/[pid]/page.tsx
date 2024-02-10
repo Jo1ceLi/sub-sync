@@ -1,5 +1,4 @@
 import { cookies } from "next/headers";
-import CreateCard from "../../components/create-card-card";
 import { redirect } from "next/navigation";
 import {
   Card,
@@ -10,10 +9,12 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/registry/new-york/ui/button";
-import { DeleteCardButton } from "../../components/delete-card-btn";
+
 import { revalidatePath } from "next/cache";
 import type { Org } from "@/app/merchant/orgs/org-form";
 import PlanCard from "@/app/components/plan-card";
+import CreateCard from "@/app/client/components/create-card-card";
+import { DeleteCardButton } from "@/app/client/components/delete-card-btn";
 
 interface Card {
   id: string;
@@ -25,7 +26,7 @@ interface Card {
   rank: string;
 }
 
-export default async function OrgID({ params }: { params: any }) {
+export default async function Plan({ params }: { params: any }) {
   const createcardaction = async (prime: string, alias: string) => {
     "use server";
     const token = cookies().get("ctoken");
@@ -111,6 +112,12 @@ export default async function OrgID({ params }: { params: any }) {
     }
   };
 
+  const getPlanId = () => {
+    const pid = params["pid"];
+    console.log(pid);
+  };
+
+  console.log("planid=", getPlanId());
   const cards = await getCards();
   const org = (await getOrgById()) as Org;
   return (
@@ -152,9 +159,7 @@ export default async function OrgID({ params }: { params: any }) {
               </Card>
             );
           })}
-          <PlanCard>
-            <></>
-          </PlanCard>
+          {/* TODO: PLAN GET BY ID*/}
         </div>
       </div>
     </>
