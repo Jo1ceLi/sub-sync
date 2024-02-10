@@ -21,7 +21,7 @@ interface Plan {
 
 export default async function OrgPlanPage() {
   const getPlans = async () => {
-    const token = cookies().get("token");
+    const token = cookies().get("utoken");
     const url = headers().get("x-url");
     if (url && token) {
       const oid = url.split("/")[url.split("/").length - 1];

@@ -11,7 +11,7 @@ export const patchOrgAction = async (
 ) => {
   "use server";
   // Do something with the form values.
-  const token = cookies().get("token");
+  const token = cookies().get("utoken");
   // ✅ This will be type-safe and validated.
   const res = await fetch(`${process.env.BACKEND_HOST}/api/orgs/${id}`, {
     method: "PATCH",
@@ -30,7 +30,7 @@ export const patchOrgAction = async (
 
 export const postOrgAction = async (values: z.infer<typeof formSchema>) => {
   "use server";
-  const token = cookies().get("token");
+  const token = cookies().get("utoken");
   console.log("values from post action", values);
   // Do something with the form values.
   // ✅ This will be type-safe and validated.
@@ -51,7 +51,7 @@ export const postOrgAction = async (values: z.infer<typeof formSchema>) => {
 
 export const deleteAction = async (id: string) => {
   "use server";
-  const token = cookies().get("token");
+  const token = cookies().get("utoken");
   // Do something with the form values.
   // ✅ This will be type-safe and validated.
   const res = await fetch(`${process.env.BACKEND_HOST}/api/orgs/${id}`, {

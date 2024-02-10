@@ -27,7 +27,7 @@ interface Card {
 export default async function OrgID({ params }: { params: any }) {
   const createcardaction = async (prime: string, alias: string) => {
     "use server";
-    const token = cookies().get("token");
+    const token = cookies().get("ctoken");
     const oid = params["id"];
     if (token && oid) {
       const res = await fetch(
@@ -57,7 +57,7 @@ export default async function OrgID({ params }: { params: any }) {
 
   const deleteCardAction = async (id: string) => {
     "use server";
-    const token = cookies().get("token");
+    const token = cookies().get("ctoken");
     const oid = params["id"];
     if (token && oid) {
       const res = await fetch(
@@ -77,7 +77,7 @@ export default async function OrgID({ params }: { params: any }) {
   };
 
   const getCards = async () => {
-    const token = cookies().get("token");
+    const token = cookies().get("ctoken");
     const oid = params["id"];
     if (token && oid) {
       const res = await fetch(
@@ -98,7 +98,7 @@ export default async function OrgID({ params }: { params: any }) {
 
   const getOrgById = async () => {
     const oid = params["id"];
-    const token = cookies().get("token");
+    const token = cookies().get("ctoken");
     if (oid) {
       const res = await fetch(
         `${process.env.BACKEND_HOST}/api/client/orgs/${oid}`,

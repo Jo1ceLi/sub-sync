@@ -10,24 +10,34 @@ export function middleware(request: NextRequest) {
       headers: requestHeaders,
     },
   });
-
+  // client token
   response.headers.set("Access-Control-Allow-Origin", "*");
   const url = request.nextUrl;
-  const tokenInSearchParam = url.searchParams.get("token");
-  if (tokenInSearchParam) {
-    url.searchParams.delete("token");
+  const ctokenInSearchParam = url.searchParams.get("ctoken");
+  if (ctokenInSearchParam) {
+    url.searchParams.delete("ctoken");
     const response = NextResponse.redirect(url);
-    response.cookies.set("token", tokenInSearchParam);
+    response.cookies.set("ctoken", ctokenInSearchParam);
     return response;
   }
+  // user token
+  const utokenInSearchParam = url.searchParams.get("utoken");
+  if (utokenInSearchParam) {
+    url.searchParams.delete("utoken");
+    const response = NextResponse.redirect(url);
+    response.cookies.set("utoken", utokenInSearchParam);
+    return response;
+  }
+
   // case token not in url, nor in cookie
-  const tokenInCookie = request.cookies.get("token");
+  const utokenInCookie = request.cookies.get("utoken");
+  const ctokenInCookie = request.cookies.get("ctoken");
   const urlStartWithMerchant = request.nextUrl.pathname.startsWith("/merchant");
   const urlStartWithClient = request.nextUrl.pathname.startsWith("/client");
-  if (!tokenInCookie && urlStartWithMerchant === true) {
+  if (!utokenInCookie && urlStartWithMerchant === true) {
     console.log("notoken back to home");
     return NextResponse.redirect(new URL("/merchant/login", request.url));
-  } else if (!tokenInCookie && urlStartWithClient) {
+  } else if (!ctokenInCookie && urlStartWithClient) {
     console.log("client notoken back to login ");
     const href = request.nextUrl.href;
     console.log(request.nextUrl);

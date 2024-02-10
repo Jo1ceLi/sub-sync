@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 export default async function Home({ params }: { params: { id: string } }) {
   const joinAction = async () => {
     "use server";
-    const token = cookies().get("token");
+    const token = cookies().get("ctoken");
     const oid = params["id"];
     if (token && oid) {
       const res = await fetch(
@@ -27,7 +27,7 @@ export default async function Home({ params }: { params: { id: string } }) {
 
   const getOrgById = async () => {
     const oid = params["id"];
-    const token = cookies().get("token");
+    const token = cookies().get("ctoken");
     if (oid) {
       const res = await fetch(
         `${process.env.BACKEND_HOST}/api/client/orgs/${oid}`,
@@ -40,7 +40,7 @@ export default async function Home({ params }: { params: { id: string } }) {
   };
 
   const getOrgsByClientToken = async () => {
-    const token = cookies().get("token");
+    const token = cookies().get("ctoken");
     if (token) {
       const res = await fetch(`${process.env.BACKEND_HOST}/api/client/orgs`, {
         headers: { Authorization: "Bearer " + token.value },

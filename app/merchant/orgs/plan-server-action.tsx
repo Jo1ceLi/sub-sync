@@ -10,7 +10,7 @@ export const postPlanAction = async (
   values: z.infer<typeof formSchema>
 ) => {
   "use server";
-  const token = cookies().get("token");
+  const token = cookies().get("utoken");
   const res = await fetch(`${process.env.BACKEND_HOST}/api/orgs/${oid}/plans`, {
     method: "POST",
     body: JSON.stringify(values),
