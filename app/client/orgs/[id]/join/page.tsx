@@ -1,7 +1,7 @@
+import { JoinButton } from "@/app/client/orgs/[id]/join/join-btn";
 import { Button } from "@/registry/new-york/ui/button";
 import { cookies } from "next/headers";
 import Image from "next/image";
-import { JoinButton } from "../../join-btn";
 import { redirect } from "next/navigation";
 
 export default async function Home({ params }: { params: { id: string } }) {
@@ -11,7 +11,7 @@ export default async function Home({ params }: { params: { id: string } }) {
     const oid = params["id"];
     if (token && oid) {
       const res = await fetch(
-        `http://localhost:8080/api/client/join/orgs/${oid}`,
+        `http://localhost:8080/api/client/orgs/${oid}/join`,
         {
           method: "POST",
           headers: {
@@ -42,7 +42,7 @@ export default async function Home({ params }: { params: { id: string } }) {
   const getOrgsByClientToken = async () => {
     const token = cookies().get("token");
     if (token) {
-      const res = await fetch(`${process.env.BACKEND_HOST}/api/client/org`, {
+      const res = await fetch(`${process.env.BACKEND_HOST}/api/client/orgs`, {
         headers: { Authorization: "Bearer " + token.value },
       });
       const orgs = (await res.json()) as any[];

@@ -12,6 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/registry/new-york/ui/button";
 import { DeleteCardButton } from "../../components/delete-card-btn";
 import { revalidatePath } from "next/cache";
+import type { Org } from "@/app/merchant/orgs/org-form";
 
 interface Card {
   id: string;
@@ -95,11 +96,26 @@ export default async function OrgID({ params }: { params: any }) {
     }
   };
 
+  const getOrgById = async () => {
+    const oid = params["id"];
+    const token = cookies().get("token");
+    if (oid) {
+      const res = await fetch(
+        `${process.env.BACKEND_HOST}/api/client/orgs/${oid}`,
+        {
+          headers: { Authorization: "Bearer " + token!.value },
+        }
+      );
+      return await res.json();
+    }
+  };
+
   const cards = await getCards();
+  const org = (await getOrgById()) as Org;
   return (
     <>
       <div className="container mx-auto">
-        HELLO FROM ORG {params.id}
+        Hello! Welcome to {org.name}!<p>{org.description}!</p>
         <div className="grid lg:grid-cols-2 gap-4">
           {cards?.length === 0 && (
             <CreateCard createcardaction={createcardaction} />
@@ -140,5 +156,4 @@ export default async function OrgID({ params }: { params: any }) {
       </div>
     </>
   );
-  //TODO: BIND CARD PAGE
 }

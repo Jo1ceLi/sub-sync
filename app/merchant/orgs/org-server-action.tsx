@@ -24,7 +24,7 @@ export const patchOrgAction = async (
 
   if (res.ok) {
     console.log("okokok");
-    revalidatePath("/merchant/org");
+    revalidatePath("/merchant/orgs");
   }
 };
 
@@ -45,7 +45,7 @@ export const postOrgAction = async (values: z.infer<typeof formSchema>) => {
 
   if (res.ok) {
     console.log("okokok");
-    revalidatePath("/merchant/org");
+    revalidatePath("/merchant/orgs");
   }
 };
 
@@ -63,6 +63,6 @@ export const deleteAction = async (id: string) => {
   });
 
   if (res.ok) {
-    revalidatePath("/merchant/org");
+    revalidatePath("/merchant/orgs");
   }
 };

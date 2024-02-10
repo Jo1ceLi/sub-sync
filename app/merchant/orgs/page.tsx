@@ -16,7 +16,7 @@ import { DeleteOrgBtn } from "./delete-org-btn";
 
 async function getOrgsData() {
   const token = cookies().get("token");
-  const res = await fetch(`${process.env.BACKEND_HOST}/api/org`, {
+  const res = await fetch(`${process.env.BACKEND_HOST}/api/orgs`, {
     headers: { Authorization: "Bearer " + token!.value },
   });
   const data = await res.json();
