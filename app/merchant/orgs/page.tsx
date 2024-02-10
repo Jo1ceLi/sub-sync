@@ -1,18 +1,8 @@
-import { Button } from "@/components/ui/button";
-import { DialogHeader, DialogFooter } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-  DialogTrigger,
-} from "@radix-ui/react-dialog";
-import { Label } from "@radix-ui/react-label";
 import { cookies } from "next/headers";
 import { OrgDialog } from "./org-dialog";
 import { patchOrgAction, postOrgAction } from "./org-server-action";
 import { DeleteOrgBtn } from "./delete-org-btn";
+import Link from "next/link";
 
 async function getOrgsData() {
   const token = cookies().get("token");
@@ -30,15 +20,8 @@ export default async function Org() {
     <>
       <body className="bg-gray-50">
         <div className="container mx-auto px-4 py-8">
-          <div className="mb-6">
+          <div className="flex justify-between mb-6">
             <h1 className="text-3xl font-semibold">Welcome back!</h1>
-            <p className="text-gray-600">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-              Accusantium, asperiores, blanditiis, cumque distinctio earum eius
-              eveniet fugit incidunt ipsam laborum maxime natus numquam
-              perspiciatis quae quia quidem reiciendis rem reprehenderit
-              sapiente.
-            </p>
 
             <OrgDialog org={null} action={postOrgAction} />
           </div>
@@ -72,7 +55,12 @@ export default async function Org() {
                     className="bg-white divide-y divide-gray-200"
                   >
                     <td key={org.id} className="px-6 py-4 whitespace-nowrap">
-                      <Button>{org.name}</Button>
+                      <Link
+                        className="bg-slate-800 text-white border-2 border-slate-800 rounded-lg	p-2"
+                        href={`/merchant/orgs/${org.id}`}
+                      >
+                        {org.name}
+                      </Link>
                     </td>
                     <td
                       key={org.id}

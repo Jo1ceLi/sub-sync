@@ -28,11 +28,11 @@ export type Org = {
 export const formSchema = z.object({
   name: z.string().max(20),
   description: z.string(),
-  app_id: z.string(), //.min(5).max(5),
-  app_key: z.string(), //.min(64).max(64),
-  partner_key: z.string(), //.min(64).max(64),
-  non_3D_mid: z.string(), //,
-  mid_with_3D: z.string(),
+  app_id: z.string().optional(), //.min(5).max(5),
+  app_key: z.string().optional(), //.min(64).max(64),
+  partner_key: z.string().optional(), //.min(64).max(64),
+  non_3D_mid: z.string().optional(), //,
+  mid_with_3D: z.string().optional(),
 });
 
 export function OrgForm({
@@ -97,71 +97,78 @@ export function OrgForm({
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="app_id"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>AppId</FormLabel>
-              <FormControl>
-                <Input placeholder="AppId" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="app_key"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>AppKey</FormLabel>
-              <FormControl>
-                <Input placeholder="AppKey" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="partner_key"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>PartnerKey</FormLabel>
-              <FormControl>
-                <Input placeholder="PartnerKey" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="non_3D_mid"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>非3D驗證MerchantID</FormLabel>
-              <FormControl>
-                <Input placeholder="非3D驗證MerchantID" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="mid_with_3D"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>3D驗證MerchantID</FormLabel>
-              <FormControl>
-                <Input placeholder="3D驗證MerchantID" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+
+        {org === null ? (
+          <></>
+        ) : (
+          <>
+            <FormField
+              control={form.control}
+              name="app_id"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>AppId</FormLabel>
+                  <FormControl>
+                    <Input placeholder="AppId" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="app_key"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>AppKey</FormLabel>
+                  <FormControl>
+                    <Input placeholder="AppKey" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="partner_key"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>PartnerKey</FormLabel>
+                  <FormControl>
+                    <Input placeholder="PartnerKey" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="non_3D_mid"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>非3D驗證MerchantID</FormLabel>
+                  <FormControl>
+                    <Input placeholder="非3D驗證MerchantID" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="mid_with_3D"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>3D驗證MerchantID</FormLabel>
+                  <FormControl>
+                    <Input placeholder="3D驗證MerchantID" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </>
+        )}
         <Button type="submit">Submit</Button>
       </form>
     </Form>
