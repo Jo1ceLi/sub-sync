@@ -29,8 +29,8 @@ export type Org = {
 export const formSchema = z.object({
   name: z.string().max(20),
   description: z.string(),
-  amount: z.number().positive(),
-  interval: z.number().positive(),
+  amount: z.coerce.number(),
+  interval: z.coerce.number(),
 });
 
 export function PlanForm({
