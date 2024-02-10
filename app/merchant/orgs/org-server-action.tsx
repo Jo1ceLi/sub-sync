@@ -13,7 +13,7 @@ export const patchOrgAction = async (
   // Do something with the form values.
   const token = cookies().get("token");
   // ✅ This will be type-safe and validated.
-  const res = await fetch(`${process.env.BACKEND_HOST}/api/org/${id}`, {
+  const res = await fetch(`${process.env.BACKEND_HOST}/api/orgs/${id}`, {
     method: "PATCH",
     body: JSON.stringify(values),
     headers: {
@@ -34,7 +34,7 @@ export const postOrgAction = async (values: z.infer<typeof formSchema>) => {
   console.log("values from post action", values);
   // Do something with the form values.
   // ✅ This will be type-safe and validated.
-  const res = await fetch(`${process.env.BACKEND_HOST}/api/org`, {
+  const res = await fetch(`${process.env.BACKEND_HOST}/api/orgs`, {
     method: "POST",
     body: JSON.stringify(values),
     headers: {
@@ -54,7 +54,7 @@ export const deleteAction = async (id: string) => {
   const token = cookies().get("token");
   // Do something with the form values.
   // ✅ This will be type-safe and validated.
-  const res = await fetch(`${process.env.BACKEND_HOST}/api/org/${id}`, {
+  const res = await fetch(`${process.env.BACKEND_HOST}/api/orgs/${id}`, {
     method: "DELETE",
     headers: {
       Authorization: "Bearer " + token!.value,

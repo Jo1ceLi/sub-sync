@@ -30,7 +30,7 @@ export default async function OrgID({ params }: { params: any }) {
     const oid = params["id"];
     if (token && oid) {
       const res = await fetch(
-        `${process.env.BACKEND_HOST}/api/client/org/${oid}/cards`,
+        `${process.env.BACKEND_HOST}/api/client/orgs/${oid}/cards`,
         {
           method: "POST",
           body: JSON.stringify({
@@ -60,7 +60,7 @@ export default async function OrgID({ params }: { params: any }) {
     const oid = params["id"];
     if (token && oid) {
       const res = await fetch(
-        `${process.env.BACKEND_HOST}/api/client/org/${oid}/cards/${id}`,
+        `${process.env.BACKEND_HOST}/api/client/orgs/${oid}/cards/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -70,7 +70,7 @@ export default async function OrgID({ params }: { params: any }) {
         }
       );
       if (res.ok) {
-        revalidatePath("/client/org/" + oid);
+        revalidatePath("/client/orgs/" + oid);
       }
     }
   };
@@ -80,7 +80,7 @@ export default async function OrgID({ params }: { params: any }) {
     const oid = params["id"];
     if (token && oid) {
       const res = await fetch(
-        `${process.env.BACKEND_HOST}/api/client/org/${oid}/cards`,
+        `${process.env.BACKEND_HOST}/api/client/orgs/${oid}/cards`,
         {
           headers: {
             "Content-Type": "application/json",

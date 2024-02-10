@@ -11,7 +11,7 @@ export default async function Home({ params }: { params: { id: string } }) {
     const oid = params["id"];
     if (token && oid) {
       const res = await fetch(
-        `http://localhost:8080/api/client/join/org/${oid}`,
+        `http://localhost:8080/api/client/join/orgs/${oid}`,
         {
           method: "POST",
           headers: {
@@ -20,7 +20,7 @@ export default async function Home({ params }: { params: { id: string } }) {
         }
       );
       if (res.ok) {
-        redirect(`/client/org/${oid}`);
+        redirect(`/client/orgs/${oid}`);
       }
     }
   };
@@ -30,7 +30,7 @@ export default async function Home({ params }: { params: { id: string } }) {
     const token = cookies().get("token");
     if (oid) {
       const res = await fetch(
-        `${process.env.BACKEND_HOST}/api/client/org/${oid}`,
+        `${process.env.BACKEND_HOST}/api/client/orgs/${oid}`,
         {
           headers: { Authorization: "Bearer " + token!.value },
         }
@@ -48,7 +48,7 @@ export default async function Home({ params }: { params: { id: string } }) {
       const orgs = (await res.json()) as any[];
       const oid = params.id;
       if (orgs.some((o: any) => o.id === oid)) {
-        redirect(`/client/org/${oid}`);
+        redirect(`/client/orgs/${oid}`);
       }
     }
   };
