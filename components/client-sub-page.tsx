@@ -15,8 +15,15 @@ import {
 import { CardTitle, CardHeader, CardContent, Card } from "@/components/ui/card";
 import Image from "next/image";
 import type { Card as CardType } from "@/app/client/orgs/[id]/page";
+import type { Session } from "@/app/api/[auth]/auth";
 
-export function ClientSubPage({ card }: { card: CardType | undefined }) {
+export function ClientSubPage({
+  card,
+  session,
+}: {
+  card: CardType | undefined;
+  session: Session | undefined;
+}) {
   return (
     <div className="grid min-h-screen w-full overflow-hidden bg-gray-100/40 lg:grid-cols-[280px_1fr] dark:bg-gray-800/40">
       <div className="hidden border-r border-gray-200 lg:block dark:border-gray-800">
@@ -76,7 +83,7 @@ export function ClientSubPage({ card }: { card: CardType | undefined }) {
                     alt="Avatar"
                     className="rounded-full"
                     height="32"
-                    src="https://profile.line-scdn.net/0hcv4zsII-PFkZAxdCfZ9CJmlTPzM6cmVLNWAgPysCYW8iZywJNDZ1OXlTMDpzNyhaNzVxbHkHYD0VEEs_B1XAbR4zYm4gNXoPNGxyvg"
+                    src={session?.user.picture as string}
                     style={{
                       aspectRatio: "32/32",
                       objectFit: "cover",
@@ -87,7 +94,7 @@ export function ClientSubPage({ card }: { card: CardType | undefined }) {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuLabel>{session?.user.name}</DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>Settings</DropdownMenuItem>
                 <DropdownMenuItem>Support</DropdownMenuItem>

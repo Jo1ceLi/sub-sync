@@ -15,6 +15,7 @@ import { revalidatePath } from "next/cache";
 import type { Org } from "@/app/merchant/orgs/org-form";
 import PlanCard from "@/app/components/plan-card";
 import { ClientSubPage } from "@/components/client-sub-page";
+import { useAuth } from "@/app/api/[auth]/auth";
 
 export interface Card {
   id: string;
@@ -115,9 +116,10 @@ export default async function OrgID({ params }: { params: any }) {
   const cards = await getCards();
   const card = cards?.[0];
   const org = (await getOrgById()) as Org;
+  const session = await useAuth("client");
   return (
     <>
-      <ClientSubPage card={card} />
+      <ClientSubPage card={card} session={session} />
       <div className="container mx-auto">
         Hello! Welcome to {org.name}!<p>{org.description}!</p>
         <div className="grid lg:grid-cols-2 gap-4">

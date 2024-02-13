@@ -3,6 +3,7 @@ import { CreatePlanDialog } from "../components/create-plan-dialog";
 import { postPlanAction } from "../plan-server-action";
 import PlanCard from "@/app/components/plan-card";
 import EditDeleteBtn from "./edit-delete-btn";
+import { MerchantSubPage } from "@/components/merchant-sub-page";
 
 export interface Plan {
   id: string;
@@ -35,6 +36,7 @@ export default async function OrgPlanPage() {
           </div>
         </div>
       </div>
+      <MerchantSubPage />
     </>
   );
 }
