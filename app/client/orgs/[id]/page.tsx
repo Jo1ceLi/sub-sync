@@ -14,8 +14,9 @@ import { DeleteCardButton } from "../../components/delete-card-btn";
 import { revalidatePath } from "next/cache";
 import type { Org } from "@/app/merchant/orgs/org-form";
 import PlanCard from "@/app/components/plan-card";
+import { ClientSubPage } from "@/components/client-sub-page";
 
-interface Card {
+export interface Card {
   id: string;
   alias: string;
   funding: string;
@@ -112,9 +113,11 @@ export default async function OrgID({ params }: { params: any }) {
   };
 
   const cards = await getCards();
+  const card = cards?.[0];
   const org = (await getOrgById()) as Org;
   return (
     <>
+      <ClientSubPage card={card} />
       <div className="container mx-auto">
         Hello! Welcome to {org.name}!<p>{org.description}!</p>
         <div className="grid lg:grid-cols-2 gap-4">
