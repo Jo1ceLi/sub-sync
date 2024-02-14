@@ -11,7 +11,7 @@ export default async function Home({ params }: { params: { id: string } }) {
     const oid = params["id"];
     if (token && oid) {
       const res = await fetch(
-        `http://localhost:8080/api/client/orgs/${oid}/join`,
+        `${process.env.BACKEND_HOST}/api/client/orgs/${oid}/join`,
         {
           method: "POST",
           headers: {
