@@ -15,16 +15,15 @@ import {
 import { CardTitle, CardHeader, CardContent, Card } from "@/components/ui/card";
 import Image from "next/image";
 import type { Card as CardType } from "@/app/client/orgs/[id]/page";
-import type { Session } from "@/app/api/[auth]/auth";
+import { useAuth, type Session } from "@/app/api/[auth]/auth";
 import { Icons } from "@/components/icons";
 
-export function ClientSubPage({
-  card,
-  session,
+export default async function ClientPageLayout({
+  children,
 }: {
-  card: CardType | undefined;
-  session: Session | undefined;
+  children: React.ReactNode;
 }) {
+  const session = await useAuth("client");
   return (
     <div className="grid min-h-screen w-full overflow-hidden bg-gray-100/40 lg:grid-cols-[280px_1fr] dark:bg-gray-800/40">
       <div className="hidden border-r border-gray-200 lg:block dark:border-gray-800">
@@ -45,7 +44,7 @@ export function ClientSubPage({
             </Link>
             <Link
               className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-              href="#"
+              href="subscriptions"
             >
               <UsersIcon className="h-4 w-4" />
               Subscriptions
@@ -105,96 +104,7 @@ export function ClientSubPage({
             </DropdownMenu>
           </div>
         </header>
-        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
-          <div className="grid gap-4 md:grid-cols-2">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-sm font-medium">
-                  Subscription Plan
-                </CardTitle>
-                <Button size="sm">Change Plan</Button>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-2 text-sm">
-                  <div className="flex items-center gap-4">
-                    <div className="font-semibold">Plan</div>
-                    <div>Pro</div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="font-semibold">Status</div>
-                    <div>Active</div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="font-semibold">Renewal Date</div>
-                    <div>March 25, 2023</div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                <CardTitle className="text-sm font-medium">
-                  Payment Method
-                </CardTitle>
-                <Button size="sm">Update</Button>
-              </CardHeader>
-              <CardContent>
-                <div className="grid gap-2 text-sm">
-                  <div className="flex items-center gap-4">
-                    <CreditCardIcon className="w-6 h-6" />
-                    <div>**** **** **** {card?.last_four}</div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="font-semibold">Alias</div>
-                    <div>{card?.alias}</div>
-                  </div>
-                  <div className="flex items-center gap-4">
-                    <div className="font-semibold">Expires</div>
-                    <div>
-                      {card?.expiry.substring(0, 4)}/{card?.expiry.substring(4)}
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-              <CardTitle className="text-sm font-medium">
-                Recent Transactions
-              </CardTitle>
-              <Button size="sm">View All</Button>
-            </CardHeader>
-            <CardContent>
-              <div className="grid gap-4">
-                <Card>
-                  <CardContent className="flex items-center gap-4">
-                    <CalendarIcon className="w-6 h-6" />
-                    <div className="font-semibold">March 25, 2023</div>
-                    <div className="text-sm">Monthly Subscription</div>
-                    <div className="ml-auto font-semibold">$25.00</div>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardContent className="flex items-center gap-4">
-                    <CalendarIcon className="w-6 h-6" />
-                    <div className="font-semibold">March 25, 2023</div>
-                    <div className="text-sm">Monthly Subscription</div>
-                    <div className="ml-auto font-semibold">$25.00</div>
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardContent className="flex items-center gap-4">
-                    <CalendarIcon className="w-6 h-6" />
-                    <div className="font-semibold">March 25, 2023</div>
-                    <div className="text-sm">Monthly Subscription</div>
-                    <div className="ml-auto font-semibold">$25.00</div>
-                  </CardContent>
-                </Card>
-              </div>
-            </CardContent>
-          </Card>
-        </main>
+        {children}
       </div>
     </div>
   );
