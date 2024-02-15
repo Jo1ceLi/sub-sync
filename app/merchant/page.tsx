@@ -12,6 +12,7 @@ export const metadata: Metadata = {
 };
 
 export default function AuthenticationPage() {
+  const loginurl = `${process.env.BACKEND_HOST}/api/auth/login/google`;
   return (
     <>
       <div className="md:hidden">
@@ -76,7 +77,7 @@ export default function AuthenticationPage() {
                 Enter your email below to create your account
               </p> */}
             </div>
-            <UserAuthForm />
+            <UserAuthForm loginurl={loginurl} />
             <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{" "}
               <Link

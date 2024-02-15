@@ -17,7 +17,7 @@ export interface Plan {
 export default async function OrgPlanPage() {
   return (
     <>
-      <div className="">
+      {/* <div className="">
         <div className="grid grid-rows-5 h-dvh">
           <div id="top" className="container p-2 flex justify-between">
             <p>1</p>
@@ -35,7 +35,7 @@ export default async function OrgPlanPage() {
             03
           </div>
         </div>
-      </div>
+      </div> */}
       <MerchantSubPage />
     </>
   );
