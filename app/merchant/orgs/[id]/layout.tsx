@@ -16,9 +16,14 @@ import { useAuth } from "@/app/api/[auth]/auth";
 
 export default async function MerchantPageLayout({
   children,
+  params,
+  searchParams,
 }: {
   children: React.ReactNode;
+  params: { id: string };
+  searchParams: { [key: string]: string | string[] | undefined };
 }) {
+  const currentUrl = `/merchant/orgs/${params.id}`;
   const session = await useAuth("user");
   return (
     <div className="grid min-h-screen w-full overflow-hidden lg:grid-cols-[280px_1fr]">
@@ -34,14 +39,14 @@ export default async function MerchantPageLayout({
             <nav className="grid items-start px-4 text-sm font-medium">
               <Link
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                href="#"
+                href={currentUrl}
               >
                 <Icons.home className="h-4 w-4" />
                 Home
               </Link>
               <Link
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                href="#"
+                href={`${currentUrl}/customers`}
               >
                 <Icons.users className="h-4 w-4" />
                 Customers
@@ -115,7 +120,9 @@ export default async function MerchantPageLayout({
             </DropdownMenu>
           </div>
         </header>
-        {children}
+        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
+          {children}
+        </main>
       </div>
     </div>
   );

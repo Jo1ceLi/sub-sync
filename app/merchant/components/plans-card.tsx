@@ -1,5 +1,11 @@
 import { Icons } from "@/components/icons";
-import { CardTitle, CardContent, CardHeader, Card } from "@/components/ui/card";
+import {
+  CardTitle,
+  CardContent,
+  CardHeader,
+  Card,
+  CardFooter,
+} from "@/components/ui/card";
 import { Button } from "@/registry/new-york/ui/button";
 import { cookies, headers } from "next/headers";
 import { Plan } from "@/types/index";
@@ -48,7 +54,6 @@ export default async function PlansCard() {
               <Card key={p.id}>
                 <CardHeader className="flex items-center gap-4 p-4 rounded-t-lg">
                   <h2 className="font-semibold">{p.name}</h2>
-                  <Button variant="outline">Edit</Button>
                 </CardHeader>
                 <CardContent className="p-4 grid gap-2">
                   <div className="flex items-center gap-4">
@@ -75,6 +80,7 @@ export default async function PlansCard() {
                     </ul>
                   </div>
                 </CardContent>
+                {/* <Button variant="default">Edit</Button> */}
               </Card>
             </>
           ))}
