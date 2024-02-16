@@ -1,5 +1,5 @@
 import { cookies, headers } from "next/headers";
-import { Plan } from "../merchant/orgs/[id]/page";
+import { Plan } from "@/types";
 import {
   Card,
   CardHeader,

@@ -8,23 +8,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/registry/new-york/ui/button";
-
+import { Card as CardType } from "@/types";
 import { revalidatePath } from "next/cache";
 import type { Org } from "@/app/merchant/orgs/org-form";
 import PlanCard from "@/app/components/plan-card";
 import CreateCard from "@/app/client/components/create-card-card";
 import { DeleteCardButton } from "@/app/client/components/delete-card-btn";
-
-interface Card {
-  id: string;
-  alias: string;
-  funding: string;
-  network: string;
-  last_four: string;
-  expiry: string;
-  rank: string;
-}
 
 export default async function Plan({ params }: { params: any }) {
   const createcardaction = async (prime: string, alias: string) => {
@@ -92,7 +81,7 @@ export default async function Plan({ params }: { params: any }) {
         }
       );
       if (res.ok) {
-        const cards = (await res.json()) as Card[];
+        const cards = (await res.json()) as CardType[];
         return cards;
       }
     }

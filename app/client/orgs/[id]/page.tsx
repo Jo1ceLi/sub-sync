@@ -16,16 +16,7 @@ import type { Org } from "@/app/merchant/orgs/org-form";
 import PlanCard from "@/app/components/plan-card";
 import { useAuth } from "@/app/api/[auth]/auth";
 import { ClientHome } from "@/components/client-home";
-
-export interface Card {
-  id: string;
-  alias: string;
-  funding: string;
-  network: string;
-  last_four: string;
-  expiry: string;
-  rank: string;
-}
+import { Card as CardType } from "@/types";
 
 export default async function OrgID({ params }: { params: any }) {
   const createcardaction = async (prime: string, alias: string) => {
@@ -93,7 +84,7 @@ export default async function OrgID({ params }: { params: any }) {
         }
       );
       if (res.ok) {
-        const cards = (await res.json()) as Card[];
+        const cards = (await res.json()) as CardType[];
         return cards;
       }
     }

@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { CardTitle, CardHeader, CardContent, Card } from "@/components/ui/card";
 import Image from "next/image";
-import type { Card as CardType } from "@/app/client/orgs/[id]/page";
+import type { Card as CardType } from "@/types";
 import type { Session } from "@/app/api/[auth]/auth";
 import { Icons } from "@/components/icons";
 

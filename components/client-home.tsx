@@ -1,5 +1,5 @@
 import { CardTitle, CardHeader, CardContent, Card } from "@/components/ui/card";
-import type { Card as CardType } from "@/app/client/orgs/[id]/page";
+import type { Card as CardType } from "@/types";
 import { Button } from "@/registry/new-york/ui/button";
 import { cookies } from "next/headers";
 import { Icons } from "@/components/icons";
