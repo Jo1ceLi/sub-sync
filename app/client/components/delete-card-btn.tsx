@@ -14,5 +14,9 @@ export function DeleteCardButton({
   const onClick = async () => {
     await deletecard(id);
   };
-  return <Button onClick={onClick}>{text}</Button>;
+  return (
+    <Button variant={"destructive"} onClick={onClick}>
+      {text}
+    </Button>
+  );
 }
