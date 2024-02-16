@@ -10,15 +10,6 @@ import {
   DropdownMenuContent,
   DropdownMenu,
 } from "@/components/ui/dropdown-menu";
-import { CardTitle, CardContent, CardHeader, Card } from "@/components/ui/card";
-import {
-  TableHead,
-  TableRow,
-  TableHeader,
-  TableCell,
-  TableBody,
-  Table,
-} from "@/components/ui/table";
 import { Icons } from "@/components/icons";
 import Image from "next/image";
 import { useAuth } from "@/app/api/[auth]/auth";
@@ -56,7 +47,7 @@ export default async function MerchantPageLayout({
                 Customers
               </Link>
               <Link
-                className="flex items-center gap-3 rounded-lg bg-gray-100 px-3 py-2 text-gray-900  transition-all hover:text-gray-900 dark:bg-gray-800 dark:text-gray-50 dark:hover:text-gray-50"
+                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-900 transition-all hover:text-gray-900 dark:bg-gray-800 bg-gray-100 dark:text-gray-50 dark:hover:text-gray-50"
                 href="#"
               >
                 <Icons.trendingup className="h-4 w-4" />
@@ -65,13 +56,13 @@ export default async function MerchantPageLayout({
                   12
                 </Badge>
               </Link>
-              <Link
+              {/* <Link
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
                 href="#"
               >
                 <Icons.creditCard className="h-4 w-4" />
                 Billing
-              </Link>
+              </Link> */}
             </nav>
           </div>
         </div>

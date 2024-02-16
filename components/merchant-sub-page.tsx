@@ -25,8 +25,31 @@ import {
 } from "@/components/ui/table";
 import { Icons } from "@/components/icons";
 import Image from "next/image";
+import { cookies, headers } from "next/headers";
+import { Plan } from "@/app/merchant/orgs/[id]/page";
 
-export function MerchantSubPage() {
+export async function MerchantSubPage() {
+  const getPlans = async () => {
+    const token = cookies().get("utoken") ?? cookies().get("ctoken");
+    const url = headers().get("x-url");
+    if (url && token) {
+      const splits = url.split("/orgs/");
+      const orgId = splits[1].substring(0, 36);
+      const res = await fetch(
+        `${process.env.BACKEND_HOST}/api/orgs/${orgId}/plans`,
+        {
+          headers: {
+            Authorization: "Bearer " + token!.value,
+          },
+        }
+      );
+      if (res.ok) {
+        const data = await res.json();
+        return data;
+      }
+    }
+  };
+  const plans = (await getPlans()) as Plan[];
   return (
     // <div className="grid min-h-screen w-full overflow-hidden lg:grid-cols-[280px_1fr]">
     //   <div className="hidden border-r bg-gray-100/40 lg:block dark:bg-gray-800/40">
@@ -135,7 +158,7 @@ export function MerchantSubPage() {
             <div className="grid grid-cols-3 gap-4">
               <Card>
                 <CardHeader className="flex items-center gap-4 p-4 rounded-t-lg">
-                  <h2 className="font-semibold">Starter</h2>
+                  <h2 className="font-semibold">{plans[0].name}</h2>
                   <Button variant="outline">Edit</Button>
                 </CardHeader>
                 <CardContent className="p-4 grid gap-2">
@@ -161,7 +184,7 @@ export function MerchantSubPage() {
               </Card>
               <Card>
                 <CardHeader className="flex items-center gap-4 p-4 rounded-t-lg">
-                  <h2 className="font-semibold">Pro</h2>
+                  <h2 className="font-semibold">{plans[1].name}</h2>
                   <Button variant="outline">Edit</Button>
                 </CardHeader>
                 <CardContent className="p-4 grid gap-2">
@@ -170,8 +193,7 @@ export function MerchantSubPage() {
                     <div className="grid gap-1.5">
                       <h3 className="font-semibold">Growth</h3>
                       <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Upgrade to access more features and increase your
-                        productivity.
+                        {plans[1].description}
                       </p>
                     </div>
                   </div>
@@ -187,7 +209,7 @@ export function MerchantSubPage() {
               </Card>
               <Card>
                 <CardHeader className="flex items-center gap-4 p-4 rounded-t-lg">
-                  <h2 className="font-semibold">Enterprise</h2>
+                  <h2 className="font-semibold">{plans[2].name}</h2>
                   <Button variant="outline">Edit</Button>
                 </CardHeader>
                 <CardContent className="p-4 grid gap-2">
