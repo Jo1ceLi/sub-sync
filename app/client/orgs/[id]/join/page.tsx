@@ -2,7 +2,7 @@ import { JoinButton } from "@/app/client/orgs/[id]/join/join-btn";
 import { Button } from "@/registry/new-york/ui/button";
 import { cookies } from "next/headers";
 import Image from "next/image";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 
 export default async function Home({ params }: { params: { id: string } }) {
   const joinAction = async () => {
@@ -35,7 +35,11 @@ export default async function Home({ params }: { params: { id: string } }) {
           headers: { Authorization: "Bearer " + token!.value },
         }
       );
-      return await res.json();
+      if (res.ok) {
+        return await res.json();
+      } else if (res.status === 404) {
+        notFound();
+      }
     }
   };
 

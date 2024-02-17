@@ -1,6 +1,6 @@
 import { cookies } from "next/headers";
 import CreateCard from "../../components/create-card-card";
-import { redirect } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -100,13 +100,17 @@ export default async function OrgID({ params }: { params: any }) {
           headers: { Authorization: "Bearer " + token!.value },
         }
       );
-      return await res.json();
+      if (res.ok) {
+        return await res.json();
+      } else if (res.status === 404) {
+        notFound();
+      }
     }
   };
 
+  const org = (await getOrgById()) as Org;
   const cards = await getCards();
   const card = cards?.[0];
-  const org = (await getOrgById()) as Org;
   const session = await useAuth("client");
   return (
     <>
