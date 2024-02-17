@@ -1,5 +1,6 @@
 "use client";
 
+import { Icons } from "@/components/icons";
 import {
   Card,
   CardContent,
@@ -13,6 +14,7 @@ import { Button } from "@/registry/new-york/ui/button";
 import { Label } from "@radix-ui/react-label";
 import Script from "next/script";
 import { FormEvent, useState } from "react";
+import { twMerge } from "tailwind-merge";
 
 export default function CreateCard({
   createcardaction,
@@ -90,27 +92,31 @@ export default function CreateCard({
   };
   const getPrime = async (e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
+    setLoading(true);
     // 取得 TapPay Fields 的 status
     const tappayStatus = TPDirect.card.getTappayFieldsStatus();
     // 確認是否可以 getPrime
     if (tappayStatus.canGetPrime === false) {
       alert("can not get prime");
+      setLoading(false);
       return;
     }
     // Get prime
     TPDirect.card.getPrime(async (result: any) => {
       if (result.status !== 0) {
         alert("get prime error " + result.msg);
+        setLoading(false);
         return;
       }
       // alert("get prime 成功，prime: " + result.card.prime);
       await createcardaction(result.card.prime, alias);
-
+      setLoading(false);
       // send prime to your server, to pay with Pay by Prime API .
       // Pay By Prime Docs: https://docs.tappaysdk.com/tutorial/zh/back.html#pay-by-prime-api
     });
   };
 
+  const [loading, setLoading] = useState(false);
   const [alias, setAlias] = useState("");
   return (
     <>
@@ -154,8 +160,11 @@ export default function CreateCard({
           </div>
         </CardContent>
         <CardFooter>
-          <Button onClick={getPrime} className="w-full">
+          <Button disabled={loading} onClick={getPrime} className="w-full">
             Continue
+            <span className={twMerge("ml-2 hidden", loading && "block")}>
+              <Icons.spinner className="animate-spin" />
+            </span>
           </Button>
         </CardFooter>
       </Card>

@@ -88,7 +88,6 @@ export default async function ClientBilling({ params }: { params: any }) {
 
   return (
     <div className="container mx-auto">
-      {/* Hello! Welcome to {org.name}!<p>{org.description}!</p> */}
       <div className="grid lg:grid-cols-2 gap-4">
         <CreateCard createcardaction={createcardaction} />
 
@@ -122,9 +121,6 @@ export default async function ClientBilling({ params }: { params: any }) {
             </Card>
           );
         })}
-        {/* <PlanCard>
-          <></>
-        </PlanCard> */}
       </div>
     </div>
   );
