@@ -1,16 +1,19 @@
 import PlanCard from "@/app/components/plan-card";
 import RecentSubscriptions from "@/app/merchant/components/recent-subscriptions";
 import SubBtn from "../plans/sub-btn";
+import { Card } from "@/components/ui/card";
 
 export default async function OrgID({ params }: { params: any }) {
   return (
     <>
-      <div className="flex gap-5 p-5 justify-between">
+      <Card className="flex flex-1 m-5 p-5 justify-evenly">
         <PlanCard>
           <SubBtn></SubBtn>
         </PlanCard>
-      </div>
-      <RecentSubscriptions />
+      </Card>
+      <Card className="flex flex-col flex-1 m-5">
+        <RecentSubscriptions />
+      </Card>
     </>
   );
 }

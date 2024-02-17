@@ -36,7 +36,7 @@ export default async function PlanCard({ children }: { children: any }) {
       {plans?.map((p) => {
         return (
           <>
-            <Card key={p.id} className="bg-slate-200 w-[320px] h-[320px]">
+            <Card key={p.id} className="bg-white w-[320px] h-[320px]">
               <CardHeader className="">
                 <CardTitle>{p.name}</CardTitle>
               </CardHeader>
