@@ -14,6 +14,7 @@ export function UserAuthForm({
   ...props
 }: UserAuthFormProps & {
   loginurl: string;
+  deletecookieaction: () => void;
 }) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const router = useRouter();

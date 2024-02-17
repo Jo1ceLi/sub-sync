@@ -1,10 +1,8 @@
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/registry/new-york/ui/button";
 import { UserAuthForm } from "@/app/merchant/components/user-auth-form";
+import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
   title: "Authentication",
@@ -13,6 +11,10 @@ export const metadata: Metadata = {
 
 export default function AuthenticationPage() {
   const loginurl = `${process.env.BACKEND_HOST}/api/auth/login/google`;
+  const deletecookieaction = async () => {
+    "use server";
+    cookies().delete("utoken");
+  };
   return (
     <>
       <div className="md:hidden">
@@ -77,7 +79,10 @@ export default function AuthenticationPage() {
                 Enter your email below to create your account
               </p> */}
             </div>
-            <UserAuthForm loginurl={loginurl} />
+            <UserAuthForm
+              loginurl={loginurl}
+              deletecookieaction={deletecookieaction}
+            />
             <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{" "}
               <Link

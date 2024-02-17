@@ -1,4 +1,5 @@
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export type Session = {
   user: {
@@ -20,7 +21,10 @@ export const useAuth = async (
           Authorization: "Bearer " + token.value,
         },
       });
-      return (await resp.json()) as Session;
+      if (resp.ok) {
+        return (await resp.json()) as Session;
+      }
+      return redirect("/merchant/login");
     }
   } else if (type === "client") {
     const token = cookies().get("ctoken");
@@ -30,8 +34,10 @@ export const useAuth = async (
           Authorization: "Bearer " + token.value,
         },
       });
-      return (await resp.json()) as Session;
+      if (resp.ok) {
+        return (await resp.json()) as Session;
+      }
+      return redirect("/client/login");
     }
   }
-  return undefined;
 };

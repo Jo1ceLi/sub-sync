@@ -1,11 +1,8 @@
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/registry/new-york/ui/button";
-import { UserAuthForm } from "@/app/merchant/components/user-auth-form";
 import { ClientAuthForm } from "../components/client-auth-form";
+import { cookies } from "next/headers";
 
 export const metadata: Metadata = {
   title: "Authentication",
@@ -22,6 +19,10 @@ export default function AuthenticationPage({
     return `${process.env.BACKEND_HOST}/api/auth/login/line?redirect_url=${redirectUrl}`;
   };
   const redirectUrl = getRedirectUrl();
+  const deletecookieaction = async () => {
+    "use server";
+    cookies().delete("ctoken");
+  };
   return (
     <>
       <div className="md:hidden">
@@ -86,7 +87,10 @@ export default function AuthenticationPage({
                 Enter your email below to create your account
               </p> */}
             </div>
-            <ClientAuthForm redirecturl={redirectUrl} />
+            <ClientAuthForm
+              redirecturl={redirectUrl}
+              deletecookieaction={deletecookieaction}
+            />
             <p className="px-8 text-center text-sm text-muted-foreground">
               By clicking continue, you agree to our{" "}
               <Link

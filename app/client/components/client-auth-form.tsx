@@ -14,7 +14,10 @@ interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 export function ClientAuthForm({
   className,
   ...props
-}: UserAuthFormProps & { redirecturl: string }) {
+}: UserAuthFormProps & {
+  redirecturl: string;
+  deletecookieaction: () => void;
+}) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
   const router = useRouter();
@@ -22,6 +25,7 @@ export function ClientAuthForm({
     //redirect to google auth
     event.preventDefault();
     setIsLoading(true);
+    props.deletecookieaction();
     router.push(props.redirecturl);
   }
 
