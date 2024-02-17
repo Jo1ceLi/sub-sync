@@ -27,7 +27,9 @@ export function DeleteCardButton({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="outline">刪除卡片</Button>
+        <Button className="bg-slate-900" variant={"outline"}>
+          刪除卡片
+        </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
