@@ -8,6 +8,9 @@ const nextConfig = {
       {
         hostname: "profile.line-scdn.net",
       },
+      {
+        hostname: "lh3.googleusercontent.com",
+      },
     ],
   },
 };

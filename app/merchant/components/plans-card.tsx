@@ -59,7 +59,9 @@ export default async function PlansCard() {
                   <div className="flex items-center gap-4">
                     <Icons.trendingup className="w-6 h-6" />
                     <div className="grid gap-1.5">
-                      <h3 className="font-semibold">Growth</h3>
+                      <h3 className="font-semibold">
+                        ${p.amount} /{p.interval}天
+                      </h3>
                       <p className="text-sm text-gray-500 dark:text-gray-400">
                         Upgrade to access more features and increase your
                         productivity.
