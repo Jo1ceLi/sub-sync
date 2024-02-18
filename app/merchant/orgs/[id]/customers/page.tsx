@@ -4,6 +4,9 @@ import { MerchantCRM } from "@/components/merchant-crm";
 import { Customer } from "@/types";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { DataTable } from "@/app/merchant/orgs/[id]/customers/data-table";
+import { columns } from "@/app/merchant/orgs/[id]/customers/columns";
+import { Card } from "@/components/ui/card";
 
 export default async function MerchantCustomer({
   params,
@@ -30,13 +33,15 @@ export default async function MerchantCustomer({
   const session = await useAuth("user");
 
   const customers = await getCustomers();
-  console.log("cusotmers", customers);
   const headersList = headers();
   const hostname = headersList.get("x-forwarded-host");
   const protocol = headersList.get("x-forwarded-proto") || "http";
   return (
     <>
-      <MerchantCRM customers={customers} />
+      <Card className="flex flex-col flex-1">
+        <DataTable columns={columns} data={customers} />
+      </Card>
+      {/* <MerchantCRM customers={customers} /> */}
       <JoinOrgQRCode hostname={protocol + "://" + hostname!} />
     </>
   );
