@@ -8,6 +8,7 @@ export type Session = {
     picture: string;
   };
   expires: string;
+  token: string;
 };
 
 export const useAuth = async (
@@ -22,7 +23,11 @@ export const useAuth = async (
         },
       });
       if (resp.ok) {
-        return (await resp.json()) as Session;
+        const session: Session = {
+          ...(await resp.json()),
+          token: token.value,
+        };
+        return session;
       }
       return redirect("/merchant/login");
     }
@@ -35,7 +40,11 @@ export const useAuth = async (
         },
       });
       if (resp.ok) {
-        return (await resp.json()) as Session;
+        const session: Session = {
+          ...(await resp.json()),
+          token: token.value,
+        };
+        return session;
       }
       return redirect("/client/login");
     }
