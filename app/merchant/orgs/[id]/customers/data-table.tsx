@@ -15,15 +15,26 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Card,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Icons } from "@/components/icons";
+import { Button } from "@/registry/new-york/ui/button";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  children?: React.ReactNode;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  children,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -32,7 +43,20 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="rounded-md border">
+    <Card className="rounded-md border">
+      <CardHeader>
+        <CardTitle className="flex justify-between items-center">
+          <p>Customer Data</p>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="mr-5" variant={"outline"}>
+                <Icons.userAdd />
+              </Button>
+            </DialogTrigger>
+            <DialogContent>{children}</DialogContent>
+          </Dialog>
+        </CardTitle>
+      </CardHeader>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -75,6 +99,6 @@ export function DataTable<TData, TValue>({
           )}
         </TableBody>
       </Table>
-    </div>
+    </Card>
   );
 }

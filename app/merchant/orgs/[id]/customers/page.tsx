@@ -6,7 +6,7 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { DataTable } from "@/app/merchant/orgs/[id]/customers/data-table";
 import { columns } from "@/app/merchant/orgs/[id]/customers/columns";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 
 export default async function MerchantCustomer({
   params,
@@ -38,11 +38,18 @@ export default async function MerchantCustomer({
   const protocol = headersList.get("x-forwarded-proto") || "http";
   return (
     <>
-      <Card className="flex flex-col flex-1">
-        <DataTable columns={columns} data={customers} />
+      <Card className="flex flex-col flex-1 ">
+        <DataTable columns={columns} data={customers}>
+          <Card className="flex items-center mt-5">
+            <JoinOrgQRCode hostname={protocol + "://" + hostname!} />
+            <CardContent>
+              <p>請消費者掃描此QR Code </p>
+              <p>加入會員</p>
+            </CardContent>
+          </Card>
+        </DataTable>
       </Card>
       {/* <MerchantCRM customers={customers} /> */}
-      <JoinOrgQRCode hostname={protocol + "://" + hostname!} />
     </>
   );
 }

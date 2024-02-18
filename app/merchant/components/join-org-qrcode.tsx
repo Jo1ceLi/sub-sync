@@ -17,8 +17,8 @@ export default function JoinOrgQRCode(props: { hostname: string }) {
         scale: 4,
         width: 200,
         color: {
-          dark: "#091e49",
-          light: "#d1d4da",
+          dark: "#000000",
+          light: "#FFFFFF",
         },
       }}
     />
