@@ -15,8 +15,9 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import Image from "next/image";
+import { Customer } from "@/types";
 
-export function MerchantCRM() {
+export function MerchantCRM({ customers }: { customers: Customer[] }) {
   return (
     <Card>
       <CardHeader>
@@ -161,6 +162,37 @@ export function MerchantCRM() {
               </TableCell>
               <TableCell>2023-10-15</TableCell>
             </TableRow>
+            {customers.map((c) => {
+              return (
+                <>
+                  <TableRow>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <Image
+                          alt="Avatar"
+                          className="rounded-full"
+                          height="32"
+                          src={c.picture}
+                          style={{
+                            aspectRatio: "32/32",
+                            objectFit: "cover",
+                          }}
+                          width="32"
+                        />
+                        <div className="font-medium">{c.name}</div>
+                      </div>
+                    </TableCell>
+                    <TableCell>{c.email}</TableCell>
+                    <TableCell>
+                      <Badge className="bg-yellow-500" variant="outline">
+                        {c.subscription_status ?? "EMPTY"}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>{c.subscription_renewal_date}</TableCell>
+                  </TableRow>
+                </>
+              );
+            })}
           </TableBody>
         </Table>
       </CardContent>
