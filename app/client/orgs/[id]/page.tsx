@@ -90,25 +90,23 @@ export default async function OrgID({ params }: { params: any }) {
     }
   };
 
-  const getOrgById = async () => {
-    const oid = params["id"];
+  const getOrgsByClientToken = async () => {
     const token = cookies().get("ctoken");
-    if (oid) {
-      const res = await fetch(
-        `${process.env.BACKEND_HOST}/api/client/orgs/${oid}`,
-        {
-          headers: { Authorization: "Bearer " + token!.value },
-        }
-      );
-      if (res.ok) {
-        return await res.json();
-      } else if (res.status === 404) {
-        notFound();
+    if (token) {
+      const res = await fetch(`${process.env.BACKEND_HOST}/api/client/orgs`, {
+        headers: { Authorization: "Bearer " + token.value },
+      });
+      const orgs = (await res.json()) as any[];
+      const oid = params.id;
+      if (orgs.some((o: any) => o.id === oid) === false) {
+        redirect(`/client/orgs/${oid}/join`);
+      } else {
+        return orgs.filter((o) => o.id === oid)[0] as Org;
       }
     }
   };
 
-  const org = (await getOrgById()) as Org;
+  const org = (await getOrgsByClientToken()) as Org;
   const cards = await getCards();
   const card = cards?.[0];
   const session = await useAuth("client");

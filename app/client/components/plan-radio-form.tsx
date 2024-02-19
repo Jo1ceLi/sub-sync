@@ -16,11 +16,12 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Card as CardType, Plan } from "@/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { CreditCard } from "@/components/credit-card";
 import CreditCardPure from "@/components/credit-card-pure";
 import { useState } from "react";
 import { twMerge } from "tailwind-merge";
 import { Icons } from "@/components/icons";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export const FormSchema = z.object({
   planId: z.string(),
@@ -51,13 +52,15 @@ export function PlanRadioGroupForm({
     setLoading(false);
   }
 
+  const path = usePathname();
+  const billingHref = path.split("subscriptions")[0] + "billing";
   const [loading, setLoading] = useState(false);
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         // className="m-5 p-5 flex flex-1 justify-evenly "
-        className="grid gap-4 md:grid-cols-2"
+        className="grid gap-4 md:grid-cols-2 lg:grid-cols-3"
       >
         <div className="m-2 p-5">
           <CardContent>
@@ -136,7 +139,7 @@ export function PlanRadioGroupForm({
                       defaultValue={field.value}
                       className="flex flex-col space-y-1"
                     >
-                      {cards &&
+                      {cards && cards.length > 0 ? (
                         cards.map((c) => (
                           <FormItem
                             key={c.id}
@@ -149,7 +152,12 @@ export function PlanRadioGroupForm({
                               <CreditCardPure card={c} />
                             </FormLabel>
                           </FormItem>
-                        ))}
+                        ))
+                      ) : (
+                        <Button asChild variant={"outline"}>
+                          <Link href={billingHref}>請先新增卡片</Link>
+                        </Button>
+                      )}
                     </RadioGroup>
                   </FormControl>
                   <FormMessage />
@@ -157,6 +165,9 @@ export function PlanRadioGroupForm({
               )}
             />
           </CardContent>
+        </div>
+        {/* TODO: BILLING */}
+        {cards && cards?.length > 0 && (
           <div className="flex">
             <Button disabled={loading} type="submit">
               訂閱
@@ -165,7 +176,7 @@ export function PlanRadioGroupForm({
               </span>
             </Button>
           </div>
-        </div>
+        )}
       </form>
     </Form>
   );

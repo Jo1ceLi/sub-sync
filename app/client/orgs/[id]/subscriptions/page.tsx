@@ -14,13 +14,11 @@ import { z } from "zod";
 
 export default async function OrgID({ params }: { params: any }) {
   const getPlans = async () => {
-    const token = cookies().get("utoken") ?? cookies().get("ctoken");
-    const url = headers().get("x-url");
-    if (url && token) {
-      const splits = url.split("/orgs/");
-      const orgId = splits[1].substring(0, 36);
+    const token = cookies().get("ctoken");
+    if (token) {
+      const orgId = params["id"];
       const res = await fetch(
-        `${process.env.BACKEND_HOST}/api/orgs/${orgId}/plans`,
+        `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/plans`,
         {
           headers: {
             Authorization: "Bearer " + token!.value,
