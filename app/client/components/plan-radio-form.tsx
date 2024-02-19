@@ -18,6 +18,9 @@ import { Card as CardType, Plan } from "@/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CreditCard } from "@/components/credit-card";
 import CreditCardPure from "@/components/credit-card-pure";
+import { useState } from "react";
+import { twMerge } from "tailwind-merge";
+import { Icons } from "@/components/icons";
 
 export const FormSchema = z.object({
   planId: z.string(),
@@ -31,23 +34,32 @@ export function PlanRadioGroupForm({
 }: {
   plans: Plan[];
   cards: CardType[] | undefined;
-  subscribeAction: (values: z.infer<typeof FormSchema>) => Promise<void>;
+  subscribeAction: (values: z.infer<typeof FormSchema>) => Promise<number>;
 }) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
   });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    // await subscribeAction(data);
+    setLoading(true);
+    const status = await subscribeAction(data);
+
+    if (status === 200) {
+      // TODO
+      // alert("訂閱成功");
+    }
+    setLoading(false);
   }
 
+  const [loading, setLoading] = useState(false);
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="m-5 p-5 flex flex-1 justify-evenly bg-green-50"
+        // className="m-5 p-5 flex flex-1 justify-evenly "
+        className="grid gap-4 md:grid-cols-2"
       >
-        <div className="m-2 p-5 w-1/2">
+        <div className="m-2 p-5">
           <CardContent>
             <FormField
               control={form.control}
@@ -72,7 +84,7 @@ export function PlanRadioGroupForm({
                           <FormLabel className="font-normal">
                             <Card
                               key={p.id}
-                              className="bg-white w-[320px] h-[200px]"
+                              className="bg-white w-[270px] h-[200px]"
                             >
                               <CardHeader className="">
                                 <CardTitle>{p.name}</CardTitle>
@@ -110,7 +122,7 @@ export function PlanRadioGroupForm({
             />
           </CardContent>
         </div>
-        <div className="m-2 p-5 w-1/2">
+        <div className="m-2 p-5">
           <CardContent>
             <FormField
               control={form.control}
@@ -146,7 +158,12 @@ export function PlanRadioGroupForm({
             />
           </CardContent>
           <div className="flex">
-            <Button type="submit">Submit</Button>
+            <Button disabled={loading} type="submit">
+              訂閱
+              <span className={twMerge("ml-2 hidden", loading && "block")}>
+                <Icons.spinner className="animate-spin" />
+              </span>
+            </Button>
           </div>
         </div>
       </form>

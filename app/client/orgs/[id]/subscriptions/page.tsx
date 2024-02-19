@@ -70,32 +70,26 @@ export default async function OrgID({ params }: { params: any }) {
         },
       }
     );
-    console.log("val=", values);
-    console.log("res", res.status);
-    console.log("res json", await res.json());
     if (res.ok) {
-      console.log("okokok");
+      return res.status;
     }
+    return res.status;
   };
   const plans = (await getPlans()) as Plan[];
   const cards = await getCards();
   return (
     <>
-      {/* <Card className="flex flex-1 m-5 p-5 justify-evenly"> */}
+      {/* 您目前的會期, xxxxx */}
+
       <PlanRadioGroupForm
         plans={plans}
         cards={cards}
         subscribeAction={subscribe}
       />
-      {/* <Card className="m-2 p-5 w-1/2">
-          <CardContent>
-          </CardContent>
-        </Card> */}
-      {/* <Card className="m-2 bg-yellow-500 w-1/2">dd</Card> */}
-      {/* </Card> */}
-      {/* <Card className="flex flex-col flex-1 m-5">
+
+      <Card className="flex flex-col flex-1 m-5">
         <RecentSubscriptions />
-      </Card> */}
+      </Card>
     </>
   );
 }
