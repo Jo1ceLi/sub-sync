@@ -1,5 +1,5 @@
 import { CardTitle, CardHeader, CardContent, Card } from "@/components/ui/card";
-import type { Card as CardType, Transaction } from "@/types";
+import type { Card as CardType, Customer, Transaction } from "@/types";
 import { Button } from "@/registry/new-york/ui/button";
 import { cookies } from "next/headers";
 import { Icons } from "@/components/icons";
@@ -44,12 +44,29 @@ export async function ClientHome({ params }: { params: any }) {
     }
     return [];
   };
+
+  const getSubscription = async () => {
+    const response = await fetch(
+      `${process.env.BACKEND_HOST}/api/client/orgs/${params.id}/subscription`,
+      {
+        headers: {
+          Authorization: `Bearer ${session!.token}`,
+        },
+      }
+    );
+    if (response.ok) {
+      const data = (await response.json()) as Customer;
+      return data;
+    } else if (response.status == 403) {
+      redirect("/merchant/orgs");
+    }
+  };
   const session = await useAuth("client");
   const cards = await getCards();
   const card = cards?.[0];
 
   const txs = await getTransactions();
-  console.log(txs);
+  const sub = await getSubscription();
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
@@ -65,15 +82,21 @@ export async function ClientHome({ params }: { params: any }) {
             <div className="grid gap-2 text-sm">
               <div className="flex items-center gap-4">
                 <div className="font-semibold">Plan</div>
-                <div>Pro</div>
+                <div>{sub?.plan_name}</div>
               </div>
               <div className="flex items-center gap-4">
                 <div className="font-semibold">Status</div>
-                <div>Active</div>
+                <div>{sub?.subscription_status}</div>
               </div>
               <div className="flex items-center gap-4">
                 <div className="font-semibold">Renewal Date</div>
-                <div>March 25, 2023</div>
+                <div>
+                  {sub?.subscription_renewal_date
+                    ? new Date(
+                        sub?.subscription_renewal_date as string
+                      ).toLocaleDateString()
+                    : ""}
+                </div>
               </div>
             </div>
           </CardContent>
@@ -114,21 +137,23 @@ export async function ClientHome({ params }: { params: any }) {
         </CardHeader>
         <CardContent>
           <div className="grid gap-4">
-            {txs.map((tx) => {
-              return (
-                <Card key={tx.id}>
-                  <CardContent className="pt-6 flex gap-4">
-                    <Icons.calendar className="w-6 h-6" />
-                    <div className="font-semibold">
-                      {new Date(tx.created_at).toLocaleDateString()}
-                    </div>
-                    <div className="text-sm">Monthly Subscription</div>
-                    <div className="text-sm">{tx.description}</div>
-                    <div className="ml-auto font-semibold">{`$${tx.amount}`}</div>
-                  </CardContent>
-                </Card>
-              );
-            })}
+            {txs &&
+              txs.length > 0 &&
+              txs.map((tx) => {
+                return (
+                  <Card key={tx.id}>
+                    <CardContent className="pt-6 flex gap-4">
+                      <Icons.calendar className="w-6 h-6" />
+                      <div className="font-semibold">
+                        {new Date(tx.created_at).toLocaleDateString()}
+                      </div>
+                      <div className="text-sm">Monthly Subscription</div>
+                      <div className="text-sm">{tx.description}</div>
+                      <div className="ml-auto font-semibold">{`$${tx.amount}`}</div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
             {/* <Card>
               <CardContent className="flex items-center gap-4">
                 <Icons.calendar className="w-6 h-6" />

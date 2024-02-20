@@ -10,6 +10,7 @@ import {
 import { cookies, headers } from "next/headers";
 import { Card } from "@/components/ui/card";
 import { z } from "zod";
+import { revalidatePath } from "next/cache";
 // import Plan from "./[pid]/page";
 
 export default async function OrgID({ params }: { params: any }) {
@@ -69,6 +70,7 @@ export default async function OrgID({ params }: { params: any }) {
       }
     );
     if (res.ok) {
+      revalidatePath("/client/orgs/" + params["id"]);
       return res.status;
     }
     return res.status;
