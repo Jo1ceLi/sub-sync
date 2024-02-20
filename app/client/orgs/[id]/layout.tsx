@@ -11,6 +11,8 @@ import {
 import Image from "next/image";
 import { useAuth } from "@/app/api/[auth]/auth";
 import { Icons } from "@/components/icons";
+import LogoutBtn from "@/components/logout-btn";
+import { cookies } from "next/headers";
 
 export default async function ClientPageLayout({
   children,
@@ -23,6 +25,12 @@ export default async function ClientPageLayout({
 }) {
   const currentUrl = `/client/orgs/${params.id}`;
   const session = await useAuth("client");
+
+  const logoutaction = async () => {
+    "use server";
+    cookies().delete("ctoken");
+  };
+
   return (
     <div className="grid min-h-screen w-full overflow-hidden bg-gray-100/40 lg:grid-cols-[280px_1fr] dark:bg-gray-800/40">
       <div className="hidden border-r border-gray-200 lg:block dark:border-gray-800">
@@ -98,7 +106,8 @@ export default async function ClientPageLayout({
                 <DropdownMenuItem>Settings</DropdownMenuItem>
                 <DropdownMenuItem>Support</DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Logout</DropdownMenuItem>
+                <LogoutBtn logoutaction={logoutaction} />
+                {/* <DropdownMenuItem>Logout</DropdownMenuItem> */}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

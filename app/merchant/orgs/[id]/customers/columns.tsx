@@ -3,6 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import type { Customer } from "@/types";
 import Image from "next/image";
+import { Badge } from "@/components/ui/badge";
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 
@@ -62,14 +63,34 @@ export const columns: ColumnDef<Customer>[] = [
     accessorKey: "subscription_status",
     header: "Status",
     cell: ({ row }) => {
-      return row.getValue("subscription_status") || "---";
+      const status = row.getValue("subscription_status");
+      switch (status) {
+        case "active":
+          return (
+            <Badge className="bg-green-500" variant="outline">
+              {status}
+            </Badge>
+          );
+        case "expired":
+          return (
+            <Badge className="bg-red-500" variant="outline">
+              {status}
+            </Badge>
+          );
+        default:
+          return "---";
+      }
     },
   },
   {
     accessorKey: "subscription_renewal_date",
     header: "Renewal Date",
     cell: ({ row }) => {
-      return row.getValue("subscription_renewal_date") || "---";
+      return row.getValue("subscription_renewal_date")
+        ? new Date(
+            row.getValue("subscription_renewal_date")
+          ).toLocaleDateString()
+        : "---";
     },
   },
   {

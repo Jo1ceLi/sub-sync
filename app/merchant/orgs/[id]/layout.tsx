@@ -13,6 +13,8 @@ import {
 import { Icons } from "@/components/icons";
 import Image from "next/image";
 import { useAuth } from "@/app/api/[auth]/auth";
+import LogoutBtn from "@/components/logout-btn";
+import { cookies } from "next/headers";
 
 export default async function MerchantPageLayout({
   children,
@@ -25,6 +27,10 @@ export default async function MerchantPageLayout({
 }) {
   const currentUrl = `/merchant/orgs/${params.id}`;
   const session = await useAuth("user");
+  const logoutaction = async () => {
+    "use server";
+    cookies().delete("utoken");
+  };
   return (
     <div className="grid min-h-screen w-full overflow-hidden lg:grid-cols-[280px_1fr]">
       <div className="hidden border-r bg-gray-100/40 lg:block dark:bg-gray-800/40">
@@ -53,7 +59,7 @@ export default async function MerchantPageLayout({
               </Link>
               <Link
                 className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-900 transition-all hover:text-gray-900 dark:bg-gray-800 bg-gray-100 dark:text-gray-50 dark:hover:text-gray-50"
-                href="#"
+                href={`${currentUrl}/subscriptions`}
               >
                 <Icons.trendingup className="h-4 w-4" />
                 Subscriptions
@@ -115,7 +121,8 @@ export default async function MerchantPageLayout({
                 <DropdownMenuItem>Settings</DropdownMenuItem>
                 <DropdownMenuItem>Support</DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>Logout</DropdownMenuItem>
+                {/* <DropdownMenuItem>Logout</DropdownMenuItem> */}
+                <LogoutBtn logoutaction={logoutaction} />
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
