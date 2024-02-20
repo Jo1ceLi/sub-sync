@@ -142,7 +142,7 @@ export async function ClientHome({ params }: { params: any }) {
               txs.map((tx) => {
                 return (
                   <Card key={tx.id}>
-                    <CardContent className="pt-6 flex gap-4">
+                    <CardContent className="pt-6 md:flex gap-4">
                       <Icons.calendar className="w-6 h-6" />
                       <div className="font-semibold">
                         {new Date(tx.created_at).toLocaleDateString()}
@@ -154,22 +154,6 @@ export async function ClientHome({ params }: { params: any }) {
                   </Card>
                 );
               })}
-            {/* <Card>
-              <CardContent className="flex items-center gap-4">
-                <Icons.calendar className="w-6 h-6" />
-                <div className="font-semibold">March 25, 2023</div>
-                <div className="text-sm">Monthly Subscription</div>
-                <div className="ml-auto font-semibold">$25.00</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="flex items-center gap-4">
-                <Icons.calendar className="w-6 h-6" />
-                <div className="font-semibold">March 25, 2023</div>
-                <div className="text-sm">Monthly Subscription</div>
-                <div className="ml-auto font-semibold">$25.00</div>
-              </CardContent>
-            </Card> */}
           </div>
         </CardContent>
       </Card>
