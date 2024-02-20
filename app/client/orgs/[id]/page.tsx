@@ -116,7 +116,7 @@ export default async function OrgID({ params }: { params: any }) {
       <div className="container mx-auto">
         Hello! Welcome to {org.name}!<p>{org.description}!</p>
         <div className="grid lg:grid-cols-2 gap-4">
-          {cards?.length === 0 && (
+          {/* {cards?.length === 0 && (
             <CreateCard createcardaction={createcardaction} />
           )}
 
@@ -149,10 +149,10 @@ export default async function OrgID({ params }: { params: any }) {
                 </CardFooter>
               </Card>
             );
-          })}
-          <PlanCard>
+          })} */}
+          {/* <PlanCard>
             <></>
-          </PlanCard>
+          </PlanCard> */}
         </div>
       </div>
     </>
