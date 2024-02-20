@@ -60,7 +60,7 @@ export function PlanRadioGroupForm({
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         // className="m-5 p-5 flex flex-1 justify-evenly "
-        className="grid gap-4 md:grid-cols-2 lg:grid-cols-3"
+        className="flex flex-wrap"
       >
         <div className="m-2 p-5">
           <CardContent>
@@ -168,7 +168,7 @@ export function PlanRadioGroupForm({
         </div>
         {/* TODO: BILLING */}
         {cards && cards?.length > 0 && (
-          <div className="flex">
+          <div className="place-items-end m-2 p-5 flex">
             <Button disabled={loading} type="submit">
               訂閱
               <span className={twMerge("ml-2 hidden", loading && "block")}>
