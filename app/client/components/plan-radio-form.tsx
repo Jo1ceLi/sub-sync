@@ -168,7 +168,7 @@ export function PlanRadioGroupForm({
         </div>
         {/* TODO: BILLING */}
         {cards && cards?.length > 0 && (
-          <div className="place-items-end m-2 p-5 flex">
+          <div className="flex flex-col-reverse content-end items-end md:m-2 md:p-5  w-64">
             <Button disabled={loading} type="submit">
               訂閱
               <span className={twMerge("ml-2 hidden", loading && "block")}>

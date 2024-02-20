@@ -2,11 +2,30 @@
 
 import { Icons } from "@/components/icons";
 import Link from "next/link";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Sidebar({ currentUrl }: { currentUrl: string }) {
-  type Seleted = 0 | 1 | 2 | 3;
-  const [selected, setSelected] = useState<Seleted>(0); // only 0,1,2,3
+  type Seleted = 0 | 1 | 2 | 3 | null;
+  const pathname = usePathname();
+  const params = pathname.split("/")[pathname.split("/").length - 1];
+
+  const [selected, setSelected] = useState<Seleted>(null); // only 0,1,2,3
+  useEffect(() => {
+    switch (params) {
+      case "subscriptions":
+        setSelected(1);
+        break;
+      case "billing":
+        setSelected(2);
+        break;
+      case "settings":
+        setSelected(3);
+        break;
+      default:
+        setSelected(0);
+    }
+  }, [params]);
 
   const selectedStyle =
     "flex items-center gap-3 rounded-lg bg-gray-100 px-3 py-2 text-gray-900  transition-all hover:text-gray-900 dark:bg-gray-800 dark:text-gray-50 dark:hover:text-gray-50";
