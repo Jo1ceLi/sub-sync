@@ -29,3 +29,15 @@ export interface Customer {
   subscription_plan_id: string | null;
   plan_name: string | null;
 }
+
+export interface Transaction {
+  id: string;
+  description: string;
+  amount: number;
+  client_id: string;
+  client_name: string;
+  client_note: string | null;
+  client_phone: string | null;
+  created_at: string;
+  rec_trade_id: string;
+}
