@@ -14,6 +14,7 @@ import { Icons } from "@/components/icons";
 import LogoutBtn from "@/components/logout-btn";
 import { cookies } from "next/headers";
 import { MobileNav } from "@/components/mobile-nav";
+import Sidebar from "@/app/client/components/sidebar";
 
 export default async function ClientPageLayout({
   children,
@@ -35,49 +36,7 @@ export default async function ClientPageLayout({
   return (
     <>
       <div className="grid min-h-screen w-full overflow-hidden bg-gray-100/40 md:grid-cols-[280px_1fr] dark:bg-gray-800/40">
-        <div
-          id="sidebar"
-          className="hidden border-r border-gray-200 md:block dark:border-gray-800"
-        >
-          <div className="flex flex-col gap-2">
-            <div className="flex h-[60px] items-center px-6">
-              <Link className="flex items-center gap-2 font-semibold" href="#">
-                <Icons.package2 className="h-6 w-6" />
-                <span className="">Sub-Sync Inc</span>
-              </Link>
-            </div>
-            <nav className="grid items-start px-4 text-sm font-medium">
-              <Link
-                className="flex items-center gap-3 rounded-lg bg-gray-100 px-3 py-2 text-gray-900  transition-all hover:text-gray-900 dark:bg-gray-800 dark:text-gray-50 dark:hover:text-gray-50"
-                href={`${currentUrl}`}
-              >
-                <Icons.home className="h-4 w-4" />
-                Home
-              </Link>
-              <Link
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                href={`${currentUrl}/subscriptions`}
-              >
-                <Icons.users className="h-4 w-4" />
-                Subscriptions
-              </Link>
-              <Link
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                href={`${currentUrl}/billing`}
-              >
-                <Icons.creditCard className="h-4 w-4" />
-                Billing
-              </Link>
-              <Link
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                href={`${currentUrl}/settings`}
-              >
-                <Icons.settings className="h-4 w-4" />
-                Settings
-              </Link>
-            </nav>
-          </div>
-        </div>
+        <Sidebar currentUrl={currentUrl} />
         <div className="flex flex-col">
           <header className="flex h-14 lg:h-[60px] items-center gap-4 border-b bg-white shadow shrink-0 px-6 dark:bg-gray-900/90 dark:border-gray-800/90">
             <Link className="lg:hidden" href="#">

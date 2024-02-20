@@ -1,5 +1,6 @@
 "use client";
 
+import { Org } from "@/app/merchant/orgs/org-form";
 import { Icons } from "@/components/icons";
 import {
   Card,
@@ -17,8 +18,10 @@ import { FormEvent, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 export default function CreateCard({
+  org,
   createcardaction,
 }: {
+  org: Org;
   createcardaction: (prime: string, alias: string) => Promise<any>;
 }) {
   const tappayInit = () => {
@@ -39,9 +42,9 @@ export default function CreateCard({
       },
     };
     TPDirect.setupSDK(
-      127916,
-      "app_2PmavdqZ17zccOzag9Mgo1ZWDtRqEFYyt0QFQRnufZcF5TlT1HNC4prlBiyG",
-      "sandbox"
+      org.app_id,
+      org.app_key,
+      process.env.NEXT_PUBLIC_TAPPAY_ENV
     );
     TPDirect.card.setup({
       fields: fields,
