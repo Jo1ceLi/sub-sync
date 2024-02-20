@@ -1,11 +1,11 @@
-import { JoinButton } from "@/app/client/orgs/[id]/join/join-btn";
-import { Button } from "@/registry/new-york/ui/button";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { cookies } from "next/headers";
-import Image from "next/image";
 import { notFound, redirect } from "next/navigation";
+import { JoinForm } from "./join-form";
+import { useAuth } from "@/app/api/[auth]/auth";
 
 export default async function Home({ params }: { params: { id: string } }) {
-  const joinAction = async () => {
+  const joinAction = async (val: { phone: string }) => {
     "use server";
     const token = cookies().get("ctoken");
     const oid = params["id"];
@@ -14,8 +14,10 @@ export default async function Home({ params }: { params: { id: string } }) {
         `${process.env.BACKEND_HOST}/api/client/orgs/${oid}/join`,
         {
           method: "POST",
+          body: JSON.stringify(val),
           headers: {
             Authorization: "Bearer " + token.value,
+            "Content-Type": "application/json",
           },
         }
       );
@@ -57,37 +59,19 @@ export default async function Home({ params }: { params: { id: string } }) {
     }
   };
 
+  const session = await useAuth("client");
   const org = await getOrgById();
-  await getOrgsByClientToken();
+  // await getOrgsByClientToken();
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          YOU ARE INVITED TO {org.name}&nbsp;
-          {/* <code className="font-mono font-bold">app/page.tsx</code> */}
-          <JoinButton join={joinAction} />
-        </p>
-        {/* <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className="dark:invert"
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div> */}
-      </div>
-    </main>
+    <Card className="m-5 p-5 w-[350px]">
+      <CardTitle className="ml-5">
+        HI {session?.user.name} YOU ARE INVITED TO {org.name}
+      </CardTitle>
+
+      <CardContent className="mt-5">
+        <JoinForm submit={joinAction} />
+      </CardContent>
+    </Card>
   );
 }
-
-// https://access.line.me/oauth2/v2.1/authorize?response_type=code&client_id=1234567890&redirect_uri=https%3A%2F%2Fexample.com%2Fauth%3Fkey%3Dvalue&state=12345abcde&scope=profile%20openid&nonce=09876xyz
