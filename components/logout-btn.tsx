@@ -8,15 +8,13 @@ export default function LogoutBtn({
   logoutaction: () => void;
 }) {
   return (
-    <DropdownMenuItem>
-      <button
-        onClick={(e) => {
-          e.preventDefault();
-          logoutaction();
-        }}
-      >
-        Logout
-      </button>
+    <DropdownMenuItem
+      onClick={(e) => {
+        e.preventDefault();
+        logoutaction();
+      }}
+    >
+      Logout
     </DropdownMenuItem>
   );
 }

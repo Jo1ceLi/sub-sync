@@ -49,43 +49,45 @@ export default async function PlansCard() {
       </CardHeader>
       <CardContent className="px-5">
         <div className="grid grid-cols-3 gap-4">
-          {plans.map((p) => (
-            <>
-              <Card key={p.id}>
-                <CardHeader className="flex items-center gap-4 p-4 rounded-t-lg">
-                  <h2 className="font-semibold">{p.name}</h2>
-                </CardHeader>
-                <CardContent className="p-4 grid gap-2">
-                  <div className="flex items-center gap-4">
-                    <Icons.trendingup className="w-6 h-6" />
-                    <div className="grid gap-1.5">
-                      <h3 className="font-semibold">
-                        ${p.amount} /{p.interval}天
-                      </h3>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">
-                        Upgrade to access more features and increase your
-                        productivity.
-                      </p>
+          {plans &&
+            plans.length > 0 &&
+            plans.map((p) => (
+              <>
+                <Card key={p.id}>
+                  <CardHeader className="flex items-center gap-4 p-4 rounded-t-lg">
+                    <h2 className="font-semibold">{p.name}</h2>
+                  </CardHeader>
+                  <CardContent className="p-4 grid gap-2">
+                    <div className="flex items-center gap-4">
+                      <Icons.trendingup className="w-6 h-6" />
+                      <div className="grid gap-1.5">
+                        <h3 className="font-semibold">
+                          ${p.amount} /{p.interval}天
+                        </h3>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
+                          Upgrade to access more features and increase your
+                          productivity.
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="grid gap-1.5">
-                    <h3 className="font-semibold">Features</h3>
-                    <ul className="pl-4 list-disc list-outside">
-                      {p.description
-                        .split("- ")
-                        .map((d, idx) =>
-                          idx > 0 ? <li key={idx}>{d}</li> : null
-                        )}
-                      {/* <li>{}</li>
+                    <div className="grid gap-1.5">
+                      <h3 className="font-semibold">Features</h3>
+                      <ul className="pl-4 list-disc list-outside">
+                        {p.description
+                          .split("- ")
+                          .map((d, idx) =>
+                            idx > 0 ? <li key={idx}>{d}</li> : null
+                          )}
+                        {/* <li>{}</li>
                       <li>10 email templates</li>
                       <li>Basic reporting</li> */}
-                    </ul>
-                  </div>
-                </CardContent>
-                {/* <Button variant="default">Edit</Button> */}
-              </Card>
-            </>
-          ))}
+                      </ul>
+                    </div>
+                  </CardContent>
+                  {/* <Button variant="default">Edit</Button> */}
+                </Card>
+              </>
+            ))}
         </div>
       </CardContent>
     </Card>
