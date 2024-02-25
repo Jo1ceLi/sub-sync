@@ -226,7 +226,10 @@ export function Landingpage() {
               </Button>
             </form> */}
             <p></p>
-            <Link className="underline underline-offset-2" href="#">
+            <Link
+              className="underline underline-offset-2"
+              href="https://www.privacypolicies.com/live/0493ba7d-5827-4602-a2f9-ac77f81df26e"
+            >
               Terms & Conditions
             </Link>
             {/* <p className="mt-2 text-xs text-center text-gray-500 md:text-sm dark:text-gray-400">
