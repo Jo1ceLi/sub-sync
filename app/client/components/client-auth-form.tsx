@@ -16,7 +16,7 @@ export function ClientAuthForm({
   ...props
 }: UserAuthFormProps & {
   redirecturl: string;
-  deletecookieaction: () => void;
+  deletecookieaction: () => Promise<void>;
 }) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
 
@@ -25,13 +25,14 @@ export function ClientAuthForm({
     //redirect to google auth
     event.preventDefault();
     setIsLoading(true);
-    props.deletecookieaction();
+    await props.deletecookieaction();
     router.push(props.redirecturl);
   }
 
   return (
-    <div className={cn("grid gap-6", className)} {...props}>
-      {/* <form onSubmit={onSubmit}>
+    <>
+      <div className={cn("grid gap-6", className)} {...props}>
+        {/* <form onSubmit={onSubmit}>
         <div className="grid gap-2">
           <div className="grid gap-1">
             <Label className="sr-only" htmlFor="email">
@@ -65,15 +66,16 @@ export function ClientAuthForm({
           </span>
         </div>
       </div> */}
-      <Button
-        variant="outline"
-        type="button"
-        disabled={isLoading}
-        onClick={lineLogin}
-      >
-        {<Icons.line className="mr-2 h-5 w-5" />}
-        LINE
-      </Button>
-    </div>
+        <Button
+          variant="outline"
+          type="button"
+          disabled={isLoading}
+          onClick={lineLogin}
+        >
+          {<Icons.line className="mr-2 h-5 w-5" />}
+          LINE
+        </Button>
+      </div>
+    </>
   );
 }
