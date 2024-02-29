@@ -55,15 +55,15 @@ export default function CreateCard({
         },
         // Styling ccv field
         "input.ccv": {
-          // 'font-size': '16px'
+          "font-size": "16px",
         },
         // Styling expiration-date field
         "input.expiration-date": {
-          // 'font-size': '16px'
+          "font-size": "16px",
         },
         // Styling card-number field
         "input.card-number": {
-          // 'font-size': '16px'
+          "font-size": "16px",
         },
         // style focus state
         ":focus": {
@@ -138,7 +138,7 @@ export default function CreateCard({
           <div className="grid gap-1">
             <Label>Alias</Label>
             <Input
-              className="border-2 border-black rounded-lg max-h-8 focus-visible:ring-3"
+              className="text-base border-2 border-black rounded-lg max-h-8 focus-visible:ring-3"
               placeholder="Alias"
               onChange={(e) => setAlias(e.target.value)}
             />
