@@ -34,7 +34,7 @@ export default async function MerchantPageLayout({
     cookies().delete("utoken");
   };
   return (
-    <div className="grid min-h-screen w-full overflow-hidden lg:grid-cols-[280px_1fr]">
+    <div className="grid min-h-dvh w-full overflow-hidden lg:grid-cols-[280px_1fr]">
       <Sidebar currentUrl={currentUrl} />
       {/* <div className="hidden border-r bg-gray-100/40 lg:block dark:bg-gray-800/40">
         <div className="flex flex-col gap-2">
@@ -78,7 +78,6 @@ export default async function MerchantPageLayout({
         <header className="flex h-14 lg:h-[60px] items-center gap-4 border-b bg-gray-100/40 px-6 dark:bg-gray-800/40">
           <Link className="lg:hidden" href="#">
             <MobileNav currentUrl={currentUrl} />
-            {/* <Icons.package2 className="h-6 w-6" /> */}
             <span className="sr-only">Home</span>
           </Link>
           <div className="flex-1">
@@ -118,7 +117,6 @@ export default async function MerchantPageLayout({
                 <DropdownMenuItem>Settings</DropdownMenuItem>
                 <DropdownMenuItem>Support</DropdownMenuItem>
                 <DropdownMenuSeparator />
-                {/* <DropdownMenuItem>Logout</DropdownMenuItem> */}
                 <LogoutBtn logoutaction={logoutaction} />
               </DropdownMenuContent>
             </DropdownMenu>

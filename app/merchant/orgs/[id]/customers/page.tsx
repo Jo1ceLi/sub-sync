@@ -38,17 +38,15 @@ export default async function MerchantCustomer({
   const protocol = headersList.get("x-forwarded-proto") || "http";
   return (
     <>
-      <Card className="flex flex-col flex-1 ">
-        <DataTable columns={columns} data={customers}>
-          <Card className="flex items-center mt-5">
-            <JoinOrgQRCode hostname={protocol + "://" + hostname!} />
-            <CardContent>
-              <p>請消費者掃描此QR Code </p>
-              <p>加入會員</p>
-            </CardContent>
-          </Card>
-        </DataTable>
-      </Card>
+      <DataTable columns={columns} data={customers}>
+        <Card className="flex items-center mt-5">
+          <JoinOrgQRCode hostname={protocol + "://" + hostname!} />
+          <CardContent>
+            <p>請消費者掃描此QR Code </p>
+            <p>加入會員</p>
+          </CardContent>
+        </Card>
+      </DataTable>
       {/* <MerchantCRM customers={customers} /> */}
     </>
   );
