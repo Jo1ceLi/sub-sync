@@ -1,8 +1,8 @@
 "use client";
 
-import * as React from "react";
+import { useState, useEffect } from "react";
 import Link, { LinkProps } from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Icons } from "@/components/icons";
 import { Button } from "@/registry/new-york/ui/button";
@@ -10,8 +10,33 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 export function MobileNav({ currentUrl }: { currentUrl: string }) {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
 
+  type Seleted = 0 | 1 | 2 | 3 | null;
+  const pathname = usePathname();
+  const params = pathname.split("/")[pathname.split("/").length - 1];
+
+  const [selected, setSelected] = useState<Seleted>(null); // only 0,1,2,3
+  useEffect(() => {
+    switch (params) {
+      case "subscriptions":
+        setSelected(1);
+        break;
+      case "billing":
+        setSelected(2);
+        break;
+      case "settings":
+        setSelected(3);
+        break;
+      default:
+        setSelected(0);
+    }
+  }, [params]);
+
+  const selectedStyle =
+    "flex items-center gap-3 rounded-lg bg-gray-100 px-3 py-2 text-gray-900  transition-all hover:text-gray-900 dark:bg-gray-800 dark:text-gray-50 dark:hover:text-gray-50";
+  const nonSelectedStyle =
+    "flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50";
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
@@ -70,15 +95,15 @@ export function MobileNav({ currentUrl }: { currentUrl: string }) {
             </div>
             <nav className="grid items-start px-4 text-sm font-medium">
               <MobileLink
+                className={selected === 0 ? selectedStyle : nonSelectedStyle}
                 href={`${currentUrl}`}
-                className="flex items-center gap-3 rounded-lg bg-gray-100 px-3 py-2 text-gray-900  transition-all hover:text-gray-900 dark:bg-gray-800 dark:text-gray-50 dark:hover:text-gray-50"
                 onOpenChange={setOpen}
               >
                 <Icons.home className="h-4 w-4" />
                 Home
               </MobileLink>
               <MobileLink
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+                className={selected === 1 ? selectedStyle : nonSelectedStyle}
                 href={`${currentUrl}/subscriptions`}
                 onOpenChange={setOpen}
               >
@@ -86,7 +111,7 @@ export function MobileNav({ currentUrl }: { currentUrl: string }) {
                 Subscriptions
               </MobileLink>
               <MobileLink
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+                className={selected === 2 ? selectedStyle : nonSelectedStyle}
                 href={`${currentUrl}/billing`}
                 onOpenChange={setOpen}
               >
@@ -94,7 +119,7 @@ export function MobileNav({ currentUrl }: { currentUrl: string }) {
                 Billing
               </MobileLink>
               <MobileLink
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
+                className={selected === 3 ? selectedStyle : nonSelectedStyle}
                 href={`${currentUrl}/settings`}
                 onOpenChange={setOpen}
               >

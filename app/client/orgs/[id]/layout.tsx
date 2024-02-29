@@ -13,7 +13,7 @@ import { useAuth } from "@/app/api/[auth]/auth";
 import { Icons } from "@/components/icons";
 import LogoutBtn from "@/components/logout-btn";
 import { cookies } from "next/headers";
-import { MobileNav } from "@/components/mobile-nav";
+import { MobileNav } from "@/app/client/components/mobile-nav";
 import Sidebar from "@/app/client/components/sidebar";
 
 export default async function ClientPageLayout({
