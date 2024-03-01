@@ -22,6 +22,7 @@ import { twMerge } from "tailwind-merge";
 import { Icons } from "@/components/icons";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { toast } from "sonner";
 
 export const FormSchema = z.object({
   planId: z.string(),
@@ -44,10 +45,8 @@ export function PlanRadioGroupForm({
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     setLoading(true);
     const status = await subscribeAction(data);
-
     if (status === 200) {
-      // TODO
-      // alert("訂閱成功");
+      toast.success("訂閱成功");
     }
     setLoading(false);
   }
@@ -60,9 +59,9 @@ export function PlanRadioGroupForm({
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         // className="m-5 p-5 flex flex-1 justify-evenly "
-        className="flex flex-wrap"
+        className="grid gap-4 md:grid-cols-2"
       >
-        <div className="m-2 p-5">
+        <div className="p-5">
           <CardContent>
             <FormField
               control={form.control}
@@ -125,7 +124,7 @@ export function PlanRadioGroupForm({
             />
           </CardContent>
         </div>
-        <div className="m-2 p-5">
+        <div className="p-5">
           <CardContent>
             <FormField
               control={form.control}
@@ -168,7 +167,7 @@ export function PlanRadioGroupForm({
         </div>
         {/* TODO: BILLING */}
         {cards && cards?.length > 0 && (
-          <div className="flex flex-col-reverse content-end items-end md:m-2 md:p-5  w-64">
+          <div className="m-5 px-12 flex flex-col-reverse">
             <Button disabled={loading} type="submit">
               訂閱
               <span className={twMerge("ml-2 hidden", loading && "block")}>
