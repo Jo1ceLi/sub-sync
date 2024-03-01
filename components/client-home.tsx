@@ -1,18 +1,22 @@
 import { CardTitle, CardHeader, CardContent, Card } from "@/components/ui/card";
-import type { Card as CardType, Customer, Transaction } from "@/types";
+import type {
+  Card as CardType,
+  Customer,
+  Subscription,
+  Transaction,
+} from "@/types";
 import { Button } from "@/registry/new-york/ui/button";
-import { cookies } from "next/headers";
 import { Icons } from "@/components/icons";
 import { redirect } from "next/navigation";
 import { useAuth } from "@/app/api/[auth]/auth";
+import Link from "next/link";
 
 export async function ClientHome({ params }: { params: any }) {
+  const orgId = params["id"];
   const getCards = async () => {
-    const token = cookies().get("ctoken");
-    const oid = params["id"];
-    if (oid) {
+    if (orgId) {
       const res = await fetch(
-        `${process.env.BACKEND_HOST}/api/client/orgs/${oid}/cards`,
+        `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/cards`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -28,26 +32,28 @@ export async function ClientHome({ params }: { params: any }) {
   };
 
   const getTransactions = async () => {
-    const response = await fetch(
-      `${process.env.BACKEND_HOST}/api/client/orgs/${params.id}/transactions`,
-      {
-        headers: {
-          Authorization: `Bearer ${session!.token}`,
-        },
+    if (orgId) {
+      const response = await fetch(
+        `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/transactions`,
+        {
+          headers: {
+            Authorization: `Bearer ${session!.token}`,
+          },
+        }
+      );
+      if (response.ok) {
+        const data = (await response.json()) as Transaction[];
+        return data;
+      } else if (response.status == 403) {
+        redirect("/merchant/orgs");
       }
-    );
-    if (response.ok) {
-      const data = (await response.json()) as Transaction[];
-      return data;
-    } else if (response.status == 403) {
-      redirect("/merchant/orgs");
+      return [];
     }
-    return [];
   };
 
   const getSubscription = async () => {
     const response = await fetch(
-      `${process.env.BACKEND_HOST}/api/client/orgs/${params.id}/subscription`,
+      `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/subscription`,
       {
         headers: {
           Authorization: `Bearer ${session!.token}`,
@@ -56,11 +62,21 @@ export async function ClientHome({ params }: { params: any }) {
     );
     if (response.ok) {
       const data = (await response.json()) as Customer;
-      return data;
+      if (data.subscription_plan_id === null) {
+        return undefined;
+      } else {
+        return {
+          subscription_status: data.subscription_status,
+          subscription_renewal_date: data.subscription_renewal_date,
+          subscription_plan_id: data.subscription_plan_id,
+          plan_name: data.plan_name,
+        };
+      }
     } else if (response.status == 403) {
       redirect("/merchant/orgs");
     }
   };
+
   const session = await useAuth("client");
   const cards = await getCards();
   const card = cards?.[0];
@@ -71,74 +87,17 @@ export async function ClientHome({ params }: { params: any }) {
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
       <div className="grid gap-4 md:grid-cols-2">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-sm font-medium">
-              Subscription Plan
-            </CardTitle>
-            <Button size="sm">Change Plan</Button>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-2 text-sm">
-              <div className="flex items-center gap-4">
-                <div className="font-semibold">Plan</div>
-                <div>{sub?.plan_name}</div>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="font-semibold">Status</div>
-                <div>{sub?.subscription_status}</div>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="font-semibold">Renewal Date</div>
-                <div>
-                  {sub?.subscription_renewal_date
-                    ? new Date(
-                        sub?.subscription_renewal_date as string
-                      ).toLocaleDateString()
-                    : ""}
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-            <CardTitle className="text-sm font-medium">
-              Payment Method
-            </CardTitle>
-            <Button size="sm">Update</Button>
-          </CardHeader>
-          <CardContent>
-            <div className="grid gap-2 text-sm">
-              <div className="flex items-center gap-4">
-                <Icons.creditCard className="w-6 h-6" />
-                <div>**** **** **** {card?.last_four}</div>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="font-semibold">Alias</div>
-                <div>{card?.alias}</div>
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="font-semibold">Expires</div>
-                <div>
-                  {card?.expiry.substring(0, 4)}/{card?.expiry.substring(4)}
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        <SubscriptionPlanCard sub={sub} orgId={orgId} />
+        <PaymentMethodCard card={card} orgId={orgId} />
       </div>
       <Card>
         <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-          <CardTitle className="text-sm font-medium">
-            Recent Transactions
-          </CardTitle>
-          <Button size="sm">View All</Button>
+          <CardTitle className="text-sm font-medium">最近交易紀錄</CardTitle>
+          <Button size="sm">更多</Button>
         </CardHeader>
         <CardContent>
           <div className="grid gap-4">
-            {txs &&
-              txs.length > 0 &&
+            {txs && txs.length > 0 ? (
               txs.map((tx) => {
                 return (
                   <Card key={tx.id}>
@@ -153,10 +112,149 @@ export async function ClientHome({ params }: { params: any }) {
                     </CardContent>
                   </Card>
                 );
-              })}
+              })
+            ) : (
+              <div className="font-semibold text-sm">無交易紀錄</div>
+            )}
           </div>
         </CardContent>
       </Card>
     </main>
+  );
+}
+
+function SubscriptionPlanCard({
+  sub,
+  orgId,
+}: {
+  sub: Subscription | undefined;
+  orgId: string;
+}) {
+  if (sub === undefined) {
+    return (
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+          <CardTitle className="text-sm font-medium">目前訂閱方案</CardTitle>
+          <Button size="sm">
+            <Link href={`/client/orgs/${orgId}/subscriptions`}>訂閱</Link>
+          </Button>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-2 text-sm">
+            <div className="flex items-center gap-4">
+              <div className="font-semibold">方案</div>
+              <div>----</div>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="font-semibold">狀態</div>
+              <div>----</div>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="font-semibold">續訂日期</div>
+              <div>----/--/--</div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+        <CardTitle className="text-sm font-medium">Subscription Plan</CardTitle>
+        <Button size="sm">Change Plan</Button>
+      </CardHeader>
+      <CardContent>
+        <div className="grid gap-2 text-sm">
+          <div className="flex items-center gap-4">
+            <div className="font-semibold">Plan</div>
+            <div>{sub?.plan_name}</div>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="font-semibold">Status</div>
+            <div>{sub?.subscription_status}</div>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="font-semibold">Renewal Date</div>
+            <div>
+              {sub?.subscription_renewal_date
+                ? new Date(
+                    sub?.subscription_renewal_date as string
+                  ).toLocaleDateString()
+                : ""}
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function PaymentMethodCard({
+  card,
+  orgId,
+}: {
+  card: CardType | undefined;
+  orgId: string;
+}) {
+  if (card === undefined) {
+    return (
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+          <CardTitle className="text-sm font-medium">
+            請先新增付款方式
+          </CardTitle>
+          <Button asChild size="sm">
+            <Link href={`/client/orgs/${orgId}/billing`}>新增</Link>
+          </Button>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-2 text-sm">
+            <div className="flex items-center gap-4">
+              <Icons.creditCard className="w-6 h-6" />
+              <div>**** **** **** ****</div>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="font-semibold">卡片別名</div>
+              <div>---</div>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="font-semibold">Expires</div>
+              <div>
+                {"----"}/{"--"}
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+        <CardTitle className="text-sm font-medium">付款方式</CardTitle>
+        <Button asChild size="sm">
+          <Link href={`/client/orgs/${orgId}/billing`}>更新</Link>
+        </Button>
+      </CardHeader>
+      <CardContent>
+        <div className="grid gap-2 text-sm">
+          <div className="flex items-center gap-4">
+            <Icons.creditCard className="w-6 h-6" />
+            <div>**** **** **** {card.last_four}</div>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="font-semibold">卡片別名</div>
+            <div>{card.alias}</div>
+          </div>
+          <div className="flex items-center gap-4">
+            <div className="font-semibold">有效期限</div>
+            <div>
+              {card.expiry.substring(0, 4)}/{card.expiry.substring(4)}
+            </div>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 }
