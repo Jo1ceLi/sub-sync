@@ -100,7 +100,7 @@ export default function CreateCard({
     const tappayStatus = TPDirect.card.getTappayFieldsStatus();
     // 確認是否可以 getPrime
     if (tappayStatus.canGetPrime === false) {
-      alert("can not get prime");
+      alert("請確認信用卡資訊");
       setLoading(false);
       return;
     }
@@ -129,27 +129,25 @@ export default function CreateCard({
       />
       <Card>
         <CardHeader>
-          <CardTitle>添加信用卡至{}</CardTitle>
-          <CardDescription>
-            Add a new payment method to your account.
-          </CardDescription>
+          <CardTitle>新增付款方式</CardTitle>
+          <CardDescription>請輸入信用卡資訊，以便進行付款</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-6">
           <div className="grid gap-1">
-            <Label>Alias</Label>
+            <Label>信用卡別名</Label>
             <Input
               className="text-base border-2 border-black rounded-lg max-h-8 focus-visible:ring-3"
               placeholder="Alias"
               onChange={(e) => setAlias(e.target.value)}
             />
 
-            <Label htmlFor="number">Card number</Label>
+            <Label htmlFor="number">信用卡卡號</Label>
             <div
               className="pl-2 border-2 border-black rounded-lg max-h-8 tpfield"
               id="card-number"
             ></div>
 
-            <Label htmlFor="month">Expires</Label>
+            <Label htmlFor="month">信用卡效期</Label>
             <div
               className="pl-2 border-2 border-black rounded-lg max-h-8 tpfield"
               id="card-expiration-date"
@@ -164,7 +162,7 @@ export default function CreateCard({
         </CardContent>
         <CardFooter>
           <Button disabled={loading} onClick={getPrime} className="w-full">
-            Continue
+            新增
             <span className={twMerge("ml-2 hidden", loading && "block")}>
               <Icons.spinner className="animate-spin" />
             </span>

@@ -57,6 +57,7 @@ export default async function ClientBilling({ params }: { params: any }) {
             alias: alias,
             prime: prime,
             result_url: {
+              //TODO: change to frontend url
               frontend_redirect_url: "https://google.com.tw",
               go_back_url: "https://google.com.tw",
             },
@@ -77,15 +78,24 @@ export default async function ClientBilling({ params }: { params: any }) {
   const cards = await getCards();
   const org = await getOrgById();
   return (
-    <div className="container mx-auto">
-      <div className="grid lg:grid-cols-2 gap-4">
+    <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
+      <div className="grid gap-4 md:grid-cols-2">
         <CreateCard org={org} createcardaction={createcardaction} />
-        <Card className="p-4 md:mt-8 lg:mt-0 flex flex-wrap justify-center gap-4">
-          {cards?.map((c) => {
-            return <CreditCard key={c.id} card={c} params={params} />;
-          })}
-        </Card>
+        {cards && cards.length === 0 ? (
+          <div className="bg-white p-4 rounded-xl shadow-xl">
+            <div className="text-center">
+              <h2 className="text-2xl font-semibold">尚無付款方式</h2>
+              <p className="text-gray-500">請先新增付款方式</p>
+            </div>
+          </div>
+        ) : (
+          <Card className="p-4 md:mt-8 lg:mt-0 flex flex-wrap justify-center gap-4">
+            {cards?.map((c) => {
+              return <CreditCard key={c.id} card={c} params={params} />;
+            })}
+          </Card>
+        )}
       </div>
-    </div>
+    </main>
   );
 }
