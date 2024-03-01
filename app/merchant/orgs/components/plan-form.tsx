@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/registry/new-york/ui/button";
+import { Plan } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { usePathname } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -36,18 +37,20 @@ export const formSchema = z.object({
 export function PlanForm({
   action,
   setOpen,
+  plan,
 }: {
   action: (...args: any) => Promise<void>;
   setOpen: (open: boolean) => void;
+  plan?: Plan;
 }) {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
-      description: "",
-      amount: 199,
-      interval: 30,
+      name: plan?.name || "",
+      description: plan?.description || "",
+      amount: plan?.amount || 199,
+      interval: plan?.interval || 30,
     },
   });
 
@@ -55,8 +58,13 @@ export function PlanForm({
   const oid = pathname.split("/")[pathname.split("/").length - 1];
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
-    await action(oid, values);
-    setOpen(false);
+    if (plan?.id) {
+      await action(oid, plan.id, values);
+      setOpen(false);
+    } else {
+      await action(oid, values);
+      setOpen(false);
+    }
   };
 
   return (
@@ -119,7 +127,7 @@ export function PlanForm({
           )}
         />
 
-        <Button type="submit">Submit</Button>
+        <Button type="submit">送出</Button>
       </form>
     </Form>
   );

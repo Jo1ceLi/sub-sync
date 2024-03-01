@@ -10,7 +10,8 @@ import { Button } from "@/registry/new-york/ui/button";
 import { cookies, headers } from "next/headers";
 import { Plan } from "@/types/index";
 import { CreatePlanDialog } from "../orgs/components/create-plan-dialog";
-import { postPlanAction } from "../orgs/plan-server-action";
+import { postPlanAction, updatePlanAction } from "../orgs/plan-server-action";
+import { EditPlanDialog } from "./edit-plan-dialog";
 
 export default async function PlansCard() {
   const getPlans = async () => {
@@ -84,7 +85,9 @@ export default async function PlansCard() {
                       </ul>
                     </div>
                   </CardContent>
-                  {/* <Button variant="default">Edit</Button> */}
+                  <CardFooter>
+                    <EditPlanDialog action={updatePlanAction} plan={p} />
+                  </CardFooter>
                 </Card>
               </>
             ))}

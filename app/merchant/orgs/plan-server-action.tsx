@@ -24,3 +24,27 @@ export const postPlanAction = async (
     revalidatePath("/merchant/orgs/[id]");
   }
 };
+
+export const updatePlanAction = async (
+  oid: string,
+  planId: string,
+  values: z.infer<typeof formSchema>
+) => {
+  "use server";
+  const token = cookies().get("utoken");
+  const res = await fetch(
+    `${process.env.BACKEND_HOST}/api/orgs/${oid}/plans/${planId}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(values),
+      headers: {
+        Authorization: "Bearer " + token!.value,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  if (res.ok) {
+    console.log("okokok");
+    revalidatePath("/merchant/orgs/[id]");
+  }
+};
