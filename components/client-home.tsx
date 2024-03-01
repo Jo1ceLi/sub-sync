@@ -10,6 +10,7 @@ import { Icons } from "@/components/icons";
 import { redirect } from "next/navigation";
 import { useAuth } from "@/app/api/[auth]/auth";
 import Link from "next/link";
+import { SubscriptionPlanCard } from "@/app/client/orgs/[id]/subscriptions/page";
 
 export async function ClientHome({ params }: { params: any }) {
   const orgId = params["id"];
@@ -87,7 +88,11 @@ export async function ClientHome({ params }: { params: any }) {
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
       <div className="grid gap-4 md:grid-cols-2">
-        <SubscriptionPlanCard sub={sub} orgId={orgId} />
+        <SubscriptionPlanCard session={session} orgId={orgId}>
+          <Button asChild size="sm">
+            <Link href={`/client/orgs/${orgId}/subscriptions`}>變更</Link>
+          </Button>
+        </SubscriptionPlanCard>
         <PaymentMethodCard card={card} orgId={orgId} />
       </div>
       <Card>
@@ -120,73 +125,6 @@ export async function ClientHome({ params }: { params: any }) {
         </CardContent>
       </Card>
     </main>
-  );
-}
-
-function SubscriptionPlanCard({
-  sub,
-  orgId,
-}: {
-  sub: Subscription | undefined;
-  orgId: string;
-}) {
-  if (sub === undefined) {
-    return (
-      <Card>
-        <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-          <CardTitle className="text-sm font-medium">目前訂閱方案</CardTitle>
-          <Button size="sm">
-            <Link href={`/client/orgs/${orgId}/subscriptions`}>訂閱</Link>
-          </Button>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-2 text-sm">
-            <div className="flex items-center gap-4">
-              <div className="font-semibold">方案</div>
-              <div>----</div>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="font-semibold">狀態</div>
-              <div>----</div>
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="font-semibold">續訂日期</div>
-              <div>----/--/--</div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-  return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-        <CardTitle className="text-sm font-medium">Subscription Plan</CardTitle>
-        <Button size="sm">Change Plan</Button>
-      </CardHeader>
-      <CardContent>
-        <div className="grid gap-2 text-sm">
-          <div className="flex items-center gap-4">
-            <div className="font-semibold">Plan</div>
-            <div>{sub?.plan_name}</div>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="font-semibold">Status</div>
-            <div>{sub?.subscription_status}</div>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="font-semibold">Renewal Date</div>
-            <div>
-              {sub?.subscription_renewal_date
-                ? new Date(
-                    sub?.subscription_renewal_date as string
-                  ).toLocaleDateString()
-                : ""}
-            </div>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
   );
 }
 

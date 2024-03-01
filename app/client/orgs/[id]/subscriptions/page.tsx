@@ -10,7 +10,7 @@ import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { Button } from "@/registry/new-york/ui/button";
 import Link from "next/link";
-import { useAuth } from "@/app/api/[auth]/auth";
+import { Session, useAuth } from "@/app/api/[auth]/auth";
 import { redirect } from "next/navigation";
 
 export default async function OrgID({ params }: { params: any }) {
@@ -98,12 +98,14 @@ export default async function OrgID({ params }: { params: any }) {
   );
 }
 
-async function SubscriptionPlanCard({
+export async function SubscriptionPlanCard({
   session,
   orgId,
+  children,
 }: {
-  session: any;
+  session: Session | undefined;
   orgId: string;
+  children?: React.ReactNode;
 }) {
   const getSubscription = async () => {
     const response = await fetch(
@@ -163,7 +165,7 @@ async function SubscriptionPlanCard({
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
         <CardTitle className="text-sm font-medium">目前訂閱方案</CardTitle>
-        {/* <Button size="sm">Change Plan</Button> */}
+        {children}
       </CardHeader>
       <CardContent>
         <div className="grid gap-2 text-sm">
