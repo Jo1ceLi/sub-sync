@@ -11,7 +11,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 export function MobileNav({ currentUrl }: { currentUrl: string }) {
   const [open, setOpen] = useState(false);
-  type Seleted = 0 | 1 | 2 | null;
+  type Seleted = 0 | 1 | 2 | 3 | 4 | null;
   const pathname = usePathname();
   const params = pathname.split("/")[pathname.split("/").length - 1];
 
@@ -26,6 +26,12 @@ export function MobileNav({ currentUrl }: { currentUrl: string }) {
         break;
       case "subscriptions":
         setSelected(2);
+        break;
+      case "plans":
+        setSelected(3);
+        break;
+      case "settings":
+        setSelected(4);
         break;
       default:
         setSelected(0);
@@ -115,6 +121,22 @@ export function MobileNav({ currentUrl }: { currentUrl: string }) {
               >
                 <Icons.clock className="h-4 w-4" />
                 Subscriptions
+              </MobileLink>
+              <MobileLink
+                className={selected === 3 ? selectedStyle : nonSelectedStyle}
+                href={`${currentUrl}/plans`}
+                onOpenChange={setOpen}
+              >
+                <Icons.clock className="h-4 w-4" />
+                Plans
+              </MobileLink>
+              <MobileLink
+                className={selected === 2 ? selectedStyle : nonSelectedStyle}
+                href={`${currentUrl}/settings`}
+                onOpenChange={setOpen}
+              >
+                <Icons.clock className="h-4 w-4" />
+                Settings
               </MobileLink>
 
               {/* <MobileLink

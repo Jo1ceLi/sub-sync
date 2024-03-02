@@ -1,21 +1,11 @@
 import { Metadata } from "next";
-import Image from "next/image";
-
-import { Button } from "@/registry/new-york/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { MainNav } from "../components/main-nav";
 import { UserNav } from "../components/user-nav";
 import TeamSwitcher from "../components/team-switcher";
 import Link from "next/link";
 import { MobileNav } from "../../components/mobile-nav";
 import { useAuth } from "@/app/api/[auth]/auth";
+import { getOrgsData } from "../page";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -29,6 +19,8 @@ export default async function Layout({
   params: { id: string };
   children: React.ReactNode;
 }) {
+  const orgs = await getOrgsData();
+
   const currentUrl = `/merchant/orgs/${params.id}`;
   const session = await useAuth("user");
   return (
@@ -40,7 +32,7 @@ export default async function Layout({
             <span className="sr-only">Home</span>
           </Link>
           <div className="hidden md:flex h-16 items-center px-4">
-            <TeamSwitcher />
+            <TeamSwitcher orgs={orgs} />
             <MainNav className="mx-6" />
             <div className="ml-auto flex items-center space-x-4">
               <UserNav user={session?.user} />

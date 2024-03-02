@@ -29,8 +29,8 @@ export const columns: ColumnDef<Customer>[] = [
           }}
           alt={altname}
           src={pic}
-          width={45}
-          height={45}
+          width={35}
+          height={35}
         />
       );
     },

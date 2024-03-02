@@ -46,71 +46,70 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      <Card className="flex flex-col flex-1">
-        <Card className="rounded-md border">
-          <CardHeader>
-            <CardTitle className="flex justify-between items-center">
-              <p>Customer Data</p>
-              <Dialog>
-                <DialogTrigger asChild>
-                  <Button className="mr-5" variant={"outline"}>
-                    <Icons.userAdd />
-                  </Button>
-                </DialogTrigger>
-                <DialogContent>{children}</DialogContent>
-              </Dialog>
-            </CardTitle>
-          </CardHeader>
-          <Table>
-            <TableHeader>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => {
-                    return (
-                      <TableHead key={header.id}>
-                        {header.isPlaceholder
-                          ? null
-                          : flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                      </TableHead>
-                    );
-                  })}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex justify-between items-center">
+            <p>Customer Data</p>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button className="mr-5" variant={"outline"}>
+                  <Icons.userAdd />
+                </Button>
+              </DialogTrigger>
+              <DialogContent>{children}</DialogContent>
+            </Dialog>
+          </CardTitle>
+        </CardHeader>
+        <Table>
+          <TableHeader>
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => {
+                  return (
+                    <TableHead key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows?.length ? (
+              table.getRowModel().rows.map((row) => (
+                <TableRow
+                  key={row.id}
+                  data-state={row.getIsSelected() && "selected"}
+                >
+                  {row.getVisibleCells().map((cell) => (
+                    <TableCell key={cell.id}>
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext()
+                      )}
+                    </TableCell>
+                  ))}
                 </TableRow>
-              ))}
-            </TableHeader>
-            <TableBody>
-              {table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    data-state={row.getIsSelected() && "selected"}
-                  >
-                    {row.getVisibleCells().map((cell) => (
-                      <TableCell key={cell.id}>
-                        {flexRender(
-                          cell.column.columnDef.cell,
-                          cell.getContext()
-                        )}
-                      </TableCell>
-                    ))}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell
-                    colSpan={columns.length}
-                    className="h-24 text-center"
-                  >
-                    No results.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </Card>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  No results.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
       </Card>
+
       <div className="flex items-center justify-end space-x-2">
         <Button
           variant="outline"

@@ -3,19 +3,23 @@ import { OrgDialog } from "./org-dialog";
 import { patchOrgAction, postOrgAction } from "./org-server-action";
 import { DeleteOrgBtn } from "./delete-org-btn";
 import Link from "next/link";
+import { Org } from "./org-form";
 
-async function getOrgsData() {
+export async function getOrgsData() {
   const token = cookies().get("utoken");
   const res = await fetch(`${process.env.BACKEND_HOST}/api/orgs`, {
     headers: { Authorization: "Bearer " + token!.value },
   });
-  const data = await res.json();
-  return data;
+  if (res.ok) {
+    const data = (await res.json()) as Org[];
+    return data;
+  } else {
+    return [];
+  }
 }
 
 export default async function Org() {
   const orgs: any[] = await getOrgsData();
-  console.log("orgs=", orgs);
   return (
     <>
       <body className="bg-gray-50">

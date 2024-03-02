@@ -9,7 +9,7 @@ export function MainNav({
   className,
   ...props
 }: React.HTMLAttributes<HTMLElement>) {
-  type Seleted = 0 | 1 | 2 | 3 | null;
+  type Seleted = 0 | 1 | 2 | 3 | 4 | null;
   const pathname = usePathname();
 
   const [baseUrl, params] = useMemo(() => {
@@ -36,6 +36,9 @@ export function MainNav({
         break;
       case "plans":
         setSelected(3);
+        break;
+      case "settings":
+        setSelected(4);
         break;
       default:
         setSelected(0);
@@ -80,6 +83,13 @@ export function MainNav({
         className={selected === 3 ? selectedStyle : nonSelectedStyle}
       >
         方案
+      </Link>
+      <Link
+        href={`${baseUrl}/settings`}
+        onClick={() => setSelected(3)}
+        className={selected === 4 ? selectedStyle : nonSelectedStyle}
+      >
+        設定
       </Link>
     </nav>
   );
