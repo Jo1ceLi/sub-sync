@@ -6,6 +6,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Overview } from "../components/overview";
+import { RecentSales } from "../components/recent-sales";
 
 export default function DashboardPage() {
   return (
@@ -139,7 +141,9 @@ export default function DashboardPage() {
               <CardHeader>
                 <CardTitle>Overview</CardTitle>
               </CardHeader>
-              <CardContent className="pl-2">{/* <Overview /> */}</CardContent>
+              <CardContent className="pl-2">
+                <Overview />
+              </CardContent>
             </Card>
             <Card className="col-span-3">
               <CardHeader>
@@ -148,7 +152,9 @@ export default function DashboardPage() {
                   You made 265 sales this month.
                 </CardDescription>
               </CardHeader>
-              <CardContent>{/* <RecentSales /> */}</CardContent>
+              <CardContent>
+                <RecentSales />
+              </CardContent>
             </Card>
           </div>
         </TabsContent>

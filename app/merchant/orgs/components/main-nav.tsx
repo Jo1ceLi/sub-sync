@@ -9,7 +9,7 @@ export function MainNav({
   className,
   ...props
 }: React.HTMLAttributes<HTMLElement>) {
-  type Seleted = 0 | 1 | 2 | null;
+  type Seleted = 0 | 1 | 2 | 3 | null;
   const pathname = usePathname();
 
   const [baseUrl, params] = useMemo(() => {
@@ -33,6 +33,9 @@ export function MainNav({
         break;
       case "subscriptions":
         setSelected(2);
+        break;
+      case "plans":
+        setSelected(3);
         break;
       default:
         setSelected(0);
@@ -70,6 +73,13 @@ export function MainNav({
         className={selected === 2 ? selectedStyle : nonSelectedStyle}
       >
         訂閱
+      </Link>
+      <Link
+        href={`${baseUrl}/plans`}
+        onClick={() => setSelected(3)}
+        className={selected === 3 ? selectedStyle : nonSelectedStyle}
+      >
+        方案
       </Link>
     </nav>
   );

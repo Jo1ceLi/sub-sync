@@ -5,7 +5,7 @@ export async function MerchantSubPage() {
   return (
     <>
       <PlansCard />
-      <RecentSubscriptions />
+      {/* <RecentSubscriptions /> */}
     </>
   );
 }
