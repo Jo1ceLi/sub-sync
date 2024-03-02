@@ -55,14 +55,14 @@ export function PlanForm({
   });
 
   const pathname = usePathname();
-  const oid = pathname.split("/")[pathname.split("/").length - 1];
+  const orgId = pathname.split("/orgs/")[1].split("/")[0];
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
     if (plan?.id) {
-      await action(oid, plan.id, values);
+      await action(orgId, plan.id, values);
       setOpen(false);
     } else {
-      await action(oid, values);
+      await action(orgId, values);
       setOpen(false);
     }
   };
