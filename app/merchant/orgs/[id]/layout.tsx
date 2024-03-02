@@ -1,131 +1,54 @@
-import Link from "next/link";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenuTrigger,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuItem,
-  DropdownMenuContent,
-  DropdownMenu,
-} from "@/components/ui/dropdown-menu";
-import { Icons } from "@/components/icons";
+import { Metadata } from "next";
 import Image from "next/image";
-import { useAuth } from "@/app/api/[auth]/auth";
-import LogoutBtn from "@/components/logout-btn";
-import { cookies } from "next/headers";
-import Sidebar from "@/app/merchant/components/sidebar";
-import { MobileNav } from "@/app/merchant/components/mobile-nav";
 
-export default async function MerchantPageLayout({
-  children,
+import { Button } from "@/registry/new-york/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { MainNav } from "../components/main-nav";
+import { UserNav } from "../components/user-nav";
+import TeamSwitcher from "../components/team-switcher";
+import Link from "next/link";
+import { MobileNav } from "../../components/mobile-nav";
+import { useAuth } from "@/app/api/[auth]/auth";
+
+export const metadata: Metadata = {
+  title: "Dashboard",
+  description: "Example dashboard app built using the components.",
+};
+
+export default async function Layout({
   params,
-  searchParams,
+  children,
 }: {
-  children: React.ReactNode;
   params: { id: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  children: React.ReactNode;
 }) {
   const currentUrl = `/merchant/orgs/${params.id}`;
   const session = await useAuth("user");
-  const logoutaction = async () => {
-    "use server";
-    cookies().delete("utoken");
-  };
   return (
-    <div className="grid min-h-dvh w-full overflow-hidden lg:grid-cols-[280px_1fr]">
-      <Sidebar currentUrl={currentUrl} />
-      {/* <div className="hidden border-r bg-gray-100/40 lg:block dark:bg-gray-800/40">
-        <div className="flex flex-col gap-2">
-          <div className="flex h-[60px] items-center px-6">
-            <Link className="flex items-center gap-2 font-semibold" href="#">
-              <Icons.package2 className="h-6 w-6" />
-              <span className="">Acme Inc</span>
-            </Link>
-          </div>
-          <div className="flex-1">
-            <nav className="grid items-start px-4 text-sm font-medium">
-              <Link
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                href={currentUrl}
-              >
-                <Icons.home className="h-4 w-4" />
-                Home
-              </Link>
-              <Link
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                href={`${currentUrl}/customers`}
-              >
-                <Icons.users className="h-4 w-4" />
-                Customers
-              </Link>
-              <Link
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-900 transition-all hover:text-gray-900 dark:bg-gray-800 bg-gray-100 dark:text-gray-50 dark:hover:text-gray-50"
-                href={`${currentUrl}/subscriptions`}
-              >
-                <Icons.trendingup className="h-4 w-4" />
-                Subscriptions
-                <Badge className="ml-auto flex h-6 w-6 shrink-0 items-center justify-center rounded-full">
-                  12
-                </Badge>
-              </Link>
-            </nav>
-          </div>
-        </div>
-      </div> */}
-      <div className="flex flex-col">
-        <header className="flex h-14 lg:h-[60px] items-center gap-4 border-b bg-gray-100/40 px-6 dark:bg-gray-800/40">
-          <Link className="lg:hidden" href="#">
+    <>
+      <div className="flex-col md:flex">
+        <div className="border-b">
+          <Link className="md:hidden flex h-16 items-center pl-4" href="#">
             <MobileNav currentUrl={currentUrl} />
             <span className="sr-only">Home</span>
           </Link>
-          <div className="flex-1">
-            <h1 className="font-semibold text-lg">Subscription Plans</h1>
+          <div className="hidden md:flex h-16 items-center px-4">
+            <TeamSwitcher />
+            <MainNav className="mx-6" />
+            <div className="ml-auto flex items-center space-x-4">
+              <UserNav user={session?.user} />
+            </div>
           </div>
-          <div className="flex flex-1 items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-            <form className="ml-auto flex-1 sm:flex-initial">
-              <div className="relative">
-                <Icons.search className="absolute left-2.5 top-2.5 h-4 w-4 text-gray-500 dark:text-gray-400" />
-                <Input
-                  className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px] bg-white"
-                  placeholder="Search plans..."
-                  type="search"
-                />
-              </div>
-            </form>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button className="rounded-full" size="icon" variant="ghost">
-                  <Image
-                    alt="Avatar"
-                    className="rounded-full"
-                    height="32"
-                    src={session?.user.picture as string}
-                    style={{
-                      aspectRatio: "32/32",
-                      objectFit: "cover",
-                    }}
-                    width="32"
-                  />
-                  <span className="sr-only">Toggle user menu</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>{session?.user.name}</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Settings</DropdownMenuItem>
-                <DropdownMenuItem>Support</DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <LogoutBtn logoutaction={logoutaction} />
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </header>
-        <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
-          {children}
-        </main>
+        </div>
+        <div className="flex-1 space-y-4 p-8 pt-6">{children}</div>
       </div>
-    </div>
+    </>
   );
 }
