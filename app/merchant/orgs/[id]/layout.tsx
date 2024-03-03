@@ -29,13 +29,16 @@ export default async function Layout({
         <div className="border-b">
           <Link className="md:hidden flex h-16 items-center pl-4" href="#">
             <MobileNav currentUrl={currentUrl} />
+            <div className="ml-auto mr-4 flex items-center space-x-4">
+              <UserNav />
+            </div>
             <span className="sr-only">Home</span>
           </Link>
           <div className="hidden md:flex h-16 items-center px-4">
             <TeamSwitcher orgs={orgs} />
             <MainNav className="mx-6" />
             <div className="ml-auto flex items-center space-x-4">
-              <UserNav user={session?.user} />
+              <UserNav />
             </div>
           </div>
         </div>
