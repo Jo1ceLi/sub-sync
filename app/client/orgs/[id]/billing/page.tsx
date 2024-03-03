@@ -1,5 +1,5 @@
 import { Card as CardType } from "@/types";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import CreateCard from "@/app/client/components/create-card-card";
 import { notFound, redirect } from "next/navigation";
 import { CreditCard } from "@/components/credit-card";
@@ -44,6 +44,15 @@ export default async function ClientBilling({ params }: { params: any }) {
     }
   };
 
+  const headersList = headers();
+  const protocol = headersList.get("x-forwarded-proto") || "";
+  const domain = headersList.get("x-forwarded-host") || "";
+  const pathname = `/client/orgs/${params["id"]}/billing` || "/client/orgs";
+
+  const currentUrl = domain.startsWith("localhost:")
+    ? "https://www.google.com"
+    : `${protocol}://${domain}${pathname}`;
+
   const createcardaction = async (prime: string, alias: string) => {
     "use server";
     const token = cookies().get("ctoken");
@@ -57,9 +66,8 @@ export default async function ClientBilling({ params }: { params: any }) {
             alias: alias,
             prime: prime,
             result_url: {
-              //TODO: change to frontend url
-              frontend_redirect_url: "https://google.com.tw",
-              go_back_url: "https://google.com.tw",
+              frontend_redirect_url: currentUrl,
+              go_back_url: currentUrl,
             },
           }),
           headers: {
