@@ -4,6 +4,7 @@ import CreateCard from "@/app/client/components/create-card-card";
 import { notFound, redirect } from "next/navigation";
 import { CreditCard } from "@/components/credit-card";
 import { Card } from "@/components/ui/card";
+import { useAuth } from "@/app/api/[auth]/auth";
 
 export default async function ClientBilling({ params }: { params: any }) {
   const getCards = async () => {
@@ -53,7 +54,20 @@ export default async function ClientBilling({ params }: { params: any }) {
     ? "https://www.google.com"
     : `${protocol}://${domain}${pathname}`;
 
-  const createcardaction = async (prime: string, alias: string) => {
+  const createcardaction = async (
+    prime: string,
+    {
+      name,
+      phone_number,
+      email,
+      alias,
+    }: {
+      name: string | undefined;
+      phone_number: string | undefined;
+      email: string | undefined;
+      alias: string;
+    }
+  ) => {
     "use server";
     const token = cookies().get("ctoken");
     const oid = params["id"];
@@ -68,6 +82,11 @@ export default async function ClientBilling({ params }: { params: any }) {
             result_url: {
               frontend_redirect_url: currentUrl,
               go_back_url: currentUrl,
+            },
+            cardholder: {
+              phone_number,
+              name: name,
+              email,
             },
           }),
           headers: {
@@ -85,10 +104,15 @@ export default async function ClientBilling({ params }: { params: any }) {
 
   const cards = await getCards();
   const org = await getOrgById();
+  const session = await useAuth("client");
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
       <div className="grid gap-4 md:grid-cols-2">
-        <CreateCard org={org} createcardaction={createcardaction} />
+        <CreateCard
+          org={org}
+          createcardaction={createcardaction}
+          user={session?.user}
+        />
         {cards && cards.length === 0 ? (
           <div className="bg-white p-4 rounded-xl shadow-xl">
             <div className="text-center">

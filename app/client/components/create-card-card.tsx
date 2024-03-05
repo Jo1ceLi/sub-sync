@@ -20,9 +20,26 @@ import { twMerge } from "tailwind-merge";
 export default function CreateCard({
   org,
   createcardaction,
+  user,
 }: {
   org: Org;
-  createcardaction: (prime: string, alias: string) => Promise<any>;
+  createcardaction: (
+    prime: string,
+    data: {
+      name: string | undefined;
+      phone_number: string | undefined;
+      email: string | undefined;
+      alias: string;
+    }
+  ) => Promise<any>;
+  user:
+    | {
+        name: string;
+        phone: string;
+        email: string;
+        picture: string;
+      }
+    | undefined;
 }) {
   const tappayInit = () => {
     const fields = {
@@ -112,7 +129,12 @@ export default function CreateCard({
         return;
       }
       // alert("get prime 成功，prime: " + result.card.prime);
-      await createcardaction(result.card.prime, alias);
+      await createcardaction(result.card.prime, {
+        name,
+        alias: alias,
+        phone_number: phone,
+        email: user?.email,
+      });
       setLoading(false);
       // send prime to your server, to pay with Pay by Prime API .
       // Pay By Prime Docs: https://docs.tappaysdk.com/tutorial/zh/back.html#pay-by-prime-api
@@ -120,6 +142,8 @@ export default function CreateCard({
   };
 
   const [loading, setLoading] = useState(false);
+  const [name, setName] = useState(user?.name);
+  const [phone, setPhone] = useState(user?.phone);
   const [alias, setAlias] = useState("");
   return (
     <>
@@ -134,10 +158,28 @@ export default function CreateCard({
         </CardHeader>
         <CardContent className="grid gap-6">
           <div className="grid gap-1">
+            <Label>姓名</Label>
+            <Input
+              className="text-base border-2 border-black rounded-lg max-h-8 focus-visible:ring-3"
+              placeholder="姓名"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+
+            <Label>電話</Label>
+            <Input
+              className="text-base border-2 border-black rounded-lg max-h-8 focus-visible:ring-3"
+              placeholder="電話"
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+
             <Label>信用卡別名</Label>
             <Input
               className="text-base border-2 border-black rounded-lg max-h-8 focus-visible:ring-3"
-              placeholder="Alias"
+              placeholder="幫信用卡取個名字吧"
               onChange={(e) => setAlias(e.target.value)}
             />
 

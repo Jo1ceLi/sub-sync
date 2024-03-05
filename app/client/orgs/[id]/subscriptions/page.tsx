@@ -12,6 +12,7 @@ import { Button } from "@/registry/new-york/ui/button";
 import Link from "next/link";
 import { Session, useAuth } from "@/app/api/[auth]/auth";
 import { redirect } from "next/navigation";
+import { ClientSettingsForm } from "../settings/components/client-form";
 
 export default async function OrgID({ params }: { params: any }) {
   const orgId = params["id"];
@@ -93,6 +94,9 @@ export default async function OrgID({ params }: { params: any }) {
         subscribeAction={subscribe}
       />
 
+      <div className="p-4">
+        <ClientSettingsForm user={session?.user} />
+      </div>
       <RecentSubscriptions />
     </>
   );
