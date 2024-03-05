@@ -10,11 +10,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
 import { useAuth } from "@/app/api/[auth]/auth";
-import { Icons } from "@/components/icons";
 import LogoutBtn from "@/components/logout-btn";
 import { cookies } from "next/headers";
 import { MobileNav } from "@/app/client/components/mobile-nav";
 import Sidebar from "@/app/client/components/sidebar";
+import { Title } from "@/app/client/orgs/[id]/title";
 
 export default async function ClientPageLayout({
   children,
@@ -45,7 +45,7 @@ export default async function ClientPageLayout({
               <span className="sr-only">Home</span>
             </Link>
             <div className="flex-1">
-              <h1 className="font-semibold text-lg">{"TTTTTT"}</h1>
+              <Title />
             </div>
             <div className="flex items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
               <DropdownMenu>

@@ -94,9 +94,9 @@ export default async function OrgID({ params }: { params: any }) {
         subscribeAction={subscribe}
       />
 
-      <div className="p-4">
+      {/* <div className="p-4">
         <ClientSettingsForm user={session?.user} />
-      </div>
+      </div> */}
       <RecentSubscriptions />
     </>
   );
