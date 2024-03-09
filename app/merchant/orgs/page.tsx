@@ -4,6 +4,7 @@ import { patchOrgAction, postOrgAction } from "./org-server-action";
 import { DeleteOrgBtn } from "./delete-org-btn";
 import Link from "next/link";
 import { Org } from "./org-form";
+import { getAuth } from "@/app/api/[auth]/auth";
 
 export async function getOrgsData() {
   const token = cookies().get("utoken");
@@ -19,36 +20,40 @@ export async function getOrgsData() {
 }
 
 export default async function Org() {
+  const session = await getAuth("user");
+
   const orgs: any[] = await getOrgsData();
   return (
     <>
       <body className="bg-gray-50">
         <div className="container mx-auto px-4 py-8">
           <div className="flex justify-between mb-6">
-            <h1 className="text-3xl font-semibold">Welcome back!</h1>
+            <h1 className="text-3xl font-semibold ml-3">
+              您好! {session?.user.name}
+            </h1>
 
             <OrgDialog org={null} action={postOrgAction} />
           </div>
 
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <input
               type="text"
               placeholder="Filter Orgs..."
               className="border-2 border-gray-200 rounded py-2 px-4 w-full"
             />
-          </div>
+          </div> */}
           <div className="bg-white shadow overflow-hidden rounded-lg">
             <table className="min-w-full">
               <thead className="bg-gray-100">
                 <tr>
                   <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Name
+                    組織名稱
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Description
+                    組織簡介
                   </th>
                   <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Action
+                    編輯
                   </th>
                 </tr>
               </thead>
@@ -92,7 +97,7 @@ export default async function Org() {
             </table>
           </div>
 
-          <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
+          {/* <div className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6">
             <div className="flex-1 flex justify-between sm:hidden">
               <a
                 href="#"
@@ -156,7 +161,7 @@ export default async function Org() {
                 </nav>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </body>
     </>

@@ -22,11 +22,11 @@ export function OrgDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">{org ? "Edit" : "Create"} Org</Button>
+        <Button variant="outline">{org ? "編輯" : "新增"}組織</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{org ? "Edit" : "Create"} Org</DialogTitle>
+          <DialogTitle>{org ? "編輯" : "新增"}組織</DialogTitle>
         </DialogHeader>
 
         <OrgForm org={org} action={action} setOpen={setOpen} />

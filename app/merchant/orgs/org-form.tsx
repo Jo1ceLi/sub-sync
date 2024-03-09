@@ -9,6 +9,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import { Button } from "@/registry/new-york/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -76,7 +77,7 @@ export function OrgForm({
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Name</FormLabel>
+              <FormLabel>組織名稱</FormLabel>
               <FormControl>
                 <Input placeholder="OrgName" {...field} />
               </FormControl>
@@ -89,7 +90,7 @@ export function OrgForm({
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Desc</FormLabel>
+              <FormLabel>組織簡介</FormLabel>
               <FormControl>
                 <Input placeholder="OrgDesc" {...field} />
               </FormControl>
@@ -101,7 +102,9 @@ export function OrgForm({
         {org === null ? (
           <></>
         ) : (
-          <>
+          <div className="space-y-2">
+            <Separator className="mt-5 mb-2" />
+            <h3 className="text-lg mb-3">TapPay 收款參數</h3>
             <FormField
               control={form.control}
               name="app_id"
@@ -167,9 +170,13 @@ export function OrgForm({
                 </FormItem>
               )}
             />
-          </>
+          </div>
         )}
-        <Button type="submit">Submit</Button>
+        <div>
+          <Button className="mt-2" type="submit">
+            送出
+          </Button>
+        </div>
       </form>
     </Form>
   );
