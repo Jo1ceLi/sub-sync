@@ -2,7 +2,7 @@ import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { cookies } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import { JoinForm } from "./join-form";
-import { useAuth } from "@/app/api/[auth]/auth";
+import { getAuth } from "@/app/api/[auth]/auth";
 
 export default async function Home({ params }: { params: { id: string } }) {
   const joinAction = async (val: { phone: string }) => {
@@ -59,7 +59,7 @@ export default async function Home({ params }: { params: { id: string } }) {
     }
   };
 
-  const session = await useAuth("client");
+  const session = await getAuth("client");
   const org = await getOrgById();
   // await getOrgsByClientToken();
 

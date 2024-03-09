@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import type { Org } from "@/app/merchant/orgs/org-form";
-import { useAuth } from "@/app/api/[auth]/auth";
+import { getAuth } from "@/app/api/[auth]/auth";
 import { ClientHome } from "@/components/client-home";
 
 export default async function OrgID({ params }: { params: any }) {
@@ -19,7 +19,7 @@ export default async function OrgID({ params }: { params: any }) {
     }
   };
 
-  const session = await useAuth("client");
+  const session = await getAuth("client");
   const org = (await getOrgsByClientToken()) as Org;
   return (
     <>

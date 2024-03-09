@@ -9,7 +9,7 @@ import {
   DropdownMenu,
 } from "@/components/ui/dropdown-menu";
 import Image from "next/image";
-import { useAuth } from "@/app/api/[auth]/auth";
+import { getAuth } from "@/app/api/[auth]/auth";
 import LogoutBtn from "@/components/logout-btn";
 import { cookies } from "next/headers";
 import { MobileNav } from "@/app/client/components/mobile-nav";
@@ -26,7 +26,7 @@ export default async function ClientPageLayout({
   searchParams: { [key: string]: string | string[] | undefined };
 }) {
   const currentUrl = `/client/orgs/${params.id}`;
-  const session = await useAuth("client");
+  const session = await getAuth("client");
 
   const logoutaction = async () => {
     "use server";
@@ -41,7 +41,6 @@ export default async function ClientPageLayout({
           <header className="flex h-14 lg:h-[60px] items-center gap-4 border-b bg-white shadow shrink-0 px-6 dark:bg-gray-900/90 dark:border-gray-800/90">
             <Link className="lg:hidden" href="#">
               <MobileNav currentUrl={currentUrl} />
-              {/* <Icons.package2 className="w-6 h-6" /> */}
               <span className="sr-only">Home</span>
             </Link>
             <div className="flex-1">
@@ -69,10 +68,11 @@ export default async function ClientPageLayout({
                   <DropdownMenuLabel>{session?.user.name}</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem>Settings</DropdownMenuItem>
-                  <DropdownMenuItem>Support</DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Link href={`/client/orgs`}>商店列表</Link>
+                  </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <LogoutBtn logoutaction={logoutaction} />
-                  <DropdownMenuItem>Logout</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>

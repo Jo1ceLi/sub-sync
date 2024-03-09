@@ -13,11 +13,11 @@ import {
 
 import LogoutBtn from "@/components/logout-btn";
 import { cookies } from "next/headers";
-import { useAuth } from "@/app/api/[auth]/auth";
+import { getAuth } from "@/app/api/[auth]/auth";
 import { DialogTrigger } from "@/components/ui/dialog";
 
 export default async function UserDropdownmenu() {
-  const session = await useAuth("user");
+  const session = await getAuth("user");
   const user = session?.user;
   const logoutaction = async () => {
     "use server";

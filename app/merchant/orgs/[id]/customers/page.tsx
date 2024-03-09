@@ -1,4 +1,4 @@
-import { useAuth } from "@/app/api/[auth]/auth";
+import { getAuth } from "@/app/api/[auth]/auth";
 import JoinOrgQRCode from "@/app/merchant/components/join-org-qrcode";
 import { MerchantCRM } from "@/components/merchant-crm";
 import { Customer } from "@/types";
@@ -30,7 +30,7 @@ export default async function MerchantCustomer({
     }
     return [];
   };
-  const session = await useAuth("user");
+  const session = await getAuth("user");
 
   const customers = await getCustomers();
   const headersList = headers();

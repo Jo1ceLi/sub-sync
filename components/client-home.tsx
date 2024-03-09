@@ -8,7 +8,7 @@ import type {
 import { Button } from "@/registry/new-york/ui/button";
 import { Icons } from "@/components/icons";
 import { redirect } from "next/navigation";
-import { useAuth } from "@/app/api/[auth]/auth";
+import { getAuth } from "@/app/api/[auth]/auth";
 import Link from "next/link";
 import { SubscriptionPlanCard } from "@/app/client/orgs/[id]/subscriptions/page";
 
@@ -78,7 +78,7 @@ export async function ClientHome({ params }: { params: any }) {
     }
   };
 
-  const session = await useAuth("client");
+  const session = await getAuth("client");
   const cards = await getCards();
   const card = cards?.[0];
 

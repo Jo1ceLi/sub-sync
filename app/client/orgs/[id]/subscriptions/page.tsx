@@ -10,7 +10,7 @@ import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { Button } from "@/registry/new-york/ui/button";
 import Link from "next/link";
-import { Session, useAuth } from "@/app/api/[auth]/auth";
+import { Session, getAuth } from "@/app/api/[auth]/auth";
 import { redirect } from "next/navigation";
 import { ClientSettingsForm } from "../settings/components/client-form";
 
@@ -77,7 +77,7 @@ export default async function OrgID({ params }: { params: any }) {
     return res.status;
   };
 
-  const session = await useAuth("client");
+  const session = await getAuth("client");
   const plans = (await getPlans()) as Plan[];
   const cards = await getCards();
 

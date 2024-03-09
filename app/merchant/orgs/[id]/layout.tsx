@@ -4,7 +4,7 @@ import { UserNav } from "../components/user-nav";
 import TeamSwitcher from "../components/team-switcher";
 import Link from "next/link";
 import { MobileNav } from "../../components/mobile-nav";
-import { useAuth } from "@/app/api/[auth]/auth";
+import { getAuth } from "@/app/api/[auth]/auth";
 import { getOrgsData } from "../page";
 
 export const metadata: Metadata = {
@@ -22,7 +22,7 @@ export default async function Layout({
   const orgs = await getOrgsData();
 
   const currentUrl = `/merchant/orgs/${params.id}`;
-  const session = await useAuth("user");
+  const session = await getAuth("user");
   return (
     <>
       <div className="flex-col md:flex">

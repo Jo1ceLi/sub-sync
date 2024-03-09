@@ -12,7 +12,7 @@ export type Session = {
   token: string;
 };
 
-export const useAuth = async (
+export const getAuth = async (
   type: "user" | "client"
 ): Promise<Session | undefined> => {
   if (type === "user") {

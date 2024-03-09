@@ -4,7 +4,7 @@ import CreateCard from "@/app/client/components/create-card-card";
 import { notFound, redirect } from "next/navigation";
 import { CreditCard } from "@/components/credit-card";
 import { Card } from "@/components/ui/card";
-import { useAuth } from "@/app/api/[auth]/auth";
+import { getAuth } from "@/app/api/[auth]/auth";
 
 export default async function ClientBilling({ params }: { params: any }) {
   const getCards = async () => {
@@ -104,7 +104,7 @@ export default async function ClientBilling({ params }: { params: any }) {
 
   const cards = await getCards();
   const org = await getOrgById();
-  const session = await useAuth("client");
+  const session = await getAuth("client");
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
       <div className="grid gap-4 md:grid-cols-2">

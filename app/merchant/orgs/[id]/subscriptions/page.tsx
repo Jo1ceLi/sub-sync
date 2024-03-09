@@ -1,4 +1,4 @@
-import { useAuth } from "@/app/api/[auth]/auth";
+import { getAuth } from "@/app/api/[auth]/auth";
 import RecentSubscriptions from "@/app/merchant/components/recent-subscriptions";
 import { Card } from "@/components/ui/card";
 import { Transaction } from "@/types";
@@ -11,7 +11,7 @@ export default async function Subscriptions({
 }: {
   params: { id: string };
 }) {
-  const session = await useAuth("user");
+  const session = await getAuth("user");
   const getTransactions = async () => {
     const response = await fetch(
       `${process.env.BACKEND_HOST}/api/orgs/${params.id}/transactions`,
