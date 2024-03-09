@@ -15,6 +15,7 @@ import { cookies } from "next/headers";
 import { MobileNav } from "@/app/client/components/mobile-nav";
 import Sidebar from "@/app/client/components/sidebar";
 import { Title } from "@/app/client/orgs/[id]/title";
+import { Org } from "@/app/merchant/orgs/org-form";
 
 export default async function ClientPageLayout({
   children,
@@ -33,10 +34,28 @@ export default async function ClientPageLayout({
     cookies().delete("ctoken");
   };
 
+  const getOrg = async (orgId: string) => {
+    const resp = await fetch(
+      `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}`,
+      {
+        headers: {
+          Authorization: "Bearer " + session!.token,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    if (resp.ok) {
+      return (await resp.json()) as Org;
+    }
+    return undefined;
+  };
+
+  const org = await getOrg(params.id);
+
   return (
     <>
       <div className="grid min-h-screen w-full overflow-hidden bg-gray-100/40 md:grid-cols-[280px_1fr] dark:bg-gray-800/40">
-        <Sidebar currentUrl={currentUrl} />
+        <Sidebar currentUrl={currentUrl} orgName={org?.name} />
         <div className="flex flex-col">
           <header className="flex h-14 lg:h-[60px] items-center gap-4 border-b bg-white shadow shrink-0 px-6 dark:bg-gray-900/90 dark:border-gray-800/90">
             <Link className="lg:hidden" href="#">

@@ -5,7 +5,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function Sidebar({ currentUrl }: { currentUrl: string }) {
+export default function Sidebar({
+  currentUrl,
+  orgName,
+}: {
+  currentUrl: string;
+  orgName: string | undefined;
+}) {
   type Seleted = 0 | 1 | 2 | 3 | null;
   const pathname = usePathname();
   const params = pathname.split("/")[pathname.split("/").length - 1];
@@ -40,7 +46,7 @@ export default function Sidebar({ currentUrl }: { currentUrl: string }) {
         <div className="flex h-[60px] items-center px-6">
           <Link className="flex items-center gap-2 font-semibold" href="#">
             <Icons.package2 className="h-6 w-6" />
-            <span className="">Sub-Sync Inc</span>
+            <span className="">{orgName}</span>
           </Link>
         </div>
         <nav className="grid items-start px-4 text-sm font-medium">
