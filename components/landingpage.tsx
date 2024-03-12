@@ -22,13 +22,15 @@ export function Landingpage() {
             </p>
             <div className="flex">
               <Link href="/merchant/login">
-                <Button className="mr-10" variant={"destructive"}>
+                <Button className="mr-10 text-gray-50" variant={"destructive"}>
                   立即免費註冊
                 </Button>
               </Link>
-              <Button className="border-white" variant={"outline"}>
-                {"瞭解更多 ->"}
-              </Button>
+              <Link href={"https://cal.com/jo1ce-li/15min"}>
+                <Button className="border-white" variant={"secondary"}>
+                  {"預約試用 ->"}
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
