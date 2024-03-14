@@ -12,7 +12,7 @@ export default function CreditCardPure({
   return (
     <div
       className={twMerge(
-        "bg-gradient-to-r from-[#272c36] to-[#070319] rounded-xl p-6  text-white shadow-xl w-[220px] h-[140px]",
+        "bg-gradient-to-r from-[#272c36] to-[#070319] rounded-xl p-6  text-white shadow-xl w-[270px] h-[170px]",
         cn
       )}
     >

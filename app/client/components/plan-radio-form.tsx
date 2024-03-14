@@ -86,14 +86,14 @@ export function PlanRadioGroupForm({
                           <FormLabel className="font-normal">
                             <Card
                               key={p.id}
-                              className="bg-white w-[270px] h-[200px]"
+                              className="bg-white w-[270px] h-[170px]"
                             >
                               <CardHeader className="">
                                 <CardTitle>{p.name}</CardTitle>
                               </CardHeader>
-                              <CardContent className=" h-[200px]">
+                              <CardContent className="h-[200px]">
                                 <>
-                                  <h1 className="text-3xl mb-2">
+                                  <h1 className="text-2xl mb-2">
                                     ${p.amount}
                                     <span className="text-sm">
                                       /{p.interval}天
@@ -136,7 +136,7 @@ export function PlanRadioGroupForm({
                     <RadioGroup
                       onValueChange={field.onChange}
                       defaultValue={field.value}
-                      className="flex flex-col space-y-1"
+                      className="flex flex-wrap"
                     >
                       {cards && cards.length > 0 ? (
                         cards.map((c) => (
