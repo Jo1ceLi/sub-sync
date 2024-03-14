@@ -12,6 +12,7 @@ import { Plan } from "@/types/index";
 import { CreatePlanDialog } from "../orgs/components/create-plan-dialog";
 import { postPlanAction, updatePlanAction } from "../orgs/plan-server-action";
 import { EditPlanDialog } from "./edit-plan-dialog";
+import { H2, H3 } from "@/components/typography";
 
 export default async function PlansCard() {
   const getPlans = async () => {
@@ -39,7 +40,7 @@ export default async function PlansCard() {
     <Card>
       <CardHeader className="pb-4">
         <CardTitle className="flex items-center justify-between">
-          <div>Subscription Plans</div>
+          <H3>訂閱方案</H3>
           <div>
             <CreatePlanDialog action={postPlanAction} />
           </div>

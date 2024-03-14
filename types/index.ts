@@ -16,6 +16,18 @@ export interface Plan {
   interval: number;
   currency: string;
 }
+
+interface Pricing {
+  price: number;
+  session_count: number;
+}
+export interface Course {
+  id: string;
+  title: string;
+  description: string;
+  pricing: Pricing[];
+}
+
 export interface Customer {
   client_id: string;
   name: string;
