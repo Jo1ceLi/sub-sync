@@ -95,7 +95,7 @@ export function Landingpage() {
               alt="Hero"
               className="mx-auto aspect-video overflow-hidden rounded-xl object-cover object-center"
               height="338"
-              src="/placeholder.svg"
+              src={"/free_your_time.jpg"}
               width="600"
             />
           </div>
@@ -108,7 +108,7 @@ export function Landingpage() {
               alt="Hero"
               className="mx-auto aspect-video overflow-hidden rounded-xl object-cover object-center lg:order-last"
               height="310"
-              src="/placeholder.svg"
+              src={"/handy_feature.jpg"}
               width="550"
             />
             <div className="space-y-4">
@@ -162,7 +162,7 @@ export function Landingpage() {
           </div>
         </div>
       </section>
-      <section className="border-t border-b py-12 lg:py-16">
+      {/* <section className="border-t border-b py-12 lg:py-16">
         <div className="container px-4 md:px-6">
           <div className="grid items-center gap-6 lg:grid-cols-2 lg:gap-12">
             <div className="space-y-4">
@@ -217,7 +217,7 @@ export function Landingpage() {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
       <div className="container px-4 md:px-6">
         <div className="flex justify-center py-6 lg:py-12">
           <div className="w-full max-w-3xl">
