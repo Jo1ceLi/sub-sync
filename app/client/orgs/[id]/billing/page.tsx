@@ -147,11 +147,9 @@ export default async function ClientBilling({ params }: { params: any }) {
           </div>
         ) : (
           <>
-            <Card className="p-4 md:mt-8 lg:mt-0 flex flex-wrap justify-center gap-4">
-              {cards?.map((c) => {
-                return <CreditCard key={c.id} card={c} params={params} />;
-              })}
-            </Card>
+            {cards?.map((c) => {
+              return <CreditCard key={c.id} card={c} params={params} />;
+            })}
             <CreateCardDialog
               org={org}
               createcardaction={createcardaction}

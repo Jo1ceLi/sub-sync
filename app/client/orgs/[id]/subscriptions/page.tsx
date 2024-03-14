@@ -97,7 +97,7 @@ export default async function OrgID({ params }: { params: any }) {
       {/* <div className="p-4">
         <ClientSettingsForm user={session?.user} />
       </div> */}
-      <RecentSubscriptions />
+      {/* <RecentSubscriptions /> */}
     </>
   );
 }
