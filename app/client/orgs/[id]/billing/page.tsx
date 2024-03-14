@@ -1,12 +1,16 @@
-import { Card as CardType } from "@/types";
+import { Card as CardType, Transaction } from "@/types";
 import { cookies, headers } from "next/headers";
-import CreateCard from "@/app/client/components/create-card-card";
 import { notFound, redirect } from "next/navigation";
 import { CreditCard } from "@/components/credit-card";
-import { Card } from "@/components/ui/card";
+import { CardTitle, CardHeader, CardContent, Card } from "@/components/ui/card";
 import { getAuth } from "@/app/api/[auth]/auth";
+import { Button } from "@/registry/new-york/ui/button";
+import { Icons } from "@/components/icons";
+import { CreateCardDialog } from "@/app/client/components/new-credit-card-dialog";
 
 export default async function ClientBilling({ params }: { params: any }) {
+  const orgId = params["id"];
+
   const getCards = async () => {
     const token = cookies().get("ctoken");
     const oid = params["id"];
@@ -102,32 +106,89 @@ export default async function ClientBilling({ params }: { params: any }) {
     }
   };
 
+  const getTransactions = async () => {
+    if (orgId) {
+      const response = await fetch(
+        `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/transactions`,
+        {
+          headers: {
+            Authorization: `Bearer ${session!.token}`,
+          },
+        }
+      );
+      if (response.ok) {
+        const data = (await response.json()) as Transaction[];
+        return data;
+      } else if (response.status == 403) {
+        redirect("/merchant/orgs");
+      }
+      return [];
+    }
+  };
+
+  const session = await getAuth("client");
+  const txs = await getTransactions();
   const cards = await getCards();
   const org = await getOrgById();
-  const session = await getAuth("client");
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
-      <div className="grid gap-4 md:grid-cols-2">
-        <CreateCard
-          org={org}
-          createcardaction={createcardaction}
-          user={session?.user}
-        />
+      <div className="grid gap-4">
         {cards && cards.length === 0 ? (
           <div className="bg-white p-4 rounded-xl shadow-xl">
             <div className="text-center">
               <h2 className="text-2xl font-semibold">尚無付款方式</h2>
-              <p className="text-gray-500">請先新增付款方式</p>
+              <p className="text-gray-500 mb-3">請先新增付款方式</p>
+              <CreateCardDialog
+                org={org}
+                createcardaction={createcardaction}
+                session={session}
+              />
             </div>
           </div>
         ) : (
-          <Card className="p-4 md:mt-8 lg:mt-0 flex flex-wrap justify-center gap-4">
-            {cards?.map((c) => {
-              return <CreditCard key={c.id} card={c} params={params} />;
-            })}
-          </Card>
+          <>
+            <Card className="p-4 md:mt-8 lg:mt-0 flex flex-wrap justify-center gap-4">
+              {cards?.map((c) => {
+                return <CreditCard key={c.id} card={c} params={params} />;
+              })}
+            </Card>
+            <CreateCardDialog
+              org={org}
+              createcardaction={createcardaction}
+              session={session}
+            />
+          </>
         )}
       </div>
+      <Card>
+        <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+          <CardTitle className="text-sm font-medium">最近交易紀錄</CardTitle>
+          <Button size="sm">更多</Button>
+        </CardHeader>
+        <CardContent>
+          <div className="grid gap-4">
+            {txs && txs.length > 0 ? (
+              txs.map((tx) => {
+                return (
+                  <Card key={tx.id}>
+                    <CardContent className="pt-6 md:flex gap-4">
+                      <Icons.calendar className="w-6 h-6" />
+                      <div className="font-semibold">
+                        {new Date(tx.created_at).toLocaleDateString()}
+                      </div>
+                      <div className="text-sm">Monthly Subscription</div>
+                      <div className="text-sm">{tx.description}</div>
+                      <div className="ml-auto font-semibold">{`$${tx.amount}`}</div>
+                    </CardContent>
+                  </Card>
+                );
+              })
+            ) : (
+              <div className="font-semibold text-sm">無交易紀錄</div>
+            )}
+          </div>
+        </CardContent>
+      </Card>
     </main>
   );
 }
