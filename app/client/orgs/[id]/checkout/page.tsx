@@ -3,8 +3,9 @@ import { BackButton } from "@/app/client/components/back-button";
 import { CoursePricingCombobox } from "@/app/client/components/course-pricing-combobox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/registry/new-york/ui/button";
-import { Course } from "@/types";
+import type { Card as CardType, Course } from "@/types";
 import { ResetIcon } from "@radix-ui/react-icons";
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
 export default async function Checkout({
@@ -35,8 +36,49 @@ export default async function Checkout({
       }
     }
   };
+
+  const getOrgById = async () => {
+    const oid = params["id"];
+    const token = cookies().get("ctoken");
+    if (oid) {
+      const res = await fetch(
+        `${process.env.BACKEND_HOST}/api/client/orgs/${oid}`,
+        {
+          headers: { Authorization: "Bearer " + token!.value },
+        }
+      );
+      if (res.ok) {
+        return await res.json();
+      } else if (res.status === 404) {
+        notFound();
+      }
+    }
+  };
+
+  const getCards = async () => {
+    const token = cookies().get("ctoken");
+    const oid = params["id"];
+    if (token && oid) {
+      const res = await fetch(
+        `${process.env.BACKEND_HOST}/api/client/orgs/${oid}/cards`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token.value,
+          },
+        }
+      );
+      if (res.ok) {
+        const cards = (await res.json()) as CardType[];
+        return cards;
+      }
+    }
+  };
+
   const course = await getCourse();
-  console.log(course);
+  const org = await getOrgById();
+  const cards = await getCards();
+
   if (!type) {
     notFound();
   }
@@ -55,7 +97,11 @@ export default async function Checkout({
             </CardHeader>
             <CardContent>
               <div className="flex justify-center">
-                <CoursePricingCombobox pricing={course.pricing} />
+                <CoursePricingCombobox
+                  pricing={course.pricing}
+                  org={org}
+                  cards={cards}
+                />
               </div>
             </CardContent>
           </Card>

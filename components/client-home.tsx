@@ -23,7 +23,7 @@ export async function ClientHome({
   searchParams: any;
 }) {
   const orgId = params["id"];
-  const tab = searchParams["tab"];
+  const tab = searchParams["tab"] || "subscription";
 
   const getCards = async () => {
     if (orgId) {
