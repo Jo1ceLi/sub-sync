@@ -4,15 +4,12 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/registry/new-york/ui/button";
-import { Label } from "@radix-ui/react-label";
-import { PlanForm } from "../orgs/components/plan-form";
+import { EditPlanForm } from "../orgs/components/edit-plan-form";
 import { useState } from "react";
 import { Plan } from "@/types";
 
@@ -40,7 +37,7 @@ export function EditPlanDialog({
             </h4>
           </DialogDescription>
         </DialogHeader>
-        <PlanForm action={action} setOpen={setOpen} plan={plan} />
+        <EditPlanForm action={action} setOpen={setOpen} plan={plan} />
         {/* <DialogFooter>
           <Button type="submit">Save changes</Button>
         </DialogFooter> */}

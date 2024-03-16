@@ -8,25 +8,26 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/registry/new-york/ui/button";
-import { useState } from "react";
-import { PlanForm } from "./plan-form";
+import { cloneElement, useState } from "react";
 
 export function CreatePlanDialog({
-  action,
+  text,
+  children,
 }: {
-  action: (...args: any) => Promise<void>;
+  text: string;
+  children: any;
 }) {
   const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">Create Plan</Button>
+        <Button variant="outline">{text}</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Create Plan</DialogTitle>
+          <DialogTitle>{text}</DialogTitle>
         </DialogHeader>
-        <PlanForm action={action} setOpen={setOpen} />
+        {cloneElement(children, { setOpen })}
       </DialogContent>
     </Dialog>
   );

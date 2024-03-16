@@ -13,6 +13,7 @@ import { CreatePlanDialog } from "../orgs/components/create-plan-dialog";
 import { postPlanAction, updatePlanAction } from "../orgs/plan-server-action";
 import { EditPlanDialog } from "./edit-plan-dialog";
 import { H2, H3 } from "@/components/typography";
+import { CreateSubPlanForm } from "@/app/merchant/components/create-sub-plan-form copy";
 
 export default async function PlansCard() {
   const getPlans = async () => {
@@ -42,7 +43,9 @@ export default async function PlansCard() {
         <CardTitle className="flex items-center justify-between">
           <H3>訂閱方案</H3>
           <div>
-            <CreatePlanDialog action={postPlanAction} />
+            <CreatePlanDialog text={"新增訂閱方案"}>
+              <CreateSubPlanForm action={postPlanAction} />
+            </CreatePlanDialog>
           </div>
         </CardTitle>
         {/* <CardContent className="text-sm">

@@ -1,9 +1,10 @@
 "use server";
 
 import { z } from "zod";
-import { formSchema } from "./components/plan-form";
+import { formSchema } from "./components/edit-plan-form";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
+import { createCourseFormSchema } from "@/app/merchant/components/create-course-form";
 
 export const postPlanAction = async (
   oid: string,
@@ -21,7 +22,7 @@ export const postPlanAction = async (
   });
   if (res.ok) {
     console.log("okokok");
-    revalidatePath("/merchant/orgs/[id]");
+    revalidatePath("/merchant/orgs/[id]", "page");
   }
 };
 
@@ -45,6 +46,29 @@ export const updatePlanAction = async (
   );
   if (res.ok) {
     console.log("okokok");
-    revalidatePath("/merchant/orgs/[id]");
+    revalidatePath("/merchant/orgs/[id]", "page");
+  }
+};
+
+export const postCourseAction = async (
+  oid: string,
+  values: z.infer<typeof createCourseFormSchema>
+) => {
+  "use server";
+  const token = cookies().get("utoken");
+  const res = await fetch(
+    `${process.env.BACKEND_HOST}/api/orgs/${oid}/courses`,
+    {
+      method: "POST",
+      body: JSON.stringify(values),
+      headers: {
+        Authorization: "Bearer " + token!.value,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  if (res.ok) {
+    console.log("okokok");
+    revalidatePath("/merchant/orgs/[id]", "page");
   }
 };

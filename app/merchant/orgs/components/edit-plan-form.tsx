@@ -34,14 +34,14 @@ export const formSchema = z.object({
   interval: z.coerce.number(),
 });
 
-export function PlanForm({
+export function EditPlanForm({
   action,
   setOpen,
   plan,
 }: {
   action: (...args: any) => Promise<void>;
   setOpen: (open: boolean) => void;
-  plan?: Plan;
+  plan: Plan;
 }) {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -58,13 +58,8 @@ export function PlanForm({
   const orgId = pathname.split("/orgs/")[1].split("/")[0];
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
-    if (plan?.id) {
-      await action(orgId, plan.id, values);
-      setOpen(false);
-    } else {
-      await action(orgId, values);
-      setOpen(false);
-    }
+    await action(orgId, plan.id, values);
+    setOpen(false);
   };
 
   return (

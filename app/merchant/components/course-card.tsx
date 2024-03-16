@@ -8,8 +8,9 @@ import {
 import { cookies, headers } from "next/headers";
 import { Course } from "@/types/index";
 import { CreatePlanDialog } from "../orgs/components/create-plan-dialog";
-import { postPlanAction, updatePlanAction } from "../orgs/plan-server-action";
+import { postCourseAction } from "../orgs/plan-server-action";
 import { H2, H3, H4, TP } from "@/components/typography";
+import { CreateCourseForm } from "./create-course-form";
 
 export default async function CourseCard() {
   const getCourses = async () => {
@@ -32,6 +33,7 @@ export default async function CourseCard() {
       }
     }
   };
+
   const courses = (await getCourses()) as Course[];
   return (
     <Card>
@@ -39,7 +41,9 @@ export default async function CourseCard() {
         <CardTitle className="flex items-center justify-between">
           <H3>課程</H3>
           <div>
-            <CreatePlanDialog action={postPlanAction} />
+            <CreatePlanDialog text={"新增課程"}>
+              <CreateCourseForm action={postCourseAction} />
+            </CreatePlanDialog>
           </div>
         </CardTitle>
       </CardHeader>
