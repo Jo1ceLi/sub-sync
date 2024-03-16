@@ -21,13 +21,5 @@ export default async function OrgID({ params }: { params: any }) {
 
   const session = await getAuth("client");
   const org = (await getOrgsByClientToken()) as Org;
-  return (
-    <>
-      <ClientHome params={params} />
-      <div className="container mx-auto">
-        Hello! Welcome to {org.name}!<p>{org.description}!</p>
-        <div className="grid lg:grid-cols-2 gap-4"></div>
-      </div>
-    </>
-  );
+  return <ClientHome params={params} />;
 }

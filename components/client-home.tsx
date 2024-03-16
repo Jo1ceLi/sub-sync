@@ -11,6 +11,9 @@ import { redirect } from "next/navigation";
 import { getAuth } from "@/app/api/[auth]/auth";
 import Link from "next/link";
 import { SubscriptionPlanCard } from "@/app/client/orgs/[id]/subscriptions/page";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import ClientCourseCard from "@/app/client/components/course-card";
+import ClientPlansCard from "@/app/client/components/sub-plan-card";
 
 export async function ClientHome({ params }: { params: any }) {
   const orgId = params["id"];
@@ -95,7 +98,21 @@ export async function ClientHome({ params }: { params: any }) {
         </SubscriptionPlanCard>
         <PaymentMethodCard card={card} orgId={orgId} />
       </div>
-      <Card>
+
+      <Tabs defaultValue="subscription">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="subscription">訂閱方案</TabsTrigger>
+          <TabsTrigger value="course">課程</TabsTrigger>
+        </TabsList>
+        <TabsContent value="subscription">
+          <ClientPlansCard />
+        </TabsContent>
+        <TabsContent value="course">
+          <ClientCourseCard />
+        </TabsContent>
+      </Tabs>
+
+      {/* <Card>
         <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
           <CardTitle className="text-sm font-medium">最近交易紀錄</CardTitle>
           <Button size="sm">更多</Button>
@@ -123,7 +140,7 @@ export async function ClientHome({ params }: { params: any }) {
             )}
           </div>
         </CardContent>
-      </Card>
+      </Card> */}
     </main>
   );
 }
