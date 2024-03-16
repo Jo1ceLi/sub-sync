@@ -3,7 +3,13 @@ import type { Org } from "@/app/merchant/orgs/org-form";
 import { getAuth } from "@/app/api/[auth]/auth";
 import { ClientHome } from "@/components/client-home";
 
-export default async function OrgID({ params }: { params: any }) {
+export default async function OrgID({
+  params,
+  searchParams,
+}: {
+  params: any;
+  searchParams: { [key: string]: string | string[] | undefined };
+}) {
   const getOrgsByClientToken = async () => {
     if (session?.token) {
       const res = await fetch(`${process.env.BACKEND_HOST}/api/client/orgs`, {
@@ -21,5 +27,5 @@ export default async function OrgID({ params }: { params: any }) {
 
   const session = await getAuth("client");
   const org = (await getOrgsByClientToken()) as Org;
-  return <ClientHome params={params} />;
+  return <ClientHome params={params} searchParams={searchParams} />;
 }

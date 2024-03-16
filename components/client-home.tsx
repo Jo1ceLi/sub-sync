@@ -15,8 +15,16 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ClientCourseCard from "@/app/client/components/course-card";
 import ClientPlansCard from "@/app/client/components/sub-plan-card";
 
-export async function ClientHome({ params }: { params: any }) {
+export async function ClientHome({
+  params,
+  searchParams,
+}: {
+  params: any;
+  searchParams: any;
+}) {
   const orgId = params["id"];
+  const tab = searchParams["tab"];
+
   const getCards = async () => {
     if (orgId) {
       const res = await fetch(
@@ -99,7 +107,8 @@ export async function ClientHome({ params }: { params: any }) {
         <PaymentMethodCard card={card} orgId={orgId} />
       </div>
 
-      <Tabs defaultValue="subscription">
+      {/* TODO: state controller the default value */}
+      <Tabs defaultValue={tab}>
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="subscription">訂閱方案</TabsTrigger>
           <TabsTrigger value="course">課程</TabsTrigger>

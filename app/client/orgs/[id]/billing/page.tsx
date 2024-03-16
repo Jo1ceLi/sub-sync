@@ -136,8 +136,8 @@ export default async function ClientBilling({ params }: { params: any }) {
         {cards && cards.length === 0 ? (
           <div className="bg-white p-4 rounded-xl shadow-xl">
             <div className="text-center">
-              <h2 className="text-2xl font-semibold">尚無付款方式</h2>
-              <p className="text-gray-500 mb-3">請先新增付款方式</p>
+              <h2 className="text-2xl font-semibold">尚無支付方式</h2>
+              <p className="text-gray-500 mb-3">請先新增支付方式</p>
               <CreateCardDialog
                 org={org}
                 createcardaction={createcardaction}

@@ -17,7 +17,7 @@ export interface Plan {
   currency: string;
 }
 
-interface Pricing {
+export interface Pricing {
   price: number;
   session_count: number;
 }
