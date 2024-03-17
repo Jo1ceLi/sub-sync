@@ -35,60 +35,159 @@ import { Input } from "@/components/ui/input";
 import Script from "next/script";
 import { GetPrime, TappayInit } from "./tappay-func";
 import { Icons } from "@/components/icons";
+import { z } from "zod";
+import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { UseFormReturn, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+import { purchaseCourse } from "./actions/create-card-sa";
+import { useRouter } from "next/navigation";
+
+type FormType = UseFormReturn<
+  {
+    pricing: {
+      price: number;
+      session_count: number;
+    };
+    cardId: string;
+  },
+  any,
+  {
+    pricing: {
+      price: number;
+      session_count: number;
+    };
+    cardId: string;
+  }
+>;
 
 export function CoursePricingCombobox({
   pricing,
   cards,
   org,
+  courseId,
 }: {
   pricing: Pricing[];
   cards: CardType[] | undefined;
   org: Org;
+  courseId: string | undefined;
 }) {
   const [openPricing, setOpenPricing] = useState(false);
-  const [selectedPricing, setSelectedPricing] = useState<Pricing>();
+  const [loading, setLoading] = useState(false);
 
   const [openCard, setOpenCard] = useState(false);
   const [newPayment, setNewPayment] = useState(false);
   const [selectedCard, setSelectedCard] = useState<CardType>();
 
+  const FormSchema = z.object({
+    pricing: z.object(
+      {
+        price: z.coerce.number(),
+        session_count: z.coerce.number(),
+      },
+      {
+        required_error: "請選擇課程",
+      }
+    ),
+    cardId: z.string({
+      required_error: "請選擇付款方式",
+    }),
+  });
+
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+  });
+
+  const router = useRouter();
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    if (courseId) {
+      //if purchase success redir to billing page
+      setLoading(true);
+      const status = await purchaseCourse({
+        courseId,
+        orgId: org.id,
+        data,
+      });
+      if (status === 200) {
+        toast.success("購買成功");
+        router.push(`/client/orgs/${org.id}/billing`);
+      } else {
+        toast.error("購買失敗");
+      }
+    }
+  }
+
   return (
-    <div className="flex flex-col items-center gap-y-3">
-      <PricingPopover
-        open={openPricing}
-        setOpen={setOpenPricing}
-        value={selectedPricing}
-        setValue={setSelectedPricing}
-        pricing={pricing}
-      />
-      {cards && !newPayment && cards.length > 0 && (
-        <CardPopover
-          open={openCard}
-          setOpen={setOpenCard}
-          value={selectedCard}
-          setValue={setSelectedCard}
-          setNewPayment={setNewPayment}
-          cards={cards}
-        />
-      )}
-      {newPayment && <NewPayment org={org} setNewPayment={setNewPayment} />}
-      {/* // <CreateCard createcardaction={() => {}} org={org} user={undefined} /> */}
-    </div>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="flex flex-col items-center gap-y-3">
+          <FormField
+            control={form.control}
+            name="pricing"
+            render={({ field }) => (
+              <FormItem>
+                <PricingPopover
+                  open={openPricing}
+                  setOpen={setOpenPricing}
+                  pricing={pricing}
+                  field={field.value}
+                  form={form}
+                />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="cardId"
+            render={({ field }) => (
+              <FormItem>
+                {cards && !newPayment && (
+                  <CardPopover
+                    open={openCard}
+                    setOpen={setOpenCard}
+                    setNewPayment={setNewPayment}
+                    cards={cards}
+                    value={selectedCard}
+                    setValue={setSelectedCard}
+                    form={form}
+                  />
+                )}
+                {newPayment && (
+                  <NewPayment org={org} setNewPayment={setNewPayment} />
+                )}
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <Button disabled={loading} className="w-full" type="submit">
+            購買
+            <span className={cn("ml-2 hidden", loading && "block")}>
+              <Icons.spinner className="animate-spin" />
+            </span>
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 }
 
 function PricingPopover({
   open,
   setOpen,
-  value,
-  setValue,
   pricing,
+  field,
+  form,
 }: {
   open: boolean;
   setOpen: (open: boolean) => void;
-  value: Pricing | undefined;
-  setValue: (value: Pricing) => void;
   pricing: Pricing[];
+  field: {
+    price: number;
+    session_count: number;
+  };
+  form: FormType;
 }) {
   const formatPriceString = (price: Pricing) =>
     `$${price.price} / ${price.session_count}堂`;
@@ -101,7 +200,7 @@ function PricingPopover({
           aria-expanded={open}
           className="w-[200px] justify-between"
         >
-          {value ? formatPriceString(value) : "選擇課程..."}
+          {field ? formatPriceString(field) : "選擇課程..."}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -115,7 +214,7 @@ function PricingPopover({
                 key={idx}
                 value={formatPriceString(p)}
                 onSelect={() => {
-                  setValue(p);
+                  form.setValue("pricing", p);
                   setOpen(false);
                 }}
               >
@@ -123,7 +222,7 @@ function PricingPopover({
                 <CheckIcon
                   className={cn(
                     "ml-auto h-4 w-4",
-                    value === p ? "opacity-100" : "opacity-0"
+                    field === p ? "opacity-100" : "opacity-0"
                   )}
                 />
               </CommandItem>
@@ -138,10 +237,11 @@ function PricingPopover({
 function CardPopover({
   open,
   setOpen,
+  setNewPayment,
   value,
   setValue,
-  setNewPayment,
   cards,
+  form,
 }: {
   open: boolean;
   setOpen: (open: boolean) => void;
@@ -149,6 +249,7 @@ function CardPopover({
   setValue: (value: CardType) => void;
   setNewPayment: (value: boolean) => void;
   cards: CardType[] | undefined;
+  form: any;
 }) {
   const formatCardString = (card: CardType) =>
     `${card.alias === "" ? card.network : card.alias} ${card.last_four}`;
@@ -162,7 +263,7 @@ function CardPopover({
           aria-expanded={open}
           className="w-[200px] justify-between"
         >
-          {value ? formatCardString(value) : "選擇卡片..."}
+          {value ? formatCardString(value) : "選擇付款方式..."}
           <CaretSortIcon className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -177,6 +278,7 @@ function CardPopover({
                   key={idx}
                   value={formatCardString(card)}
                   onSelect={() => {
+                    form.setValue("cardId", card.id);
                     setValue(card);
                     setOpen(false);
                   }}
@@ -237,10 +339,10 @@ function NewPayment({
           onReady={() => TappayInit(org)}
         />
         <div className="grid gap-2">
-          <Label>姓名</Label>
+          <Label>持卡人姓名</Label>
           <Input
             className="text-base border-2 border-black rounded-lg max-h-8 focus-visible:ring-3"
-            placeholder="姓名"
+            placeholder="全名"
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}

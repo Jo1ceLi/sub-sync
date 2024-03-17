@@ -101,6 +101,7 @@ export default async function Checkout({
                   pricing={course.pricing}
                   org={org}
                   cards={cards}
+                  courseId={cid}
                 />
               </div>
             </CardContent>
