@@ -69,7 +69,7 @@ export const purchaseCourse = async ({
   const token = cookies().get("ctoken");
   if (token) {
     const res = await fetch(
-      `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/courses/${courseId}/purchase`,
+      `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/courses/${courseId}/payment/existing-card`,
       {
         method: "POST",
         body: JSON.stringify(data),
