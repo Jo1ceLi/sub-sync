@@ -45,8 +45,24 @@ export default async function Home({ params }: { params: { id: string } }) {
     }
   };
 
+  //如果已經加入, 會跳轉到該組織
+  const getOrgsByClientToken = async () => {
+    const token = cookies().get("ctoken");
+    if (token) {
+      const res = await fetch(`${process.env.BACKEND_HOST}/api/client/orgs`, {
+        headers: { Authorization: "Bearer " + token.value },
+      });
+      const orgs = (await res.json()) as any[];
+      const oid = params.id;
+      if (orgs.some((o: any) => o.id === oid)) {
+        redirect(`/client/orgs/${oid}`);
+      }
+    }
+  };
+
   const session = await getAuth("client");
   const org = await getOrgById();
+  await getOrgsByClientToken();
 
   return (
     <Card className="m-5 p-5 w-[350px]">
