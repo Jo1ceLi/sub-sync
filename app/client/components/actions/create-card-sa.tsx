@@ -84,3 +84,37 @@ export const purchaseCourse = async ({
     }
   }
 };
+
+export const subscribePlan = async ({
+  orgId,
+  planId,
+  data,
+}: {
+  orgId: string;
+  planId: string;
+  data: {
+    cardId: string;
+  };
+}) => {
+  "use server";
+  const token = cookies().get("ctoken");
+  const res = await fetch(
+    `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/plans/${planId}/subscribe`,
+    {
+      method: "POST",
+      body: JSON.stringify({
+        cardId: data.cardId,
+      }),
+      headers: {
+        Authorization: "Bearer " + token!.value,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  if (res.ok) {
+    revalidatePath(`/client/orgs/${orgId}`, "page");
+    revalidatePath(`/client/orgs/${orgId}/subscriptions`, "page");
+    return res.status;
+  }
+  return res.status;
+};

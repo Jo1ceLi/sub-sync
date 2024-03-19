@@ -234,7 +234,7 @@ function PricingPopover({
   );
 }
 
-function CardPopover({
+export function CardPopover({
   open,
   setOpen,
   setNewPayment,
@@ -270,7 +270,7 @@ function CardPopover({
       <PopoverContent className="w-[200px] p-0">
         <Command>
           <CommandInput placeholder="搜尋卡片..." className="h-9" />
-          <CommandEmpty>找不到課程</CommandEmpty>
+          <CommandEmpty>找不到卡片</CommandEmpty>
           <CommandGroup>
             {cards &&
               cards.map((card, idx) => (
@@ -309,7 +309,7 @@ function CardPopover({
   );
 }
 
-function NewPayment({
+export function NewPayment({
   org,
   setNewPayment,
 }: {

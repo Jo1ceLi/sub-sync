@@ -1,16 +1,25 @@
 import { Icons } from "@/components/icons";
-import { CardTitle, CardContent, CardHeader, Card } from "@/components/ui/card";
+import {
+  CardTitle,
+  CardContent,
+  CardHeader,
+  Card,
+  CardFooter,
+} from "@/components/ui/card";
 import { cookies, headers } from "next/headers";
 import { Plan } from "@/types/index";
 import { H2 } from "@/components/typography";
+import { Button } from "@/registry/new-york/ui/button";
+import Link from "next/link";
 
 export default async function ClientPlansCard() {
+  let orgId: string;
   const getPlans = async () => {
     const token = cookies().get("ctoken");
     const url = headers().get("x-url");
     if (url && token) {
       const splits = url.split("/orgs/");
-      const orgId = splits[1].substring(0, 36);
+      orgId = splits[1].substring(0, 36);
       const res = await fetch(
         `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/plans`,
         {
@@ -63,6 +72,15 @@ export default async function ClientPlansCard() {
                       </ul>
                     </div>
                   </CardContent>
+                  <CardFooter className="flex flex-1 justify-center">
+                    <Button asChild className="w-full">
+                      <Link
+                        href={`/client/orgs/${orgId}/checkout?type=subscription&id=${p.id}`}
+                      >
+                        訂閱
+                      </Link>
+                    </Button>
+                  </CardFooter>
                 </Card>
               </>
             ))}

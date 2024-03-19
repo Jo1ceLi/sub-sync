@@ -1,9 +1,10 @@
 import { getAuth } from "@/app/api/[auth]/auth";
 import { BackButton } from "@/app/client/components/back-button";
 import { CoursePricingCombobox } from "@/app/client/components/course-pricing-combobox";
+import { PlanPricingCombobox } from "@/app/client/components/plan-pricing-combobox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/registry/new-york/ui/button";
-import type { Card as CardType, Course } from "@/types";
+import type { Card as CardType, Course, Plan } from "@/types";
 import { ResetIcon } from "@radix-ui/react-icons";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
@@ -17,13 +18,13 @@ export default async function Checkout({
 }) {
   const orgId = params["id"];
   const type = searchParams["type"] as CheckoutTypeMap | undefined;
-  const cid = searchParams["id"] as string | undefined;
+  const productId = searchParams["id"] as string | undefined; //共用在course or subscription
 
   const session = await getAuth("client");
   const getCourse = async () => {
-    if (cid && orgId && type === "course") {
+    if (productId && orgId && type === "course") {
       const res = await fetch(
-        `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/courses/${cid}`,
+        `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/courses/${productId}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -33,6 +34,27 @@ export default async function Checkout({
       );
       if (res.ok) {
         return (await res.json()) as Course;
+      }
+    }
+  };
+
+  const getPlan = async () => {
+    if (productId && orgId) {
+      const res = await fetch(
+        `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/plans`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + session!.token,
+          },
+        }
+      );
+      if (res.ok) {
+        const plans = (await res.json()) as Plan[];
+        const plan = plans.filter((p) => p.id === productId).at(0);
+        if (plan) {
+          return plan;
+        }
       }
     }
   };
@@ -75,12 +97,17 @@ export default async function Checkout({
     }
   };
 
-  const course = await getCourse();
   const org = await getOrgById();
   const cards = await getCards();
 
+  let course: Course | undefined;
+  let plan: Plan | undefined;
   if (!type) {
     notFound();
+  } else if (type === "course") {
+    course = await getCourse();
+  } else if (type === "subscription") {
+    plan = await getPlan();
   }
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
@@ -92,8 +119,6 @@ export default async function Checkout({
               <CardTitle className="justify-self-center text-2xl">
                 購買 {course.title}
               </CardTitle>
-              {/* <div className="justify-center">
-              </div> */}
             </CardHeader>
             <CardContent>
               <div className="flex justify-center">
@@ -101,8 +126,28 @@ export default async function Checkout({
                   pricing={course.pricing}
                   org={org}
                   cards={cards}
-                  courseId={cid}
+                  courseId={productId}
                 />
+              </div>
+            </CardContent>
+          </Card>
+        )}
+        {type === "subscription" && plan && (
+          <Card className="">
+            <CardHeader className="grid pt-2">
+              <BackButton />
+              <CardTitle className="justify-self-center text-2xl">
+                訂閱 {plan.name}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="flex justify-center">
+                <PlanPricingCombobox
+                  cards={cards}
+                  org={org}
+                  planId={productId}
+                />
+                {/* {TODO 訂閱內容！！！！} */}
               </div>
             </CardContent>
           </Card>
