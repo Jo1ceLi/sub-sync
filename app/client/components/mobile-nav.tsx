@@ -100,7 +100,7 @@ export function MobileNav({ currentUrl }: { currentUrl: string }) {
                 onOpenChange={setOpen}
               >
                 <Icons.home className="h-4 w-4" />
-                Home
+                首頁
               </MobileLink>
               <MobileLink
                 className={selected === 1 ? selectedStyle : nonSelectedStyle}
@@ -108,7 +108,7 @@ export function MobileNav({ currentUrl }: { currentUrl: string }) {
                 onOpenChange={setOpen}
               >
                 <Icons.users className="h-4 w-4" />
-                Subscriptions
+                訂閱
               </MobileLink>
               <MobileLink
                 className={selected === 2 ? selectedStyle : nonSelectedStyle}
@@ -116,7 +116,7 @@ export function MobileNav({ currentUrl }: { currentUrl: string }) {
                 onOpenChange={setOpen}
               >
                 <Icons.creditCard className="h-4 w-4" />
-                Billing
+                帳單資訊
               </MobileLink>
               <MobileLink
                 className={selected === 3 ? selectedStyle : nonSelectedStyle}
@@ -124,7 +124,7 @@ export function MobileNav({ currentUrl }: { currentUrl: string }) {
                 onOpenChange={setOpen}
               >
                 <Icons.settings className="h-4 w-4" />
-                Settings
+                設定
               </MobileLink>
             </nav>
           </div>
