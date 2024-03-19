@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import type { Transaction } from "@/types";
+import { formatDesc } from "@/lib/utils";
 
 export const columns: ColumnDef<Transaction>[] = [
   {
@@ -14,6 +15,10 @@ export const columns: ColumnDef<Transaction>[] = [
   {
     accessorKey: "description",
     header: "訂購項目",
+    cell: ({ row }) => {
+      const desc = row.getValue("description") as string;
+      return formatDesc(desc);
+    },
   },
   {
     accessorKey: "amount",

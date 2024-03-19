@@ -7,6 +7,7 @@ import { getAuth } from "@/app/api/[auth]/auth";
 import { Button } from "@/registry/new-york/ui/button";
 import { Icons } from "@/components/icons";
 import { CreateCardDialog } from "@/app/client/components/new-credit-card-dialog";
+import { formatDesc } from "@/lib/utils";
 
 export default async function ClientBilling({ params }: { params: any }) {
   const orgId = params["id"];
@@ -167,6 +168,7 @@ export default async function ClientBilling({ params }: { params: any }) {
           <div className="grid gap-4">
             {txs && txs.length > 0 ? (
               txs.map((tx) => {
+                const desc = formatDesc(tx.description);
                 return (
                   <Card key={tx.id}>
                     <CardContent className="pt-6 md:flex gap-4">
@@ -174,8 +176,7 @@ export default async function ClientBilling({ params }: { params: any }) {
                       <div className="font-semibold">
                         {new Date(tx.created_at).toLocaleDateString()}
                       </div>
-                      <div className="text-sm">Monthly Subscription</div>
-                      <div className="text-sm">{tx.description}</div>
+                      <div className="text-sm">{desc}</div>
                       <div className="ml-auto font-semibold">{`$${tx.amount}`}</div>
                     </CardContent>
                   </Card>
