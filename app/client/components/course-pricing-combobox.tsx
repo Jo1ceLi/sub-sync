@@ -292,7 +292,8 @@ function CardPopover({
                   />
                 </CommandItem>
               ))}
-            <CommandItem
+            {/* TODO: 尚未完成直接付款UI, 先關閉選單功能 */}
+            {/* <CommandItem
               onSelect={() => {
                 setNewPayment(true);
                 setOpen(false);
@@ -300,7 +301,7 @@ function CardPopover({
             >
               新增付款方式
               <PlusCircledIcon className="ml-auto h-4 w-4" />
-            </CommandItem>
+            </CommandItem> */}
           </CommandGroup>
         </Command>
       </PopoverContent>
