@@ -42,6 +42,33 @@ export interface Customer {
   plan_name: string | null;
 }
 
+export type SubscriptionCardInfo = {
+  subscription_status: string;
+  subscription_renewal_date: string;
+  subscription_plan_id: string;
+  plan_name: string;
+};
+
+export interface ClientSubscription {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  name: string;
+  uid: string;
+  email: string;
+  picture: string;
+  phone: string;
+  client_id: string;
+  org_id: string;
+  note: string | null;
+  phone_2: string | null;
+  joined_at: string;
+  subscription_status: string;
+  subscription_renewal_date: string;
+  subscription_plan_id: string;
+  plan_name: string;
+}
+
 export interface Org {
   id: string;
   name: string;

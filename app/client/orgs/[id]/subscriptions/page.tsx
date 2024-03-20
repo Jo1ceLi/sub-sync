@@ -1,5 +1,5 @@
 import RecentSubscriptions from "@/app/merchant/components/recent-subscriptions";
-import { Plan, Card as CardType, Subscription, Customer } from "@/types";
+import { Plan, Card as CardType, SubscriptionCardInfo } from "@/types";
 import {
   FormSchema,
   PlanRadioGroupForm,
@@ -10,9 +10,8 @@ import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { Button } from "@/registry/new-york/ui/button";
 import Link from "next/link";
-import { Session, getAuth } from "@/app/api/[auth]/auth";
-import { redirect } from "next/navigation";
-import { ClientSettingsForm } from "../settings/components/client-form";
+import { getAuth } from "@/app/api/[auth]/auth";
+import { clientGetSubscription } from "@/app/client/components/actions/get-clinet-sub";
 
 export default async function OrgID({ params }: { params: any }) {
   const orgId = params["id"];
@@ -80,12 +79,16 @@ export default async function OrgID({ params }: { params: any }) {
   const session = await getAuth("client");
   const plans = (await getPlans()) as Plan[];
   const cards = await getCards();
+  const clientSub = await clientGetSubscription(orgId, 0)();
 
   return (
     <>
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
         <div className="grid gap-4 md:grid-cols-2">
-          <SubscriptionPlanCard session={session} orgId={orgId} />
+          <SubscriptionPlanCard
+            orgId={orgId}
+            subscriptionCardInfo={clientSub}
+          />
         </div>
       </main>
       <PlanRadioGroupForm
@@ -94,49 +97,24 @@ export default async function OrgID({ params }: { params: any }) {
         subscribeAction={subscribe}
       />
 
-      {/* <div className="p-4">
-        <ClientSettingsForm user={session?.user} />
-      </div> */}
       {/* <RecentSubscriptions /> */}
     </>
   );
 }
 
 export async function SubscriptionPlanCard({
-  session,
+  subscriptionCardInfo,
   orgId,
   children,
 }: {
-  session: Session | undefined;
+  subscriptionCardInfo:
+    | SubscriptionCardInfo
+    | SubscriptionCardInfo[]
+    | undefined;
   orgId: string;
   children?: React.ReactNode;
 }) {
-  const getSubscription = async () => {
-    const response = await fetch(
-      `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/subscription`,
-      {
-        headers: {
-          Authorization: `Bearer ${session!.token}`,
-        },
-      }
-    );
-    if (response.ok) {
-      const data = (await response.json()) as Customer;
-      if (data.subscription_plan_id === null) {
-        return undefined;
-      } else {
-        return {
-          subscription_status: data.subscription_status,
-          subscription_renewal_date: data.subscription_renewal_date,
-          subscription_plan_id: data.subscription_plan_id,
-          plan_name: data.plan_name,
-        };
-      }
-    } else if (response.status == 403) {
-      redirect("/merchant/orgs");
-    }
-  };
-  const sub = await getSubscription();
+  const sub = subscriptionCardInfo;
   if (sub === undefined) {
     return (
       <Card>
@@ -166,31 +144,66 @@ export async function SubscriptionPlanCard({
     );
   }
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-        <CardTitle className="text-sm font-medium">目前訂閱方案</CardTitle>
-        {children}
-      </CardHeader>
-      <CardContent>
-        <div className="grid gap-2 text-sm">
-          <div className="flex items-center gap-4">
-            <div className="font-semibold">方案</div>
-            <div>{sub.plan_name}</div>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="font-semibold">狀態</div>
-            <div>{sub.subscription_status}</div>
-          </div>
-          <div className="flex items-center gap-4">
-            <div className="font-semibold">續訂日期</div>
-            <div>
-              {new Date(
-                sub.subscription_renewal_date as string
-              ).toLocaleDateString()}
+    <>
+      {sub instanceof Array ? (
+        sub.map((s) => (
+          <Card key={s.subscription_plan_id}>
+            <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+              <CardTitle className="text-sm font-medium">
+                目前訂閱方案
+              </CardTitle>
+              {children}
+            </CardHeader>
+            <CardContent>
+              <div className="grid gap-2 text-sm">
+                <div className="flex items-center gap-4">
+                  <div className="font-semibold">方案</div>
+                  <div>{s.plan_name}</div>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="font-semibold">狀態</div>
+                  <div>{s.subscription_status}</div>
+                </div>
+                <div className="flex items-center gap-4">
+                  <div className="font-semibold">續訂日期</div>
+                  <div>
+                    {new Date(
+                      s.subscription_renewal_date as string
+                    ).toLocaleDateString()}
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))
+      ) : (
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
+            <CardTitle className="text-sm font-medium">目前訂閱方案</CardTitle>
+            {children}
+          </CardHeader>
+          <CardContent>
+            <div className="grid gap-2 text-sm">
+              <div className="flex items-center gap-4">
+                <div className="font-semibold">方案</div>
+                <div>{sub.plan_name}</div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="font-semibold">狀態</div>
+                <div>{sub.subscription_status}</div>
+              </div>
+              <div className="flex items-center gap-4">
+                <div className="font-semibold">續訂日期</div>
+                <div>
+                  {new Date(
+                    sub.subscription_renewal_date as string
+                  ).toLocaleDateString()}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+          </CardContent>
+        </Card>
+      )}
+    </>
   );
 }

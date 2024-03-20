@@ -14,6 +14,7 @@ import { SubscriptionPlanCard } from "@/app/client/orgs/[id]/subscriptions/page"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ClientCourseCard from "@/app/client/components/course-card";
 import ClientPlansCard from "@/app/client/components/sub-plan-card";
+import { clientGetSubscription } from "@/app/client/components/actions/get-clinet-sub";
 
 export async function ClientHome({
   params,
@@ -63,43 +64,17 @@ export async function ClientHome({
     }
   };
 
-  const getSubscription = async () => {
-    const response = await fetch(
-      `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/subscription`,
-      {
-        headers: {
-          Authorization: `Bearer ${session!.token}`,
-        },
-      }
-    );
-    if (response.ok) {
-      const data = (await response.json()) as Customer;
-      if (data.subscription_plan_id === null) {
-        return undefined;
-      } else {
-        return {
-          subscription_status: data.subscription_status,
-          subscription_renewal_date: data.subscription_renewal_date,
-          subscription_plan_id: data.subscription_plan_id,
-          plan_name: data.plan_name,
-        };
-      }
-    } else if (response.status == 403) {
-      redirect("/merchant/orgs");
-    }
-  };
-
   const session = await getAuth("client");
   const cards = await getCards();
   const card = cards?.[0];
 
   const txs = await getTransactions();
-  const sub = await getSubscription();
+  const clientSub = await clientGetSubscription(orgId, undefined)();
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
       <div className="grid gap-4 md:grid-cols-2">
-        <SubscriptionPlanCard session={session} orgId={orgId}>
+        <SubscriptionPlanCard subscriptionCardInfo={clientSub} orgId={orgId}>
           <Button asChild size="sm">
             <Link href={`/client/orgs/${orgId}/subscriptions`}>變更</Link>
           </Button>
