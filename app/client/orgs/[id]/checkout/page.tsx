@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { BackButton } from "@/app/client/components/back-button";
 import { CoursePricingCombobox } from "@/app/client/components/course-pricing-combobox";
 import { PlanPricingCombobox } from "@/app/client/components/plan-pricing-combobox";
@@ -40,7 +42,7 @@ export default async function Checkout({
     const token = cookies().get("ctoken");
     const oid = params["id"];
     const pid = searchParams["id"];
-    if (oid && orgId && type === "subscription" && token) {
+    if (token) {
       const res = await fetch(
         `${process.env.BACKEND_HOST}/api/client/orgs/${oid}/plans/${pid}`,
         {
