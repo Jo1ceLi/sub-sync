@@ -5,13 +5,20 @@ import {
   PlanRadioGroupForm,
 } from "@/app/client/components/plan-radio-form";
 import { cookies } from "next/headers";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { Button } from "@/registry/new-york/ui/button";
 import Link from "next/link";
 import { getAuth } from "@/app/api/[auth]/auth";
 import { clientGetSubscription } from "@/app/client/components/actions/get-clinet-sub";
+import { H2, TP } from "@/components/typography";
 
 export default async function OrgID({ params }: { params: any }) {
   const orgId = params["id"];
@@ -27,7 +34,7 @@ export default async function OrgID({ params }: { params: any }) {
         }
       );
       if (res.ok) {
-        const data = await res.json();
+        const data = (await res.json()) as Plan[];
         return data;
       }
     }
@@ -77,25 +84,45 @@ export default async function OrgID({ params }: { params: any }) {
   };
 
   const session = await getAuth("client");
-  const plans = (await getPlans()) as Plan[];
+  const plans = await getPlans();
   const cards = await getCards();
-  const clientSub = await clientGetSubscription(orgId, 0)();
+  const clientSub = (await clientGetSubscription(orgId, 0)()) as
+    | SubscriptionCardInfo[]
+    | undefined;
 
+  const getNotSubscribedPlan = (
+    plans: Plan[] | undefined,
+    subscribedPlans: SubscriptionCardInfo[] | undefined
+  ) => {
+    if (plans && subscribedPlans) {
+      subscribedPlans.forEach((sub) => {
+        plans = plans!.filter((p) => p.id !== sub.subscription_plan_id);
+      });
+      return plans;
+    }
+  };
+
+  const diffPlans = getNotSubscribedPlan(plans, clientSub);
+  console.log("diffPlans", diffPlans);
   return (
     <>
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
         <div className="grid gap-4 md:grid-cols-2">
+          <H2 className="text-center">已訂閱方案</H2>
           <SubscriptionPlanCard
             orgId={orgId}
             subscriptionCardInfo={clientSub}
           />
+          {/* 依據商店類型, 區分 [訂閱多種方案] [訂閱單一種方案 -> 升降級 ] */}
+          <H2 className="text-center">尚未訂閱</H2>
+          <NotSubscribedPlanCard plans={diffPlans} orgId={orgId} />
         </div>
       </main>
-      <PlanRadioGroupForm
+      {/* <PlanRadioGroupForm
         plans={plans}
         cards={cards}
         subscribeAction={subscribe}
-      />
+      /> */}
 
       {/* <RecentSubscriptions /> */}
     </>
@@ -206,4 +233,57 @@ export async function SubscriptionPlanCard({
       )}
     </>
   );
+}
+
+function NotSubscribedPlanCard({
+  plans,
+  orgId,
+}: {
+  plans: Plan[] | undefined;
+  orgId: string;
+}) {
+  return plans?.map((p) => (
+    <Card key={p.id}>
+      <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0"></CardHeader>
+      <CardContent>
+        <div className="grid gap-2 text-sm">
+          <div className="flex items-center gap-4">
+            <div className="font-semibold">名稱</div>
+            <div>{p.name}</div>
+          </div>
+          <div className="flex items-center gap-4">
+            <div>
+              <TP className="font-semibold">價格</TP>
+            </div>
+            <div>
+              <TP>
+                ${p.amount}/{p.interval}天
+              </TP>
+            </div>
+          </div>
+          <div className="flex items-center gap-4">
+            <div>
+              <TP className="font-semibold">方案內容</TP>
+            </div>
+          </div>
+          <div className="ml-2 pl-4 ">
+            <ul className="list-disc list-outside">
+              {p.description
+                .split("- ")
+                .map((d, idx) => (idx > 0 ? <li key={idx}>{d}</li> : null))}
+            </ul>
+          </div>
+        </div>
+      </CardContent>
+      <CardFooter>
+        <Button asChild className="w-full">
+          <Link
+            href={`/client/orgs/${orgId}/checkout?type=subscription&id=${p.id}`}
+          >
+            訂閱
+          </Link>
+        </Button>
+      </CardFooter>
+    </Card>
+  ));
 }

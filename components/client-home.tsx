@@ -89,7 +89,7 @@ export async function ClientHome({
           <TabsTrigger value="course">課程</TabsTrigger>
         </TabsList>
         <TabsContent value="subscription">
-          <ClientPlansCard />
+          <ClientPlansCard orgId={orgId} />
         </TabsContent>
         <TabsContent value="course">
           <ClientCourseCard />
