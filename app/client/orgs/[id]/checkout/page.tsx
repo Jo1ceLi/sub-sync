@@ -34,6 +34,8 @@ export default async function Checkout({
       );
       if (res.ok) {
         return (await res.json()) as Course;
+      } else {
+        notFound();
       }
     }
   };
@@ -54,6 +56,8 @@ export default async function Checkout({
         const plan = plans.filter((p) => p.id === productId).at(0);
         if (plan) {
           return plan;
+        } else {
+          notFound();
         }
       }
     }
@@ -112,7 +116,7 @@ export default async function Checkout({
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
       <div className="grid gap-4 md:grid-cols-2">
-        {type === "course" && course && (
+        {course ? (
           <Card className="">
             <CardHeader className="grid pt-2">
               <BackButton />
@@ -131,8 +135,7 @@ export default async function Checkout({
               </div>
             </CardContent>
           </Card>
-        )}
-        {type === "subscription" && plan && (
+        ) : plan ? (
           <Card className="">
             <CardHeader className="grid pt-2">
               <BackButton />
@@ -151,6 +154,8 @@ export default async function Checkout({
               </div>
             </CardContent>
           </Card>
+        ) : (
+          <>NULL</>
         )}
       </div>
     </main>
