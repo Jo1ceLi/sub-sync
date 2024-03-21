@@ -22,7 +22,7 @@ export const clientGetSubscription =
     );
     if (response.ok) {
       const data = (await response.json()) as ClientSubscription[];
-      if (data.length === 0) {
+      if (!data || data.length === 0) {
         return undefined;
       } else if (displayCount === undefined) {
         return {

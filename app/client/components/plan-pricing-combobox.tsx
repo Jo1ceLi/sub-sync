@@ -42,7 +42,6 @@ export function PlanPricingCombobox({
 
   const router = useRouter();
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log("data=", data);
     if (planId) {
       //if purchase success redir to billing page
       setLoading(true);

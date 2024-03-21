@@ -103,6 +103,8 @@ export default async function OrgID({ params }: { params: any }) {
         plans = plans!.filter((p) => p.id !== sub.subscription_plan_id);
       });
       return plans;
+    } else if (!subscribedPlans) {
+      return plans;
     }
   };
 
