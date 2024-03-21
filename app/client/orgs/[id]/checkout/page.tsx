@@ -1,11 +1,8 @@
-import { getAuth } from "@/app/api/[auth]/auth";
 import { BackButton } from "@/app/client/components/back-button";
 import { CoursePricingCombobox } from "@/app/client/components/course-pricing-combobox";
 import { PlanPricingCombobox } from "@/app/client/components/plan-pricing-combobox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/registry/new-york/ui/button";
 import type { Card as CardType, Course, Plan } from "@/types";
-import { ResetIcon } from "@radix-ui/react-icons";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
@@ -19,38 +16,36 @@ export default async function Checkout({
   const orgId = params["id"];
   const type = searchParams["type"] as CheckoutTypeMap | undefined;
   const productId = searchParams["id"] as string | undefined; //共用在course or subscription
-  if (!type || !orgId || !productId) {
-    notFound();
-  }
-  const session = await getAuth("client");
 
   const getCourse = async () => {
-    if (productId && orgId && type === "course") {
+    const token = cookies().get("ctoken");
+    const oid = params["id"];
+    if (productId && oid && type === "course" && token) {
       const res = await fetch(
-        `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/courses/${productId}`,
+        `${process.env.BACKEND_HOST}/api/client/orgs/${oid}/courses/${productId}`,
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + session!.token,
+            Authorization: "Bearer " + token.value,
           },
         }
       );
       if (res.ok) {
         return (await res.json()) as Course;
-      } else {
-        notFound();
       }
     }
   };
 
   const getPlan = async () => {
-    if (productId && orgId) {
+    const token = cookies().get("ctoken");
+    const oid = params["id"];
+    if (productId && oid && orgId && type === "subscription" && token) {
       const res = await fetch(
-        `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/plans`,
+        `${process.env.BACKEND_HOST}/api/client/orgs/${oid}/plans`,
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: "Bearer " + session!.token,
+            Authorization: "Bearer " + token.value,
           },
         }
       );
@@ -58,9 +53,8 @@ export default async function Checkout({
         const plans = (await res.json()) as Plan[];
         const plan = plans.filter((p) => p.id === productId).at(0);
         if (plan) {
+          console.log("plan=", plan);
           return plan;
-        } else {
-          notFound();
         }
       }
     }
@@ -131,7 +125,10 @@ export default async function Checkout({
               </div>
             </CardContent>
           </Card>
-        ) : plan ? (
+        ) : (
+          <></>
+        )}
+        {plan ? (
           <Card className="">
             <CardHeader className="grid pt-2">
               <BackButton />
@@ -151,7 +148,7 @@ export default async function Checkout({
             </CardContent>
           </Card>
         ) : (
-          <>NULL</>
+          <></>
         )}
       </div>
     </main>
