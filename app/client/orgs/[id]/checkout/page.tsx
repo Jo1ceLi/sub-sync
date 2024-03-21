@@ -19,8 +19,11 @@ export default async function Checkout({
   const orgId = params["id"];
   const type = searchParams["type"] as CheckoutTypeMap | undefined;
   const productId = searchParams["id"] as string | undefined; //共用在course or subscription
-
+  if (!type || !orgId || !productId) {
+    notFound();
+  }
   const session = await getAuth("client");
+
   const getCourse = async () => {
     if (productId && orgId && type === "course") {
       const res = await fetch(
@@ -104,15 +107,8 @@ export default async function Checkout({
   const org = await getOrgById();
   const cards = await getCards();
 
-  let course: Course | undefined;
-  let plan: Plan | undefined;
-  if (!type) {
-    notFound();
-  } else if (type === "course") {
-    course = await getCourse();
-  } else if (type === "subscription") {
-    plan = await getPlan();
-  }
+  const course = await getCourse();
+  const plan = await getPlan();
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
       <div className="grid gap-4 md:grid-cols-2">
