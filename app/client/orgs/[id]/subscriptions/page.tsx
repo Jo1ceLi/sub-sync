@@ -19,6 +19,10 @@ import Link from "next/link";
 import { getAuth } from "@/app/api/[auth]/auth";
 import { clientGetSubscription } from "@/app/client/components/actions/get-clinet-sub";
 import { H2, TP } from "@/components/typography";
+import {
+  CancelSubscriptionAlertDialog,
+  ReSubscribeButton,
+} from "@/app/client/components/toggle-subscription";
 
 export default async function OrgID({ params }: { params: any }) {
   const orgId = params["id"];
@@ -187,18 +191,37 @@ export async function SubscriptionPlanCard({
                   <div className="font-semibold">方案</div>
                   <div>{s.plan_name}</div>
                 </div>
-                <div className="flex items-center gap-4">
+                {/* <div className="flex items-center gap-4">
                   <div className="font-semibold">狀態</div>
                   <div>{s.subscription_status}</div>
-                </div>
+                </div> */}
                 <div className="flex items-center gap-4">
-                  <div className="font-semibold">續訂日期</div>
+                  <div className="font-semibold">
+                    {s.subscription_status === "active"
+                      ? "下一次付款日"
+                      : "訂閱到期日"}
+                  </div>
                   <div>
                     {new Date(
                       s.subscription_renewal_date as string
                     ).toLocaleDateString()}
                   </div>
                 </div>
+
+                {s.subscription_status === "active" ? (
+                  <CancelSubscriptionAlertDialog
+                    dueDate={new Date(
+                      s.subscription_renewal_date
+                    ).toLocaleDateString()}
+                    orgId={orgId}
+                    planId={s.subscription_plan_id}
+                  />
+                ) : (
+                  <ReSubscribeButton
+                    orgId={orgId}
+                    planId={s.subscription_plan_id}
+                  />
+                )}
               </div>
             </CardContent>
           </Card>
