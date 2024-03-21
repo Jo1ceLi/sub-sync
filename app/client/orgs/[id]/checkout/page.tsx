@@ -17,24 +17,24 @@ export default async function Checkout({
   const type = searchParams["type"] as CheckoutTypeMap | undefined;
   const productId = searchParams["id"] as string | undefined; //共用在course or subscription
 
-  const getCourse = async () => {
-    const token = cookies().get("ctoken");
-    const oid = params["id"];
-    if (productId && oid && type === "course" && token) {
-      const res = await fetch(
-        `${process.env.BACKEND_HOST}/api/client/orgs/${oid}/courses/${productId}`,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: "Bearer " + token.value,
-          },
-        }
-      );
-      if (res.ok) {
-        return (await res.json()) as Course;
-      }
-    }
-  };
+  // const getCourse = async () => {
+  //   const token = cookies().get("ctoken");
+  //   const oid = params["id"];
+  //   if (productId && oid && type === "course" && token) {
+  //     const res = await fetch(
+  //       `${process.env.BACKEND_HOST}/api/client/orgs/${oid}/courses/${productId}`,
+  //       {
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //           Authorization: "Bearer " + token.value,
+  //         },
+  //       }
+  //     );
+  //     if (res.ok) {
+  //       return (await res.json()) as Course;
+  //     }
+  //   }
+  // };
 
   const getPlan = async () => {
     const token = cookies().get("ctoken");
@@ -101,12 +101,12 @@ export default async function Checkout({
   const org = await getOrgById();
   const cards = await getCards();
 
-  const course = await getCourse();
+  // const course = await getCourse();
   const plan = await getPlan();
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
       <div className="grid gap-4 md:grid-cols-2">
-        {course ? (
+        {/* {course ? (
           <Card className="">
             <CardHeader className="grid pt-2">
               <BackButton />
@@ -127,7 +127,7 @@ export default async function Checkout({
           </Card>
         ) : (
           <></>
-        )}
+        )} */}
         {plan ? (
           <Card className="">
             <CardHeader className="grid pt-2">
