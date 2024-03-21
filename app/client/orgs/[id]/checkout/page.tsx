@@ -15,7 +15,7 @@ export default async function Checkout({
 }) {
   const orgId = params["id"];
   const type = searchParams["type"] as CheckoutTypeMap | undefined;
-  const productId = searchParams["id"] as string | undefined; //共用在course or subscription
+  const productId = searchParams["id"] as string; //共用在course or subscription
 
   // const getCourse = async () => {
   //   const token = cookies().get("ctoken");
@@ -39,9 +39,10 @@ export default async function Checkout({
   const getPlan = async () => {
     const token = cookies().get("ctoken");
     const oid = params["id"];
-    if (productId && oid && orgId && type === "subscription" && token) {
+    const pid = searchParams["id"];
+    if (oid && orgId && type === "subscription" && token) {
       const res = await fetch(
-        `${process.env.BACKEND_HOST}/api/client/orgs/${oid}/plans`,
+        `${process.env.BACKEND_HOST}/api/client/orgs/${oid}/plans/${pid}`,
         {
           headers: {
             "Content-Type": "application/json",
@@ -50,12 +51,7 @@ export default async function Checkout({
         }
       );
       if (res.ok) {
-        const plans = (await res.json()) as Plan[];
-        const plan = plans.filter((p) => p.id === productId).at(0);
-        if (plan) {
-          console.log("plan=", plan);
-          return plan;
-        }
+        return (await res.json()) as Plan;
       }
     }
   };
