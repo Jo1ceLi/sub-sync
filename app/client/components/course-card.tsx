@@ -74,7 +74,7 @@ export default async function ClientCourseCard() {
                 <CardFooter className="flex flex-1 justify-center">
                   <Button asChild className="w-full">
                     <Link
-                      href={`/client/orgs/${orgId}/checkout?type=course&id=${course.id}`}
+                      href={`/client/orgs/${orgId}/checkout/course/${course.id}`}
                     >
                       購買
                     </Link>

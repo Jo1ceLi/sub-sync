@@ -83,7 +83,7 @@ export default async function ClientPlansCard({ orgId }: { orgId: string }) {
                     </CardContent>
                     <CardFooter className="flex flex-1 justify-center">
                       <Link
-                        href={`/client/orgs/${orgId}/checkout?type=subscription&id=${p.id}`}
+                        href={`/client/orgs/${orgId}/checkout/subscription/${p.id}`}
                         className={cn(
                           "w-full",
                           buttonVariants({ variant: "default" }),

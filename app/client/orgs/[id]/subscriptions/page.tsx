@@ -302,9 +302,7 @@ function NotSubscribedPlanCard({
       </CardContent>
       <CardFooter>
         <Button asChild className="w-full">
-          <Link
-            href={`/client/orgs/${orgId}/checkout?type=subscription&id=${p.id}`}
-          >
+          <Link href={`/client/orgs/${orgId}/checkout/subscription/${p.id}`}>
             訂閱
           </Link>
         </Button>
