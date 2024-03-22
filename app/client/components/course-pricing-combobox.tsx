@@ -40,26 +40,11 @@ import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { UseFormReturn, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { purchaseCourse } from "./actions/create-card-sa";
+import {
+  purchaseCourseUsingExistedCard,
+  purchaseCourseUsingNewCard,
+} from "./actions/create-card-sa";
 import { useRouter } from "next/navigation";
-
-type FormType = UseFormReturn<
-  {
-    pricing: {
-      price: number;
-      session_count: number;
-    };
-    cardId: string;
-  },
-  any,
-  {
-    pricing: {
-      price: number;
-      session_count: number;
-    };
-    cardId: string;
-  }
->;
 
 export function CoursePricingCombobox({
   pricing,
@@ -79,7 +64,7 @@ export function CoursePricingCombobox({
   const [newPayment, setNewPayment] = useState(false);
   const [selectedCard, setSelectedCard] = useState<CardType>();
 
-  const FormSchema = z.object({
+  const existCardSchema = z.object({
     pricing: z.object(
       {
         price: z.coerce.number(),
@@ -94,16 +79,35 @@ export function CoursePricingCombobox({
     }),
   });
 
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const newCardSchema = z.object({
+    pricing: z.object(
+      {
+        price: z.coerce.number(),
+        session_count: z.coerce.number(),
+      },
+      {
+        required_error: "請選擇課程",
+      }
+    ),
+    name: z.string({
+      required_error: "請輸入持卡人姓名",
+    }),
+    phone: z.string().optional(),
+    alias: z.string().optional(),
+  });
+
+  const schema = z.union([existCardSchema, newCardSchema]);
+
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
   });
 
   const router = useRouter();
-  async function onSubmit(data: z.infer<typeof FormSchema>) {
-    if (courseId) {
+  async function onSubmit(data: z.infer<typeof schema>) {
+    if (courseId && "cardId" in data) {
       //if purchase success redir to billing page
       setLoading(true);
-      const status = await purchaseCourse({
+      const status = await purchaseCourseUsingExistedCard({
         courseId,
         orgId: org.id,
         data,
@@ -114,6 +118,27 @@ export function CoursePricingCombobox({
       } else {
         toast.error("購買失敗");
       }
+    } else if (courseId && "name" in data) {
+      const callback = async (prime: string) => {
+        const status = await purchaseCourseUsingNewCard({
+          courseId,
+          orgId: org.id,
+          data: {
+            prime: prime,
+            pricing: data.pricing,
+            cardholder: {
+              name: data.name,
+              phone_number: data.phone,
+              alias: data.alias,
+            },
+          },
+        });
+        if (status === 200) {
+          toast.success("購買成功");
+          router.push(`/client/orgs/${org.id}/billing`);
+        }
+      };
+      await GetPrime(setLoading, callback);
     }
   }
 
@@ -154,7 +179,11 @@ export function CoursePricingCombobox({
                   />
                 )}
                 {newPayment && (
-                  <NewPayment org={org} setNewPayment={setNewPayment} />
+                  <NewPayment
+                    org={org}
+                    setNewPayment={setNewPayment}
+                    form={form}
+                  />
                 )}
                 <FormMessage />
               </FormItem>
@@ -187,7 +216,7 @@ function PricingPopover({
     price: number;
     session_count: number;
   };
-  form: FormType;
+  form: any;
 }) {
   const formatPriceString = (price: Pricing) =>
     `$${price.price} / ${price.session_count}堂`;
@@ -292,8 +321,7 @@ export function CardPopover({
                   />
                 </CommandItem>
               ))}
-            {/* TODO: 尚未完成直接付款UI, 先關閉選單功能 */}
-            {/* <CommandItem
+            <CommandItem
               onSelect={() => {
                 setNewPayment(true);
                 setOpen(false);
@@ -301,7 +329,7 @@ export function CardPopover({
             >
               新增付款方式
               <PlusCircledIcon className="ml-auto h-4 w-4" />
-            </CommandItem> */}
+            </CommandItem>
           </CommandGroup>
         </Command>
       </PopoverContent>
@@ -312,9 +340,11 @@ export function CardPopover({
 export function NewPayment({
   org,
   setNewPayment,
+  form,
 }: {
   org: Org;
   setNewPayment: (value: boolean) => void;
+  form: any;
 }) {
   const [loading, setLoading] = useState(false);
   const [name, setName] = useState("");
@@ -342,11 +372,15 @@ export function NewPayment({
         <div className="grid gap-2">
           <Label>持卡人姓名</Label>
           <Input
+            required
             className="text-base border-2 border-black rounded-lg max-h-8 focus-visible:ring-3"
             placeholder="全名"
             type="text"
             value={name}
-            onChange={(e) => setName(e.target.value)}
+            onChange={(e) => {
+              setName(e.target.value);
+              form.setValue("name", e.target.value);
+            }}
           />
 
           <Label>電話</Label>
@@ -355,14 +389,20 @@ export function NewPayment({
             placeholder="電話"
             type="tel"
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            onChange={(e) => {
+              setPhone(e.target.value);
+              form.setValue("phone", e.target.value);
+            }}
           />
 
           <Label>信用卡別名</Label>
           <Input
             className="text-base border-2 border-black rounded-lg max-h-8 focus-visible:ring-3"
             placeholder="幫信用卡取個名字吧"
-            onChange={(e) => setAlias(e.target.value)}
+            onChange={(e) => {
+              setAlias(e.target.value);
+              form.setValue("alias", e.target.value);
+            }}
           />
 
           <Label htmlFor="number">信用卡卡號</Label>
@@ -384,21 +424,6 @@ export function NewPayment({
           ></div>
         </div>
       </CardContent>
-      <CardFooter>
-        <Button
-          disabled={loading}
-          onClick={() => {
-            setLoading(true);
-            GetPrime(setLoading, () => new Promise(() => undefined));
-          }}
-          className="w-full"
-        >
-          新增
-          <span className={cn("ml-2 hidden", loading && "block")}>
-            <Icons.spinner className="animate-spin" />
-          </span>
-        </Button>
-      </CardFooter>
     </Card>
   );
 }

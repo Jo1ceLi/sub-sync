@@ -89,7 +89,6 @@ export async function GetPrime(
       setLoading(false);
       return;
     }
-    alert("get prime 成功，prime: " + result.card.prime);
     await callback(result.card.prime);
     setLoading(false);
     // send prime to your server, to pay with Pay by Prime API .

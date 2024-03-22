@@ -50,7 +50,7 @@ import { redirect } from "next/navigation";
 //   }
 // };
 
-export const purchaseCourse = async ({
+export const purchaseCourseUsingExistedCard = async ({
   orgId,
   courseId,
   data,
@@ -85,6 +85,47 @@ export const purchaseCourse = async ({
   }
 };
 
+export const purchaseCourseUsingNewCard = async ({
+  orgId,
+  courseId,
+  data,
+}: {
+  orgId: string;
+  courseId: string;
+  data: {
+    prime: string;
+    pricing: {
+      price: number;
+      session_count: number;
+    };
+    cardholder: {
+      name: string | undefined;
+      phone_number: string | undefined;
+      alias: string | undefined;
+    };
+  };
+}) => {
+  "use server";
+  const token = cookies().get("ctoken");
+  if (token) {
+    const res = await fetch(
+      `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/courses/${courseId}/payment/new-card`,
+      {
+        method: "POST",
+        body: JSON.stringify({ ...data, remember: false }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token.value,
+        },
+      }
+    );
+    if (res.ok) {
+      revalidatePath(`/client/orgs/${orgId}/billing`, "page");
+      return res.status;
+    }
+  }
+};
+
 export const subscribePlan = async ({
   orgId,
   planId,
@@ -99,7 +140,7 @@ export const subscribePlan = async ({
   "use server";
   const token = cookies().get("ctoken");
   const res = await fetch(
-    `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/plans/${planId}/subscribe`,
+    `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/plans/${planId}/subscribe/existing-card`,
     {
       method: "POST",
       body: JSON.stringify({
