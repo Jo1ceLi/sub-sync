@@ -16,6 +16,7 @@ import {
   cancelSubscription,
   resumeSubscription,
 } from "@/app/client/components/actions/subscription";
+import { toast } from "sonner";
 
 export function CancelSubscriptionAlertDialog({
   dueDate,
@@ -27,7 +28,10 @@ export function CancelSubscriptionAlertDialog({
   planId: string;
 }) {
   const onClick = async () => {
-    await cancelSubscription(orgId, planId);
+    const status = await cancelSubscription(orgId, planId);
+    if (status === 200) {
+      toast.success("取消訂閱成功");
+    }
   };
   return (
     <AlertDialog>
@@ -64,7 +68,10 @@ export function ReSubscribeButton({
   planId: string;
 }) {
   const onClick = async () => {
-    await resumeSubscription(orgId, planId);
+    const status = await resumeSubscription(orgId, planId);
+    if (status === 200) {
+      toast.success("恢復訂閱成功");
+    }
   };
   return <Button onClick={onClick}>恢復訂閱</Button>;
 }
