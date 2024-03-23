@@ -10,9 +10,13 @@ import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { subscribePlan } from "./actions/create-card-sa";
+import {
+  subscribePlanUsingExistingCard,
+  subscribePlanUsingNewCard,
+} from "./actions/create-card-sa";
 import { useRouter } from "next/navigation";
 import { CardPopover, NewPayment } from "./course-pricing-combobox";
+import { GetPrime } from "./tappay-func";
 
 export function PlanPricingCombobox({
   cards,
@@ -30,33 +34,64 @@ export function PlanPricingCombobox({
   const [newPayment, setNewPayment] = useState(false);
   const [selectedCard, setSelectedCard] = useState<CardType>();
 
-  const FormSchema = z.object({
+  const existCardSchema = z.object({
     cardId: z.string({
       required_error: "請選擇付款方式",
     }),
   });
 
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+  const newCardSchema = z.object({
+    name: z.string().optional(),
+    phone: z.string().optional(),
+    alias: z.string().optional(),
+  });
+
+  const schema = z.union([existCardSchema, newCardSchema]);
+
+  const form = useForm<z.infer<typeof schema>>({
+    resolver: zodResolver(schema),
   });
 
   const router = useRouter();
-  async function onSubmit(data: z.infer<typeof FormSchema>) {
-    if (planId) {
+  async function onSubmit(data: z.infer<typeof schema>) {
+    if (planId && "cardId" in data) {
       //if purchase success redir to billing page
       setLoading(true);
-      const status = await subscribePlan({
+      const status = await subscribePlanUsingExistingCard({
         planId,
         orgId: org.id,
         data,
       });
-      // const status = 200; //TODO:
       if (status === 200) {
         toast.success("購買成功");
         router.push(`/client/orgs/${org.id}/billing`);
       } else {
         toast.error("購買失敗");
       }
+    } else if (planId && "name" in data) {
+      const callback = async (prime: string) => {
+        const status = await subscribePlanUsingNewCard({
+          orgId: org.id,
+          planId,
+          data: {
+            alias: data.alias,
+            cardholder: {
+              name: data.name,
+              phone_number: data.phone,
+            },
+            prime,
+          },
+        });
+        if (status === 200) {
+          toast.success("訂閱成功");
+          router.push(`/client/orgs/${org.id}/billing`);
+        } else {
+          toast.error("訂閱失敗");
+          router.push(`/client/orgs/${org.id}`);
+        }
+      };
+      await GetPrime(setLoading, callback);
+      //
     }
   }
 
@@ -81,7 +116,11 @@ export function PlanPricingCombobox({
                   />
                 )}
                 {newPayment && (
-                  <NewPayment org={org} setNewPayment={setNewPayment} />
+                  <NewPayment
+                    org={org}
+                    setNewPayment={setNewPayment}
+                    form={form}
+                  />
                 )}
                 <FormMessage />
               </FormItem>

@@ -129,7 +129,7 @@ export const purchaseCourseUsingNewCard = async ({
   }
 };
 
-export const subscribePlan = async ({
+export const subscribePlanUsingExistingCard = async ({
   orgId,
   planId,
   data,
@@ -149,6 +149,36 @@ export const subscribePlan = async ({
       body: JSON.stringify({
         cardId: data.cardId,
       }),
+      headers: {
+        Authorization: "Bearer " + token!.value,
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  if (res.ok) {
+    revalidatePath(`/client/orgs/${orgId}`, "page");
+    revalidatePath(`/client/orgs/${orgId}/subscriptions`, "page");
+    return res.status;
+  }
+  return res.status;
+};
+
+export const subscribePlanUsingNewCard = async ({
+  orgId,
+  planId,
+  data,
+}: {
+  orgId: string;
+  planId: string;
+  data: PaymentWithNewCard;
+}) => {
+  "use server";
+  const token = cookies().get("ctoken");
+  const res = await fetch(
+    `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/plans/${planId}/subscribe/new-card`,
+    {
+      method: "POST",
+      body: JSON.stringify(data),
       headers: {
         Authorization: "Bearer " + token!.value,
         "Content-Type": "application/json",
