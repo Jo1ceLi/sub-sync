@@ -67,7 +67,7 @@ export default async function OrgID({ params }: { params: any }) {
     const token = cookies().get("ctoken");
     // ✅ This will be type-safe and validated.
     const res = await fetch(
-      `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/plans/${values.planId}/subscribe`,
+      `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/plans/${values.planId}/subscribe/existing-card`,
       {
         method: "POST",
         body: JSON.stringify({

@@ -41,7 +41,7 @@ import { UseFormReturn, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import {
-  purchaseCourseUsingExistedCard,
+  purchaseCourseUsingExistingCard,
   purchaseCourseUsingNewCard,
 } from "./actions/create-card-sa";
 import { useRouter } from "next/navigation";
@@ -107,7 +107,7 @@ export function CoursePricingCombobox({
     if (courseId && "cardId" in data) {
       //if purchase success redir to billing page
       setLoading(true);
-      const status = await purchaseCourseUsingExistedCard({
+      const status = await purchaseCourseUsingExistingCard({
         courseId,
         orgId: org.id,
         data,
@@ -126,16 +126,19 @@ export function CoursePricingCombobox({
           data: {
             prime: prime,
             pricing: data.pricing,
+            alias: data.alias,
             cardholder: {
               name: data.name,
               phone_number: data.phone,
-              alias: data.alias,
             },
           },
         });
         if (status === 200) {
           toast.success("購買成功");
           router.push(`/client/orgs/${org.id}/billing`);
+        } else {
+          toast.error("購買失敗");
+          router.push(`/client/orgs/${org.id}`);
         }
       };
       await GetPrime(setLoading, callback);

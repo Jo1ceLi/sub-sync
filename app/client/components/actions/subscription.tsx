@@ -27,7 +27,7 @@ export const resumeSubscription = async (orgId: string, planId: string) => {
   "use server";
   const session = await getAuth("client");
   const response = await fetch(
-    `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/plans/${planId}/subscribe`,
+    `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/plans/${planId}/subscribe/existing-card`,
     {
       method: "POST",
       headers: {

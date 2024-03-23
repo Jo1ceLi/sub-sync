@@ -50,7 +50,16 @@ import { redirect } from "next/navigation";
 //   }
 // };
 
-export const purchaseCourseUsingExistedCard = async ({
+type PaymentWithNewCard = {
+  prime: string;
+  cardholder: {
+    name: string | undefined;
+    phone_number: string | undefined;
+  };
+  alias: string | undefined;
+};
+
+export const purchaseCourseUsingExistingCard = async ({
   orgId,
   courseId,
   data,
@@ -92,16 +101,10 @@ export const purchaseCourseUsingNewCard = async ({
 }: {
   orgId: string;
   courseId: string;
-  data: {
-    prime: string;
+  data: PaymentWithNewCard & {
     pricing: {
       price: number;
       session_count: number;
-    };
-    cardholder: {
-      name: string | undefined;
-      phone_number: string | undefined;
-      alias: string | undefined;
     };
   };
 }) => {
