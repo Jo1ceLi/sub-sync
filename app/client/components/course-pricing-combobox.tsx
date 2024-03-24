@@ -29,22 +29,29 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Card as CardType, Org, Pricing } from "@/types";
-import CreateCard from "./create-card-card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import Script from "next/script";
-import { GetPrime, TappayInit } from "./tappay-func";
+import { GetPrime, TappayInit } from "@/app/client/components/tappay-func";
 import { Icons } from "@/components/icons";
 import { z } from "zod";
-import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { UseFormReturn, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import {
   purchaseCourseUsingExistingCard,
   purchaseCourseUsingNewCard,
-} from "./actions/create-card-sa";
+} from "@/app/client/components/actions/payment";
 import { useRouter } from "next/navigation";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export function CoursePricingCombobox({
   pricing,
@@ -94,6 +101,7 @@ export function CoursePricingCombobox({
     }),
     phone: z.string().optional(),
     alias: z.string().optional(),
+    remember: z.boolean().default(false),
   });
 
   const schema = z.union([existCardSchema, newCardSchema]);
@@ -118,7 +126,7 @@ export function CoursePricingCombobox({
       } else {
         toast.error("購買失敗");
       }
-    } else if (courseId && "name" in data) {
+    } else if (courseId && "remember" in data) {
       const callback = async (prime: string) => {
         const status = await purchaseCourseUsingNewCard({
           courseId,
@@ -131,6 +139,7 @@ export function CoursePricingCombobox({
               name: data.name,
               phone_number: data.phone,
             },
+            remember: data.remember,
           },
         });
         if (status === 200) {
@@ -192,6 +201,26 @@ export function CoursePricingCombobox({
               </FormItem>
             )}
           />
+
+          {newPayment && (
+            <FormField
+              control={form.control}
+              name="remember"
+              render={({ field }) => (
+                <FormItem className="flex flex-row w-full items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>記住這張卡片，下次購買時可以直接使用</FormLabel>
+                  </div>
+                </FormItem>
+              )}
+            />
+          )}
 
           <Button disabled={loading} className="w-full" type="submit">
             購買

@@ -6,17 +6,28 @@ import { Button } from "@/components/ui/button";
 import { Card as CardType, Org } from "@/types";
 import { Icons } from "@/components/icons";
 import { z } from "zod";
-import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import {
   subscribePlanUsingExistingCard,
   subscribePlanUsingNewCard,
-} from "./actions/create-card-sa";
+} from "@/app/client/components/actions/payment";
 import { useRouter } from "next/navigation";
-import { CardPopover, NewPayment } from "./course-pricing-combobox";
+import {
+  CardPopover,
+  NewPayment,
+} from "@/app/client/components/course-pricing-combobox";
 import { GetPrime } from "./tappay-func";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export function PlanPricingCombobox({
   cards,
@@ -44,6 +55,7 @@ export function PlanPricingCombobox({
     name: z.string().optional(),
     phone: z.string().optional(),
     alias: z.string().optional(),
+    remember: z.boolean().default(false),
   });
 
   const schema = z.union([existCardSchema, newCardSchema]);
@@ -80,6 +92,7 @@ export function PlanPricingCombobox({
               phone_number: data.phone,
             },
             prime,
+            remember: data.remember,
           },
         });
         if (status === 200) {
@@ -126,6 +139,26 @@ export function PlanPricingCombobox({
               </FormItem>
             )}
           />
+
+          {newPayment && (
+            <FormField
+              control={form.control}
+              name="remember"
+              render={({ field }) => (
+                <FormItem className="flex flex-row w-full items-start space-x-3 space-y-0 rounded-md border p-4 shadow">
+                  <FormControl>
+                    <Checkbox
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                  <div className="space-y-1 leading-none">
+                    <FormLabel>記住這張卡片，下次購買時可以直接使用</FormLabel>
+                  </div>
+                </FormItem>
+              )}
+            />
+          )}
 
           <Button disabled={loading} className="w-full" type="submit">
             訂閱
