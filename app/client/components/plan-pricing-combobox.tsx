@@ -66,9 +66,9 @@ export function PlanPricingCombobox({
 
   const router = useRouter();
   async function onSubmit(data: z.infer<typeof schema>) {
+    setLoading(true);
     if (planId && "cardId" in data) {
       //if purchase success redir to billing page
-      setLoading(true);
       const status = await subscribePlanUsingExistingCard({
         planId,
         orgId: org.id,

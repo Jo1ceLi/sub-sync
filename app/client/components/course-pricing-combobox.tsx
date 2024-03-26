@@ -112,9 +112,9 @@ export function CoursePricingCombobox({
 
   const router = useRouter();
   async function onSubmit(data: z.infer<typeof schema>) {
+    setLoading(true);
     if (courseId && "cardId" in data) {
       //if purchase success redir to billing page
-      setLoading(true);
       const status = await purchaseCourseUsingExistingCard({
         courseId,
         orgId: org.id,
