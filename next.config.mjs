@@ -14,6 +14,9 @@ const nextConfig = {
       {
         hostname: "drive.google.com",
       },
+      {
+        hostname: "scdn.line-apps.com",
+      },
     ],
   },
 };

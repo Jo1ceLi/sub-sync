@@ -7,30 +7,38 @@ import { Icons } from "./icons";
 export function Landingpage() {
   return (
     <>
-      <div className=" py-12 lg:py-16">
+      <div className="py-6 lg:py-16">
         <div className="container px-4 md:px-6">
           <div className="grid items-center gap-12 xl:gap-20">
             <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl/none">
-              有一個事業是一件很*的事情
-              <p>但總覺得管理花費了您一堆時間嗎？</p>
+              擁有事業是一件很酷的事
+              <p>但總覺得管理花費了您很多時間嗎？</p>
             </h1>
             <p className="text-gray-500 md:text-xl dark:text-gray-400">
-              {"SubSync將讓您在管理訂閱從現在開始變得無比簡單"}
+              {"Sub-Sync將讓您在管理訂閱從現在開始變得無比簡單"}
               <p>{"您的客戶將會體驗到史上最順暢的訂閱支付流程"}</p>
               {/* Manage all your subscriptions in one place. Get reminders before
                 payments. Stay on top of your budget. */}
             </p>
-            <div className="flex">
+            <div className="flex justify-between">
               <Link href="/merchant/login">
-                <Button className="mr-10 text-gray-50" variant={"destructive"}>
-                  立即免費註冊
+                <Button className="rounded-lg" variant={"default"}>
+                  免費試用
                 </Button>
               </Link>
               <Link href={"https://cal.com/jo1ce-li/15min"}>
-                <Button className="border-white" variant={"secondary"}>
-                  {"預約試用 ->"}
+                <Button className="rounded-lg" variant={"secondary"}>
+                  {"聯繫業務"}
                 </Button>
               </Link>
+              {/* <Link href="https://lin.ee/c3ypESL">
+                <Image
+                  src="https://scdn.line-apps.com/n/line_add_friends/btn/zh-Hant.png"
+                  alt="加入好友"
+                  width={116}
+                  height={36}
+                />
+              </Link> */}
             </div>
           </div>
         </div>
@@ -41,32 +49,32 @@ export function Landingpage() {
             <div className="space-y-4">
               <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl/none">
                 {"解放您的時間！"}
-                <p>{"我們來處理您的會員續約"}</p>
+                <p>{"我們來處理您的訂閱服務"}</p>
               </h2>
               <p className="text-gray-500 md:text-xl dark:text-gray-400">
                 {"管理所有會籍，在... 「一個頁面」！"}
-                <p>{"在會員即將到期前提醒您，留住每一個客戶！"}</p>
+                <p>{"在會員即將到期前提醒你，即時留住每一個客戶！"}</p>
                 {/* Manage all your subscriptions in one place. Get reminders before
                 payments. Stay on top of your budget. */}
               </p>
 
               <ul className="grid gap-4 sm:grid-cols-2 md:gap-6 md:grid-cols-2">
                 <li className="flex space-x-4">
-                  <Icons.calendar className="w-5 h-5 flex-shrink-0 text-cool-gray-500 group-hover:text-cool-gray-900 dark:text-cool-gray-400 dark:group-hover:text-cool-gray-300" />
+                  <Icons.calendar className="w-8 h-8 flex-shrink-0 text-cool-gray-500 group-hover:text-cool-gray-900 dark:text-cool-gray-400 dark:group-hover:text-cool-gray-300" />
                   <div className="space-y-1.5">
                     <h3 className="text-base font-medium tracking-tighter group">
                       {"自動化續約"}
                       {/* Automatic payment reminders */}
                     </h3>
                     <p className="text-sm text-cool-gray-500 dark:text-cool-gray-400">
-                      {"把時間留給您的專業"}
+                      {"把時間留給你的專業"}
                       <p>{"管理瑣碎的續約就交給我們！"}</p>
                       {/* Get notified before payments are due */}
                     </p>
                   </div>
                 </li>
                 <li className="flex space-x-4">
-                  <Icons.listChecks className="w-5 h-5 flex-shrink-0 text-cool-gray-500 group-hover:text-cool-gray-900 dark:text-cool-gray-400 dark:group-hover:text-cool-gray-300" />
+                  <Icons.listChecks className="w-8 h-8 flex-shrink-0 text-cool-gray-500 group-hover:text-cool-gray-900 dark:text-cool-gray-400 dark:group-hover:text-cool-gray-300" />
                   <div className="space-y-1.5">
                     <h3 className="text-base font-medium tracking-tighter group">
                       {"追蹤訂閱狀態"}
@@ -78,17 +86,6 @@ export function Landingpage() {
                     </p>
                   </div>
                 </li>
-                {/* <li className="flex space-x-4">
-                  <CurrencyIcon className="w-5 h-5 flex-shrink-0 text-cool-gray-500 group-hover:text-cool-gray-900 dark:text-cool-gray-400 dark:group-hover:text-cool-gray-300" />
-                  <div className="space-y-1.5">
-                    <h3 className="text-base font-medium tracking-tighter group">
-                      Budgeting tools
-                    </h3>
-                    <p className="text-sm text-cool-gray-500 dark:text-cool-gray-400">
-                      Manage your spending
-                    </p>
-                  </div>
-                </li> */}
               </ul>
             </div>
             <Image
@@ -116,34 +113,12 @@ export function Landingpage() {
                 {"讓您愛不釋手的功能"}
               </h2>
               <p className="max-w-[600px] text-gray-500 md:text-xl dark:text-gray-400">
-                {`從註冊的那一刻起，您會懷疑人生`}
-                <p>{`同時也是您：「為什麼不早點告訴我這個酷東西！」`}</p>
+                {`從註冊的那一刻起，你會懷疑人生`}
+                <p>{`「為什麼不早點告訴我這個酷東西！」`}</p>
                 {/* {`From the moment you sign up, you'll wonder how you ever managed
                 your subscriptions without us.`} */}
               </p>
               <dl className="grid gap-8 md:grid-cols-2 xl:gap-12">
-                <div className="flex space-x-4">
-                  <Icons.clock className="w-8 h-8 flex-shrink-0 text-cool-gray-500 dark:text-cool-gray-400" />
-                  <div className="space-y-1.5">
-                    <dt className="text-lg font-medium tracking-tighter">
-                      Automatic payment reminders
-                    </dt>
-                    <dd className="text-sm text-cool-gray-500 dark:text-cool-gray-400">
-                      Get notified before payments are due
-                    </dd>
-                  </div>
-                </div>
-                <div className="flex space-x-4">
-                  <Icons.listChecks className="w-8 h-8 flex-shrink-0 text-cool-gray-500 dark:text-cool-gray-400" />
-                  <div className="space-y-1.5">
-                    <dt className="text-lg font-medium tracking-tighter">
-                      Subscription tracking
-                    </dt>
-                    <dd className="text-sm text-cool-gray-500 dark:text-cool-gray-400">
-                      Easily see all your active subscriptions
-                    </dd>
-                  </div>
-                </div>
                 <div className="flex space-x-4">
                   <Icons.creditCard className="w-8 h-8 flex-shrink-0 text-cool-gray-500 dark:text-cool-gray-400" />
                   <div className="space-y-1.5">
@@ -157,6 +132,28 @@ export function Landingpage() {
                     </dd>
                   </div>
                 </div>
+                <div className="flex space-x-4">
+                  <Icons.clock className="w-8 h-8 flex-shrink-0 text-cool-gray-500 dark:text-cool-gray-400" />
+                  <div className="space-y-1.5">
+                    <dt className="text-lg font-medium tracking-tighter">
+                      {"自動化扣款"}
+                    </dt>
+                    <dd className="text-sm text-cool-gray-500 dark:text-cool-gray-400">
+                      {"讓您不會錯過任何一次續約"}
+                    </dd>
+                  </div>
+                </div>
+                {/* <div className="flex space-x-4">
+                  <Icons.listChecks className="w-8 h-8 flex-shrink-0 text-cool-gray-500 dark:text-cool-gray-400" />
+                  <div className="space-y-1.5">
+                    <dt className="text-lg font-medium tracking-tighter">
+                      Subscription tracking
+                    </dt>
+                    <dd className="text-sm text-cool-gray-500 dark:text-cool-gray-400">
+                      Easily see all your active subscriptions
+                    </dd>
+                  </div>
+                </div> */}
               </dl>
             </div>
           </div>
