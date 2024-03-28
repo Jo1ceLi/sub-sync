@@ -49,6 +49,29 @@ export type SubscriptionCardInfo = {
   plan_name: string;
 };
 
+export type CourseCardInfo = {
+  id: string;
+  title: string;
+  description: string;
+  session_sum: number;
+};
+
+type ClientInfo = {
+  id: string;
+  name: string;
+  uid: string; //line uid
+  email: string;
+  picture: string;
+  phone: string;
+  joined_at: string;
+};
+
+export type CustomerDetail = {
+  info: ClientInfo;
+  subscriptions: SubscriptionCardInfo[];
+  courses: CourseCardInfo[];
+};
+
 export interface ClientSubscription {
   id: string;
   created_at: string;
