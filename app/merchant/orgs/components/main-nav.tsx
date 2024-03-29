@@ -31,7 +31,7 @@ export function MainNav({
       case "customers":
         setSelected(1);
         break;
-      case "subscriptions":
+      case "transactions":
         setSelected(2);
         break;
       case "plans":
@@ -71,11 +71,11 @@ export function MainNav({
         顧客
       </Link>
       <Link
-        href={`${baseUrl}/subscriptions`}
+        href={`${baseUrl}/transactions`}
         onClick={() => setSelected(2)}
         className={selected === 2 ? selectedStyle : nonSelectedStyle}
       >
-        訂閱
+        訂單
       </Link>
       <Link
         href={`${baseUrl}/plans`}

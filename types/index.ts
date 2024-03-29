@@ -56,6 +56,13 @@ export type CourseCardInfo = {
   session_sum: number;
 };
 
+export type MerchantMenuTab =
+  | "home"
+  | "customers"
+  | "subscriptions"
+  | "plans"
+  | "settings";
+
 type ClientInfo = {
   id: string;
   name: string;

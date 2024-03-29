@@ -2,8 +2,10 @@
 
 import {
   ColumnDef,
+  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
@@ -19,6 +21,7 @@ import {
 import { Card } from "@/components/ui/card";
 import { Button } from "@/registry/new-york/ui/button";
 import { useState } from "react";
+import { Input } from "@/components/ui/input";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -35,15 +38,19 @@ export function DataTable<TData, TValue>({
     pageIndex: 0, //initial page index
     pageSize: 20, //default page size
   });
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const table = useReactTable({
     columns,
     data,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onPaginationChange: setPagination,
+    onColumnFiltersChange: setColumnFilters,
+    getFilteredRowModel: getFilteredRowModel(),
     state: {
+      columnFilters,
       pagination,
     },
-    onPaginationChange: setPagination,
   });
 
   return (
@@ -51,6 +58,22 @@ export function DataTable<TData, TValue>({
       <Card className="rounded-md border">
         <Table>
           <TableHeader>
+            <div className="flex items-center py-4 pl-4">
+              <Input
+                placeholder="篩選顧客姓名"
+                value={
+                  (table
+                    .getColumn("client_name")
+                    ?.getFilterValue() as string) ?? ""
+                }
+                onChange={(event) =>
+                  table
+                    .getColumn("client_name")
+                    ?.setFilterValue(event.target.value)
+                }
+                className="max-w-sm"
+              />
+            </div>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {

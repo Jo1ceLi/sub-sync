@@ -24,7 +24,7 @@ export function MobileNav({ currentUrl }: { currentUrl: string }) {
       case "customers":
         setSelected(1);
         break;
-      case "subscriptions":
+      case "transactions":
         setSelected(2);
         break;
       case "plans":
@@ -104,7 +104,7 @@ export function MobileNav({ currentUrl }: { currentUrl: string }) {
                 onOpenChange={setOpen}
               >
                 <Icons.home className="h-4 w-4" />
-                Home
+                首頁
               </MobileLink>
               <MobileLink
                 className={selected === 1 ? selectedStyle : nonSelectedStyle}
@@ -112,23 +112,23 @@ export function MobileNav({ currentUrl }: { currentUrl: string }) {
                 onOpenChange={setOpen}
               >
                 <Icons.users className="h-4 w-4" />
-                Customers
+                客戶
               </MobileLink>
               <MobileLink
                 className={selected === 2 ? selectedStyle : nonSelectedStyle}
-                href={`${currentUrl}/subscriptions`}
+                href={`${currentUrl}/transactions`}
                 onOpenChange={setOpen}
               >
-                <Icons.clock className="h-4 w-4" />
-                Subscriptions
+                <Icons.package2 className="h-4 w-4" />
+                訂單
               </MobileLink>
               <MobileLink
                 className={selected === 3 ? selectedStyle : nonSelectedStyle}
                 href={`${currentUrl}/plans`}
                 onOpenChange={setOpen}
               >
-                <Icons.clock className="h-4 w-4" />
-                Plans
+                <Icons.calendar className="h-4 w-4" />
+                方案
               </MobileLink>
               <MobileLink
                 className={selected === 2 ? selectedStyle : nonSelectedStyle}
@@ -136,17 +136,8 @@ export function MobileNav({ currentUrl }: { currentUrl: string }) {
                 onOpenChange={setOpen}
               >
                 <Icons.clock className="h-4 w-4" />
-                Settings
+                設定
               </MobileLink>
-
-              {/* <MobileLink
-                className="flex items-center gap-3 rounded-lg px-3 py-2 text-gray-500 transition-all hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-50"
-                href={`${currentUrl}/settings`}
-                onOpenChange={setOpen}
-              >
-                <Icons.settings className="h-4 w-4" />
-                Settings
-              </MobileLink> */}
             </nav>
           </div>
           <div className="flex flex-col space-y-2"></div>
