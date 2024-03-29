@@ -1,4 +1,5 @@
 "use client";
+import { joinOrg } from "@/app/client/components/actions/join-org";
 import {
   Form,
   FormControl,
@@ -14,19 +15,23 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 export function JoinForm({
-  submit,
+  orgId,
+  defaultName,
 }: {
-  submit: (data: z.infer<typeof formSchema>) => Promise<void>;
+  orgId: string;
+  defaultName?: string;
 }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
+      name: defaultName,
       phone: "",
+      email: "",
     },
   });
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
-    await submit(values);
+    await joinOrg(orgId, values);
   };
 
   return (
@@ -34,23 +39,51 @@ export function JoinForm({
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
         <FormField
           control={form.control}
-          name="phone"
+          name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>手機</FormLabel>
+              <FormLabel>姓名</FormLabel>
               <FormControl>
-                <Input placeholder="手機" {...field} />
+                <Input placeholder="姓名" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <FormField
+          control={form.control}
+          name="phone"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>手機</FormLabel>
+              <FormControl>
+                <Input type="tel" placeholder="手機" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input type="email" placeholder="email" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit">送出</Button>
       </form>
     </Form>
   );
 }
 
 const formSchema = z.object({
+  name: z.string(),
   phone: z.string().min(8).max(15),
+  email: z.string().email().optional(),
 });

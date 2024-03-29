@@ -5,28 +5,6 @@ import { JoinForm } from "./join-form";
 import { getAuth } from "@/app/api/[auth]/auth";
 
 export default async function Home({ params }: { params: { id: string } }) {
-  const joinAction = async (val: { phone: string }) => {
-    "use server";
-    const token = cookies().get("ctoken");
-    const oid = params["id"];
-    if (token && oid) {
-      const res = await fetch(
-        `${process.env.BACKEND_HOST}/api/client/orgs/${oid}/join`,
-        {
-          method: "POST",
-          body: JSON.stringify(val),
-          headers: {
-            Authorization: "Bearer " + token.value,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (res.ok) {
-        redirect(`/client/orgs/${oid}`);
-      }
-    }
-  };
-
   const getOrgById = async () => {
     const oid = params["id"];
     const token = cookies().get("ctoken");
@@ -67,11 +45,11 @@ export default async function Home({ params }: { params: { id: string } }) {
   return (
     <Card className="m-5 p-5 w-[350px]">
       <CardTitle className="ml-5">
-        HI {session?.user.name} YOU ARE INVITED TO {org.name}
+        HI {session?.user.name} 您被邀請至 {org.name}
       </CardTitle>
 
       <CardContent className="mt-5">
-        <JoinForm submit={joinAction} />
+        <JoinForm orgId={org.id} defaultName={session?.user.name} />
       </CardContent>
     </Card>
   );

@@ -3,20 +3,14 @@
 import { ColumnDef } from "@tanstack/react-table";
 import type { Customer } from "@/types";
 import Image from "next/image";
-import { Badge } from "@/components/ui/badge";
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
+import { Button } from "@/registry/new-york/ui/button";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 
 export const columns: ColumnDef<Customer>[] = [
   {
-    accessorKey: "client_id",
-    header: "ID",
-    cell: ({ row }) =>
-      "#" + String(row.getValue("client_id")).slice(0, 6).toUpperCase(),
-  },
-  {
     accessorKey: "picture",
-    header: "Pic",
+    header: "",
     cell: ({ row }) => {
       const pic = row.getValue("picture") as string;
       const altname = row.getValue("name") as string;
@@ -29,79 +23,68 @@ export const columns: ColumnDef<Customer>[] = [
           }}
           alt={altname}
           src={pic}
-          width={35}
-          height={35}
+          width={36}
+          height={36}
         />
       );
     },
   },
   {
     accessorKey: "name",
-    header: "Name",
+    header: "姓名",
   },
   {
+    accessorKey: "phone",
+    header: "電話",
+    cell: ({ row }) => {
+      const phone = row.getValue("phone") as string;
+      return (
+        <a className="text-blue-500 hover:underline" href={`tel:${phone}`}>
+          {phone}
+        </a>
+      );
+    },
+  },
+
+  {
     accessorKey: "note",
-    header: "Note",
+    header: "備註",
   },
   {
     accessorKey: "email",
     header: "Email",
   },
-  {
-    accessorKey: "phone",
-    header: "Phone",
-  },
 
   {
-    accessorKey: "plan_name",
-    header: "Plan Name",
-    cell: ({ row }) => {
-      return row.getValue("plan_name") || "No Plan";
-    },
-  },
-  {
-    accessorKey: "subscription_status",
-    header: "Status",
-    cell: ({ row }) => {
-      const status = row.getValue("subscription_status");
-      switch (status) {
-        case "active":
-          return (
-            <Badge className="bg-green-500" variant="outline">
-              {status}
-            </Badge>
-          );
-        case "expired":
-          return (
-            <Badge className="bg-red-500" variant="outline">
-              {status}
-            </Badge>
-          );
-        default:
-          return "---";
-      }
-    },
-  },
-  {
-    accessorKey: "subscription_renewal_date",
-    header: "Renewal Date",
-    cell: ({ row }) => {
-      return row.getValue("subscription_renewal_date")
-        ? new Date(
-            row.getValue("subscription_renewal_date")
-          ).toLocaleDateString()
-        : "---";
-    },
+    accessorKey: "sub_count",
+    header: "訂閱數",
   },
   {
     accessorKey: "joined_at",
-    header: "Joined At",
+    header: "加入時間",
     cell: ({ row }) => {
       return new Date(row.getValue("joined_at")).toLocaleDateString();
     },
   },
-  // {
-  //   accessorKey: "subscription_plan_id",
-  //   header: "Plan ID",
-  // },
+  {
+    accessorKey: "id",
+    header: "ID",
+    cell: ({ row }) =>
+      "#" + String(row.getValue("id")).slice(0, 6).toUpperCase(),
+  },
+  {
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => {
+      const id = row.getValue("id");
+      // eslint-disable-next-line react-hooks/rules-of-hooks
+      const params = useParams();
+      const orgId = params.id;
+      return (
+        <Button asChild className="">
+          <Link href={`/merchant/orgs/${orgId}/customers/${id}`}>更多</Link>
+        </Button>
+      );
+    },
+  },
 ];

@@ -25,6 +25,7 @@ import {
 import { Icons } from "@/components/icons";
 import { Button } from "@/registry/new-york/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { H3 } from "@/components/typography";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -49,7 +50,7 @@ export function DataTable<TData, TValue>({
       <Card>
         <CardHeader>
           <CardTitle className="flex justify-between items-center">
-            <p>Customer Data</p>
+            <H3>客戶資料</H3>
             <Dialog>
               <DialogTrigger asChild>
                 <Button className="mr-5" variant={"outline"}>

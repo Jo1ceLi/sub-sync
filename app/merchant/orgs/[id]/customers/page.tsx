@@ -47,7 +47,6 @@ export default async function MerchantCustomer({
           </CardContent>
         </Card>
       </DataTable>
-      {/* <MerchantCRM customers={customers} /> */}
     </>
   );
 }
