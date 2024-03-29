@@ -33,9 +33,9 @@ export default async function Subscriptions({
   const txs = await getTransactions();
   console.log("txs", txs);
   return (
-    <Card className="flex flex-col flex-1 m-5">
+    <>
       <DataTable columns={columns} data={txs} />
       {/* <RecentSubscriptions /> */}
-    </Card>
+    </>
   );
 }

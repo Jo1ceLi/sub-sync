@@ -6,10 +6,12 @@ import { formatDesc } from "@/lib/utils";
 
 export const columns: ColumnDef<Transaction>[] = [
   {
-    accessorKey: "id",
-    header: "ID",
+    accessorKey: "created_at",
+    header: "訂購時間",
     cell: ({ row }) =>
-      "#" + String(row.getValue("id")).slice(0, 6).toUpperCase(),
+      new Date(row.getValue("created_at")).toLocaleDateString() +
+      "  " +
+      new Date(row.getValue("created_at")).toLocaleTimeString(),
   },
 
   {
@@ -45,14 +47,15 @@ export const columns: ColumnDef<Transaction>[] = [
       return phone || "無";
     },
   },
-  {
-    accessorKey: "created_at",
-    header: "訂購時間",
-    cell: ({ row }) =>
-      new Date(row.getValue("created_at")).toLocaleDateString(),
-  },
+
   {
     accessorKey: "rec_trade_id",
     header: "交易編號",
+  },
+  {
+    accessorKey: "id",
+    header: "ID",
+    cell: ({ row }) =>
+      "#" + String(row.getValue("id")).slice(0, 6).toUpperCase(),
   },
 ];
