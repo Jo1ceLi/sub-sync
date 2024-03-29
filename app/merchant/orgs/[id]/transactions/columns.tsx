@@ -12,6 +12,7 @@ export const columns: ColumnDef<Transaction>[] = [
       new Date(row.getValue("created_at")).toLocaleDateString() +
       "  " +
       new Date(row.getValue("created_at")).toLocaleTimeString(),
+    filterFn: "dateBetweenFilterFn",
   },
 
   {
