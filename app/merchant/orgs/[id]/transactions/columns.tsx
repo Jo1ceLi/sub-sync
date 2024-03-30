@@ -1,6 +1,6 @@
 "use client";
 
-import { ColumnDef } from "@tanstack/react-table";
+import { ColumnDef, FilterFnOption } from "@tanstack/react-table";
 import type { Transaction } from "@/types";
 import { formatDesc } from "@/lib/utils";
 
@@ -12,7 +12,7 @@ export const columns: ColumnDef<Transaction>[] = [
       new Date(row.getValue("created_at")).toLocaleDateString() +
       "  " +
       new Date(row.getValue("created_at")).toLocaleTimeString(),
-    filterFn: "dateBetweenFilterFn",
+    filterFn: "dateBetweenFilterFn" as FilterFnOption<Transaction>,
   },
 
   {

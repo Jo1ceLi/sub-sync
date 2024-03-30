@@ -35,12 +35,6 @@ import {
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 
-declare module "@tanstack/table-core" {
-  interface FilterFns {
-    dateBetweenFilterFn: FilterFn<unknown>;
-  }
-}
-
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
