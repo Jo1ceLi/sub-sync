@@ -128,3 +128,24 @@ export interface Transaction {
   created_at: string;
   rec_trade_id: string;
 }
+
+export interface Revenue {
+  revenue: number;
+  period: string;
+}
+
+export type Tx = {
+  total_amount: number;
+  d_transaction_date: string;
+  dow: number;
+};
+
+export interface Transactions {
+  curr: Tx[];
+  prev: Tx[];
+}
+
+export interface Insight {
+  revenue: Revenue[];
+  txs: Transactions;
+}
