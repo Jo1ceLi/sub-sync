@@ -74,6 +74,12 @@ export default async function DashboardPage({
 
   const merged = mergeDailyRevenue();
 
+  const TWDollar = new Intl.NumberFormat("zh-TW", {
+    style: "currency",
+    currency: "TWD",
+    maximumFractionDigits: 0,
+  });
+
   return (
     <>
       <div className="flex items-center justify-between space-y-2">
@@ -86,19 +92,19 @@ export default async function DashboardPage({
       </div>
       <Tabs defaultValue="overview" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="overview">7日分析</TabsTrigger>
+          <TabsTrigger value="overview">7日數據</TabsTrigger>
           <TabsTrigger value="analytics" disabled>
-            Analytics{" "}
+            商業分析{" "}
           </TabsTrigger>
           <TabsTrigger value="reports" disabled>
-            Reports{" "}
+            洞察報表{" "}
           </TabsTrigger>
-          <TabsTrigger value="notifications" disabled>
+          {/* <TabsTrigger value="notifications" disabled>
             Notifications{" "}
-          </TabsTrigger>
+          </TabsTrigger> */}
         </TabsList>
         <TabsContent value="overview" className="space-y-4">
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">本期營收</CardTitle>
@@ -117,11 +123,12 @@ export default async function DashboardPage({
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  $
-                  {
-                    insights?.revenue.filter((r) => r.period === "curr")[0]
-                      .revenue
-                  }
+                  {TWDollar.format(
+                    Number(
+                      insights?.revenue.filter((r) => r.period === "curr")[0]
+                        .revenue
+                    )
+                  )}
                 </div>
                 {/* <p className="text-xs text-muted-foreground">
                   +20.1% from last month
@@ -146,15 +153,54 @@ export default async function DashboardPage({
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  $
-                  {
-                    insights?.revenue.filter((r) => r.period === "prev")[0]
-                      .revenue
-                  }
+                  {TWDollar.format(
+                    Number(
+                      insights?.revenue.filter((r) => r.period === "prev")[0]
+                        .revenue
+                    )
+                  )}
                 </div>
                 {/* <p className="text-xs text-muted-foreground">
                   +20.1% from last month
                 </p> */}
+              </CardContent>
+            </Card>
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  新增用戶數
+                </CardTitle>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  className="h-4 w-4 text-muted-foreground"
+                >
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">
+                  {
+                    insights?.new_customers.filter(
+                      (nc) => nc.period === "curr"
+                    )[0].count
+                  }
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  上期新增用戶數:{" "}
+                  {
+                    insights?.new_customers.filter(
+                      (nc) => nc.period === "prev"
+                    )[0].count
+                  }
+                </p>
               </CardContent>
             </Card>
             {/* {訂閱} */}
@@ -185,6 +231,57 @@ export default async function DashboardPage({
                 </p>
               </CardContent>
             </Card> */}
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">
+                  新用戶平均消費額
+                </CardTitle>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  className="h-4 w-4 text-muted-foreground"
+                >
+                  <rect width="20" height="14" x="2" y="5" rx="2" />
+                  <path d="M2 10h20" />
+                </svg>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">
+                  {TWDollar.format(
+                    Number(
+                      insights?.purchase_value.filter(
+                        (pv) => pv.period === "curr"
+                      )[0].pv
+                    ) /
+                      Number(
+                        insights?.new_customers.filter(
+                          (nc) => nc.period === "curr"
+                        )[0].count
+                      )
+                  )}
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  上期新用戶平均消費額:{" "}
+                  {TWDollar.format(
+                    Number(
+                      insights?.purchase_value.filter(
+                        (pv) => pv.period === "prev"
+                      )[0].pv
+                    ) /
+                      Number(
+                        insights?.new_customers.filter(
+                          (nc) => nc.period === "prev"
+                        )[0].count
+                      )
+                  )}
+                </p>
+              </CardContent>
+            </Card>
             {/* <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Sales</CardTitle>
@@ -235,9 +332,9 @@ export default async function DashboardPage({
               </CardContent>
             </Card> */}
           </div>
-          <div className="grid gap-4 md:grid-col text-xs:grid-cols-7">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
             {/* <Card className="col-span-4"> */}
-            <Card className="col-span-7">
+            <Card className="col-span-5">
               <CardHeader>
                 <CardTitle>每日營收</CardTitle>
               </CardHeader>
@@ -245,17 +342,22 @@ export default async function DashboardPage({
                 <SevenDaysInsight chartdata={merged} />
               </CardContent>
             </Card>
-            {/* <Card className="col-span-3">
+            <Card className="col-span-2">
               <CardHeader>
-                <CardTitle>Recent Sales</CardTitle>
-                <CardDescription>
+                <CardTitle>
+                  營收分佈
+                  <span className="ml-3 text-xs text-slate-600 font-medium">
+                    {"即將推出"}
+                  </span>
+                </CardTitle>
+                {/* <CardDescription>
                   You made 265 sales this month.
-                </CardDescription>
+                </CardDescription> */}
               </CardHeader>
-              <CardContent>
+              <CardContent className="blur-sm">
                 <RecentSales />
               </CardContent>
-            </Card> */}
+            </Card>
           </div>
         </TabsContent>
       </Tabs>

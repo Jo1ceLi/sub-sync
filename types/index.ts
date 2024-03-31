@@ -140,6 +140,16 @@ export type Tx = {
   dow: number;
 };
 
+export type NC = {
+  count: number;
+  period: string;
+};
+
+export type NCPV = {
+  pv: number;
+  period: string;
+};
+
 export interface Transactions {
   curr: Tx[];
   prev: Tx[];
@@ -148,4 +158,6 @@ export interface Transactions {
 export interface Insight {
   revenue: Revenue[];
   txs: Transactions;
+  new_customers: NC[];
+  purchase_value: NCPV[];
 }
