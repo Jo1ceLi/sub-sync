@@ -3,9 +3,11 @@
 import { ColumnDef } from "@tanstack/react-table";
 import type { Customer } from "@/types";
 import Image from "next/image";
-import { Button } from "@/registry/new-york/ui/button";
-import Link from "next/link";
 import { useParams } from "next/navigation";
+import {
+  CustomerActions,
+  EditCustomerDialog,
+} from "@/app/merchant/components/customer-actions";
 
 export const columns: ColumnDef<Customer>[] = [
   {
@@ -18,13 +20,13 @@ export const columns: ColumnDef<Customer>[] = [
         <Image
           className="rounded-full"
           style={{
-            aspectRatio: "32/32",
+            aspectRatio: "1/1",
             objectFit: "cover",
           }}
           alt={altname}
           src={pic}
-          width={36}
-          height={36}
+          width={35}
+          height={35}
         />
       );
     },
@@ -76,14 +78,27 @@ export const columns: ColumnDef<Customer>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const id = row.getValue("id");
+      const id = row.getValue("id") as string;
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const params = useParams();
-      const orgId = params.id;
+      const orgId = params.id as string;
+
+      const customerInfo = {
+        name: row.getValue("name") as string,
+        note: row.getValue("note") as string,
+        email: row.getValue("email") as string,
+        phone: row.getValue("phone") as string,
+      };
       return (
-        <Button asChild className="">
-          <Link href={`/merchant/orgs/${orgId}/customers/${id}`}>更多</Link>
-        </Button>
+        <>
+          <EditCustomerDialog
+            orgId={orgId}
+            cid={id}
+            customerInfo={customerInfo}
+          >
+            <CustomerActions orgId={orgId} cid={id} />
+          </EditCustomerDialog>
+        </>
       );
     },
   },

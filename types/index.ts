@@ -66,6 +66,7 @@ export type MerchantMenuTab =
 type ClientInfo = {
   id: string;
   name: string;
+  note: string;
   uid: string; //line uid
   email: string;
   picture: string;
