@@ -80,6 +80,13 @@ export default async function DashboardPage({
     maximumFractionDigits: 0,
   });
 
+  const prevDurationNewCustomerCount = Number(
+    insights?.new_customers.filter((nc) => nc.period === "prev")[0].count
+  );
+  const currDurationNewCustomerCount = Number(
+    insights?.new_customers.filter((nc) => nc.period === "curr")[0].count
+  );
+
   return (
     <>
       <div className="flex items-center justify-between space-y-2">
@@ -92,7 +99,7 @@ export default async function DashboardPage({
       </div>
       <Tabs defaultValue="overview" className="space-y-4">
         <TabsList>
-          <TabsTrigger value="overview">7日數據</TabsTrigger>
+          <TabsTrigger value="overview">1 週數據</TabsTrigger>
           <TabsTrigger value="analytics" disabled>
             商業分析{" "}
           </TabsTrigger>
@@ -187,19 +194,10 @@ export default async function DashboardPage({
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {
-                    insights?.new_customers.filter(
-                      (nc) => nc.period === "curr"
-                    )[0].count
-                  }
+                  {currDurationNewCustomerCount}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  上期新增用戶數:{" "}
-                  {
-                    insights?.new_customers.filter(
-                      (nc) => nc.period === "prev"
-                    )[0].count
-                  }
+                  上期新增用戶數: {prevDurationNewCustomerCount}
                 </p>
               </CardContent>
             </Card>
@@ -252,33 +250,27 @@ export default async function DashboardPage({
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">
-                  {TWDollar.format(
-                    Number(
-                      insights?.purchase_value.filter(
-                        (pv) => pv.period === "curr"
-                      )[0].pv
-                    ) /
-                      Number(
-                        insights?.new_customers.filter(
-                          (nc) => nc.period === "curr"
-                        )[0].count
-                      )
-                  )}
+                  {currDurationNewCustomerCount === 0
+                    ? 0
+                    : TWDollar.format(
+                        Number(
+                          insights?.purchase_value.filter(
+                            (pv) => pv.period === "curr"
+                          )[0].pv
+                        ) / currDurationNewCustomerCount
+                      )}
                 </div>
                 <p className="text-xs text-muted-foreground">
                   上期新用戶平均消費額:{" "}
-                  {TWDollar.format(
-                    Number(
-                      insights?.purchase_value.filter(
-                        (pv) => pv.period === "prev"
-                      )[0].pv
-                    ) /
-                      Number(
-                        insights?.new_customers.filter(
-                          (nc) => nc.period === "prev"
-                        )[0].count
-                      )
-                  )}
+                  {prevDurationNewCustomerCount === 0
+                    ? 0
+                    : TWDollar.format(
+                        Number(
+                          insights?.purchase_value.filter(
+                            (pv) => pv.period === "prev"
+                          )[0].pv
+                        ) / prevDurationNewCustomerCount
+                      )}
                 </p>
               </CardContent>
             </Card>
