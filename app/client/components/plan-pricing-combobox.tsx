@@ -25,7 +25,7 @@ import { useRouter } from "next/navigation";
 import {
   CardPopover,
   NewPayment,
-} from "@/app/client/components/course-pricing-combobox";
+} from "@/app/client/components/voucher-pricing-combobox";
 import { GetPrime } from "./tappay-func";
 import { Checkbox } from "@/components/ui/checkbox";
 

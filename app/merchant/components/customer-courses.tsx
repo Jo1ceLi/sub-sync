@@ -1,7 +1,7 @@
 import { H2 } from "@/components/typography";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/registry/new-york/ui/button";
-import { CourseCardInfo } from "@/types";
+import { VoucherCardInfo } from "@/types";
 import { CheckIcon, PauseIcon, Cross2Icon } from "@radix-ui/react-icons";
 import { RedeemCourseAlertDialog } from "./redeem-course-alert-dialog";
 
@@ -9,7 +9,7 @@ export default function CustomerCourses({
   courses,
   params,
 }: {
-  courses: CourseCardInfo[];
+  courses: VoucherCardInfo[];
   params: any;
 }) {
   // console.log("p=", params);

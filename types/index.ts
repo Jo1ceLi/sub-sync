@@ -21,7 +21,7 @@ export interface Pricing {
   price: number;
   session_count: number;
 }
-export interface Course {
+export interface Voucher {
   id: string;
   title: string;
   description: string;
@@ -49,7 +49,7 @@ export type SubscriptionCardInfo = {
   plan_name: string;
 };
 
-export type CourseCardInfo = {
+export type VoucherCardInfo = {
   id: string;
   title: string;
   description: string;
@@ -77,7 +77,7 @@ type ClientInfo = {
 export type CustomerDetail = {
   info: ClientInfo;
   subscriptions: SubscriptionCardInfo[];
-  vouchers: CourseCardInfo[];
+  vouchers: VoucherCardInfo[];
 };
 
 export interface ClientSubscription {

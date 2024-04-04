@@ -13,13 +13,13 @@ type PaymentWithNewCard = {
   remember: boolean;
 };
 
-export const purchaseCourseUsingExistingCard = async ({
+export const purchaseVoucherUsingExistingCard = async ({
   orgId,
-  courseId,
+  voucherId,
   data,
 }: {
   orgId: string;
-  courseId: string;
+  voucherId: string;
   data: {
     cardId: string;
     pricing: {
@@ -32,7 +32,7 @@ export const purchaseCourseUsingExistingCard = async ({
   const token = cookies().get("ctoken");
   if (token) {
     const res = await fetch(
-      `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/vouchers/${courseId}/payment/existing-card`,
+      `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/vouchers/${voucherId}/payment/existing-card`,
       {
         method: "POST",
         body: JSON.stringify(data),
@@ -48,13 +48,13 @@ export const purchaseCourseUsingExistingCard = async ({
   }
 };
 
-export const purchaseCourseUsingNewCard = async ({
+export const purchaseVoucherUsingNewCard = async ({
   orgId,
-  courseId,
+  voucherId,
   data,
 }: {
   orgId: string;
-  courseId: string;
+  voucherId: string;
   data: PaymentWithNewCard & {
     pricing: {
       price: number;
@@ -66,7 +66,7 @@ export const purchaseCourseUsingNewCard = async ({
   const token = cookies().get("ctoken");
   if (token) {
     const res = await fetch(
-      `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/vouchers/${courseId}/payment/new-card`,
+      `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/vouchers/${voucherId}/payment/new-card`,
       {
         method: "POST",
         body: JSON.stringify(data),

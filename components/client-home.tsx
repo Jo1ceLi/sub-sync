@@ -12,7 +12,7 @@ import { getAuth } from "@/app/api/[auth]/auth";
 import Link from "next/link";
 import { SubscriptionPlanCard } from "@/app/client/orgs/[id]/subscriptions/page";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import ClientCourseCard from "@/app/client/components/course-card";
+import ClientVoucherCard from "@/app/client/components/course-card";
 import ClientPlansCard from "@/app/client/components/sub-plan-card";
 import { clientGetSubscription } from "@/app/client/components/actions/get-clinet-sub";
 
@@ -92,7 +92,7 @@ export async function ClientHome({
           <ClientPlansCard orgId={orgId} />
         </TabsContent>
         <TabsContent value="course">
-          <ClientCourseCard />
+          <ClientVoucherCard />
         </TabsContent>
       </Tabs>
 

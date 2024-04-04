@@ -47,22 +47,22 @@ import { UseFormReturn, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import {
-  purchaseCourseUsingExistingCard,
-  purchaseCourseUsingNewCard,
+  purchaseVoucherUsingExistingCard,
+  purchaseVoucherUsingNewCard,
 } from "@/app/client/components/actions/payment";
 import { useRouter } from "next/navigation";
 import { Checkbox } from "@/components/ui/checkbox";
 
-export function CoursePricingCombobox({
+export function VoucherPricingCombobox({
   pricing,
   cards,
   org,
-  courseId,
+  voucherId,
 }: {
   pricing: Pricing[];
   cards: CardType[] | undefined;
   org: Org;
-  courseId: string | undefined;
+  voucherId: string | undefined;
 }) {
   const [openPricing, setOpenPricing] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -113,10 +113,10 @@ export function CoursePricingCombobox({
   const router = useRouter();
   async function onSubmit(data: z.infer<typeof schema>) {
     setLoading(true);
-    if (courseId && "cardId" in data) {
+    if (voucherId && "cardId" in data) {
       //if purchase success redir to billing page
-      const status = await purchaseCourseUsingExistingCard({
-        courseId,
+      const status = await purchaseVoucherUsingExistingCard({
+        voucherId: voucherId,
         orgId: org.id,
         data,
       });
@@ -126,10 +126,10 @@ export function CoursePricingCombobox({
       } else {
         toast.error("購買失敗");
       }
-    } else if (courseId && "remember" in data) {
+    } else if (voucherId && "remember" in data) {
       const callback = async (prime: string) => {
-        const status = await purchaseCourseUsingNewCard({
-          courseId,
+        const status = await purchaseVoucherUsingNewCard({
+          voucherId: voucherId,
           orgId: org.id,
           data: {
             prime: prime,

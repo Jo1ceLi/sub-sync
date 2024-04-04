@@ -1,7 +1,7 @@
-import { Card as CardType, Course, Plan } from "@/types";
+import { Card as CardType, Voucher, Plan } from "@/types";
 import { cookies } from "next/headers";
 import { BackButton } from "@/app/client/components/back-button";
-import { CoursePricingCombobox } from "@/app/client/components/course-pricing-combobox";
+import { VoucherPricingCombobox } from "@/app/client/components/voucher-pricing-combobox";
 import { PlanPricingCombobox } from "@/app/client/components/plan-pricing-combobox";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { notFound } from "next/navigation";
@@ -78,7 +78,7 @@ export default async function Checkout({ params }: { params: any }) {
         }
       );
       if (res.ok) {
-        return (await res.json()) as Course;
+        return (await res.json()) as Voucher;
       }
     }
   };
@@ -101,11 +101,11 @@ export default async function Checkout({ params }: { params: any }) {
             </CardHeader>
             <CardContent>
               <div className="flex justify-center">
-                <CoursePricingCombobox
+                <VoucherPricingCombobox
                   pricing={course.pricing}
                   org={org}
                   cards={cards}
-                  courseId={productId}
+                  voucherId={productId}
                 />
               </div>
             </CardContent>

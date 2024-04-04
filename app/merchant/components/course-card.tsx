@@ -6,7 +6,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { cookies, headers } from "next/headers";
-import { Course } from "@/types/index";
+import { Voucher } from "@/types/index";
 import { CreatePlanDialog } from "../orgs/components/create-plan-dialog";
 import { postCourseAction } from "../orgs/plan-server-action";
 import { H2, H3, H4, TP } from "@/components/typography";
@@ -34,7 +34,7 @@ export default async function CourseCard() {
     }
   };
 
-  const courses = (await getCourses()) as Course[];
+  const courses = (await getCourses()) as Voucher[];
   return (
     <Card>
       <CardHeader className="pb-4">
