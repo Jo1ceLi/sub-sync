@@ -77,7 +77,7 @@ type ClientInfo = {
 export type CustomerDetail = {
   info: ClientInfo;
   subscriptions: SubscriptionCardInfo[];
-  courses: CourseCardInfo[];
+  vouchers: CourseCardInfo[];
 };
 
 export interface ClientSubscription {

@@ -93,7 +93,7 @@ export default async function CustomerByID({
           <CustomerSubscriptions plans={customerDetail.subscriptions} />
         </TabsContent>
         <TabsContent value="course">
-          <CustomerCourses courses={customerDetail.courses} params={params} />
+          <CustomerCourses courses={customerDetail.vouchers} params={params} />
         </TabsContent>
       </Tabs>
     </>
