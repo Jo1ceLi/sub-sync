@@ -32,7 +32,7 @@ export const purchaseCourseUsingExistingCard = async ({
   const token = cookies().get("ctoken");
   if (token) {
     const res = await fetch(
-      `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/courses/${courseId}/payment/existing-card`,
+      `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/vouchers/${courseId}/payment/existing-card`,
       {
         method: "POST",
         body: JSON.stringify(data),
@@ -66,7 +66,7 @@ export const purchaseCourseUsingNewCard = async ({
   const token = cookies().get("ctoken");
   if (token) {
     const res = await fetch(
-      `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/courses/${courseId}/payment/new-card`,
+      `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/vouchers/${courseId}/payment/new-card`,
       {
         method: "POST",
         body: JSON.stringify(data),

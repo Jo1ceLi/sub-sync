@@ -16,7 +16,7 @@ export const redeemCourse = async ({
   const token = cookies().get("utoken");
   if (token) {
     const res = await fetch(
-      `${process.env.BACKEND_HOST}/api/orgs/${orgId}/courses/${courseId}/redeem`,
+      `${process.env.BACKEND_HOST}/api/orgs/${orgId}/vouchers/${courseId}/redeem`,
       {
         method: "POST",
         body: JSON.stringify({ clientId: clientId }),

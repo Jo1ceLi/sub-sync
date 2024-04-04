@@ -69,7 +69,7 @@ export default async function Checkout({ params }: { params: any }) {
     const token = cookies().get("ctoken");
     if (productId && orgId && type === "course" && token) {
       const res = await fetch(
-        `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/courses/${productId}`,
+        `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/vouchers/${productId}`,
         {
           headers: {
             "Content-Type": "application/json",

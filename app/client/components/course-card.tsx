@@ -18,11 +18,11 @@ export default async function ClientCourseCard() {
     const splits = url.split("/orgs/");
     orgId = splits[1].substring(0, 36);
   }
-  const getCourses = async () => {
+  const getVouchers = async () => {
     const token = cookies().get("ctoken");
     if (orgId && token) {
       const res = await fetch(
-        `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/courses`,
+        `${process.env.BACKEND_HOST}/api/client/orgs/${orgId}/vouchers`,
         {
           headers: {
             Authorization: "Bearer " + token!.value,
@@ -36,7 +36,7 @@ export default async function ClientCourseCard() {
     }
   };
 
-  const courses = (await getCourses()) as Course[];
+  const courses = (await getVouchers()) as Course[];
   return (
     <Card>
       <CardHeader className="pb-4">
