@@ -5,18 +5,18 @@ import { cookies } from "next/headers";
 
 export const redeemVoucher = async ({
   orgId,
-  courseId,
+  voucherId,
   clientId,
 }: {
   orgId: string;
-  courseId: string;
+  voucherId: string;
   clientId: string;
 }) => {
   "use server";
   const token = cookies().get("utoken");
   if (token) {
     const res = await fetch(
-      `${process.env.BACKEND_HOST}/api/orgs/${orgId}/vouchers/${courseId}/redeem`,
+      `${process.env.BACKEND_HOST}/api/orgs/${orgId}/vouchers/${voucherId}/redeem`,
       {
         method: "POST",
         body: JSON.stringify({ clientId: clientId }),

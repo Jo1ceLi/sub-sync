@@ -7,13 +7,13 @@ import {
 } from "@/components/ui/card";
 import { cookies, headers } from "next/headers";
 import { Voucher } from "@/types/index";
-import { CreatePlanDialog } from "../orgs/components/create-plan-dialog";
-import { postCourseAction } from "../orgs/plan-server-action";
+import { CreatePlanDialog } from "@/app/merchant/orgs/components/create-plan-dialog";
+import { postVoucherAction } from "@/app/merchant/orgs/plan-server-action";
 import { H2, H3, H4, TP } from "@/components/typography";
-import { CreateCourseForm } from "./create-course-form";
+import { CreateVoucherForm } from "@/app/merchant/components/create-voucher-form";
 
-export default async function CourseCard() {
-  const getCourses = async () => {
+export default async function VoucherCard() {
+  const getVouchers = async () => {
     const token = cookies().get("utoken") ?? cookies().get("ctoken");
     const url = headers().get("x-url");
     if (url && token) {
@@ -34,7 +34,7 @@ export default async function CourseCard() {
     }
   };
 
-  const courses = (await getCourses()) as Voucher[];
+  const vouchers = (await getVouchers()) as Voucher[];
   return (
     <Card>
       <CardHeader className="pb-4">
@@ -42,26 +42,26 @@ export default async function CourseCard() {
           <H3>課程</H3>
           <div>
             <CreatePlanDialog text={"新增課程"}>
-              <CreateCourseForm action={postCourseAction} />
+              <CreateVoucherForm action={postVoucherAction} />
             </CreatePlanDialog>
           </div>
         </CardTitle>
       </CardHeader>
       <CardContent className="px-5">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {courses &&
-            courses.length > 0 &&
-            courses.map((p) => (
+          {vouchers &&
+            vouchers.length > 0 &&
+            vouchers.map((v) => (
               <>
-                <Card key={p.id}>
+                <Card key={v.id}>
                   <CardHeader className="flex items-center gap-4 p-4 rounded-t-lg">
-                    <H2>{p.title}</H2>
+                    <H2>{v.title}</H2>
                   </CardHeader>
                   <CardContent className="px-4 grid gap-2">
                     <div className="gap-4">
                       <TP className="mb-2">課程售價</TP>
                       <div className="flex flex-wrap justify-evenly  md:justify-between  bg-slate-50">
-                        {p.pricing.map((pp, idx) => (
+                        {v.pricing.map((pp, idx) => (
                           <div className="px-2 m-2" key={idx}>
                             <H4>
                               ${pp.price} /{pp.session_count}堂
@@ -73,7 +73,7 @@ export default async function CourseCard() {
                     <div className="grid gap-1.5">
                       <TP>課程內容</TP>
                       <ul className="pl-4 list-disc list-outside">
-                        {p.description}
+                        {v.description}
                       </ul>
                     </div>
                   </CardContent>

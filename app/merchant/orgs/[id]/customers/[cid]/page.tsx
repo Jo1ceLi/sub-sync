@@ -1,4 +1,4 @@
-import CustomerCourses from "@/app/merchant/components/customer-courses";
+import CustomerVouchers from "@/app/merchant/components/customer-vouchers";
 import CustomerSubscriptions from "@/app/merchant/components/customer-subscriptions";
 import {
   Card,
@@ -93,7 +93,10 @@ export default async function CustomerByID({
           <CustomerSubscriptions plans={customerDetail.subscriptions} />
         </TabsContent>
         <TabsContent value="course">
-          <CustomerCourses courses={customerDetail.vouchers} params={params} />
+          <CustomerVouchers
+            vouchers={customerDetail.vouchers}
+            params={params}
+          />
         </TabsContent>
       </Tabs>
     </>

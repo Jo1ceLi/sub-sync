@@ -11,17 +11,17 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { redeemVoucher } from "@/app/merchant/components/actions/redeem-course";
+import { redeemVoucher } from "@/app/merchant/components/actions/redeem-voucher";
 import { toast } from "sonner";
 
-export function RedeemCourseAlertDialog({
+export function RedeemVoucherAlertDialog({
   clientId,
   orgId,
-  courseId,
+  voucherId,
 }: {
   clientId: string;
   orgId: string;
-  courseId: string;
+  voucherId: string;
 }) {
   return (
     <AlertDialog>
@@ -39,7 +39,7 @@ export function RedeemCourseAlertDialog({
               const status = await redeemVoucher({
                 clientId,
                 orgId,
-                courseId,
+                voucherId: voucherId,
               });
               if (status === 200) {
                 toast.success("兌換成功");

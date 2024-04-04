@@ -3,13 +3,13 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/registry/new-york/ui/button";
 import { VoucherCardInfo } from "@/types";
 import { CheckIcon, PauseIcon, Cross2Icon } from "@radix-ui/react-icons";
-import { RedeemCourseAlertDialog } from "./redeem-course-alert-dialog";
+import { RedeemVoucherAlertDialog } from "./redeem-voucher-alert-dialog";
 
-export default function CustomerCourses({
-  courses,
+export default function CustomerVouchers({
+  vouchers,
   params,
 }: {
-  courses: VoucherCardInfo[];
+  vouchers: VoucherCardInfo[];
   params: any;
 }) {
   // console.log("p=", params);
@@ -22,23 +22,23 @@ export default function CustomerCourses({
       </CardHeader>
       <CardContent className="px-5">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {courses && courses.length > 0 ? (
-            courses.map((c) => {
+          {vouchers && vouchers.length > 0 ? (
+            vouchers.map((v) => {
               return (
-                <Card key={c.id}>
+                <Card key={v.id}>
                   <CardHeader className="flex items-center gap-4 p-2 rounded-t-lg">
-                    <H2 className="font-semibold">{c.title}</H2>
+                    <H2 className="font-semibold">{v.title}</H2>
                   </CardHeader>
                   <CardContent className="p-4 grid gap-2">
                     {/* <div className="flex gap-4 align-middle"> */}
                     <div className="flex items-center justify-between">
                       <div>
                         <h3 className="font-semibold">
-                          剩餘數量: <span className="">{c.session_sum}</span>
+                          剩餘數量: <span className="">{v.session_sum}</span>
                         </h3>
                       </div>
-                      <RedeemCourseAlertDialog
-                        courseId={c.id}
+                      <RedeemVoucherAlertDialog
+                        voucherId={v.id}
                         clientId={params.cid}
                         orgId={params.id}
                       />

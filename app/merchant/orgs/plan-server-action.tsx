@@ -4,7 +4,7 @@ import { z } from "zod";
 import { formSchema } from "./components/edit-plan-form";
 import { cookies } from "next/headers";
 import { revalidatePath } from "next/cache";
-import { createCourseFormSchema } from "@/app/merchant/components/create-course-form";
+import { createVoucherFormSchema } from "@/app/merchant/components/create-voucher-form";
 
 export const postPlanAction = async (
   oid: string,
@@ -50,9 +50,9 @@ export const updatePlanAction = async (
   }
 };
 
-export const postCourseAction = async (
+export const postVoucherAction = async (
   oid: string,
-  values: z.infer<typeof createCourseFormSchema>
+  values: z.infer<typeof createVoucherFormSchema>
 ) => {
   "use server";
   const token = cookies().get("utoken");

@@ -65,7 +65,7 @@ export default async function Checkout({ params }: { params: any }) {
     }
   };
 
-  const getCourse = async () => {
+  const getVoucher = async () => {
     const token = cookies().get("ctoken");
     if (productId && orgId && type === "course" && token) {
       const res = await fetch(
@@ -86,23 +86,23 @@ export default async function Checkout({ params }: { params: any }) {
   const org = await getOrgById();
   const cards = await getCards();
   const plan = await getPlan();
-  const course = await getCourse();
+  const voucher = await getVoucher();
 
   return (
     <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
       <div className="grid gap-4 md:grid-cols-2">
-        {course ? (
+        {voucher ? (
           <Card className="">
             <CardHeader className="grid pt-2">
               <BackButton />
               <CardTitle className="justify-self-center text-2xl">
-                購買 {course.title}
+                購買 {voucher.title}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="flex justify-center">
                 <VoucherPricingCombobox
-                  pricing={course.pricing}
+                  pricing={voucher.pricing}
                   org={org}
                   cards={cards}
                   voucherId={productId}

@@ -17,7 +17,7 @@ import { z } from "zod";
 import { PlusCircledIcon, TrashIcon } from "@radix-ui/react-icons";
 import { useState } from "react";
 
-export const createCourseFormSchema = z.object({
+export const createVoucherFormSchema = z.object({
   title: z.string().max(20),
   description: z.string(),
   pricing: z.array(
@@ -28,15 +28,15 @@ export const createCourseFormSchema = z.object({
   ),
 });
 
-export function CreateCourseForm({
+export function CreateVoucherForm({
   action,
   setOpen,
 }: {
   action: (...args: any) => Promise<void>;
   setOpen?: (open: boolean) => void;
 }) {
-  const form = useForm<z.infer<typeof createCourseFormSchema>>({
-    resolver: zodResolver(createCourseFormSchema),
+  const form = useForm<z.infer<typeof createVoucherFormSchema>>({
+    resolver: zodResolver(createVoucherFormSchema),
     defaultValues: {
       title: "",
       description: "",
@@ -58,7 +58,7 @@ export function CreateCourseForm({
   const orgId = pathname.split("/orgs/")[1].split("/")[0];
 
   const handleSubmit = async (
-    values: z.infer<typeof createCourseFormSchema>
+    values: z.infer<typeof createVoucherFormSchema>
   ) => {
     await action(orgId, values);
     setOpen!(false);
