@@ -57,7 +57,7 @@ export const postCourseAction = async (
   "use server";
   const token = cookies().get("utoken");
   const res = await fetch(
-    `${process.env.BACKEND_HOST}/api/orgs/${oid}/courses`,
+    `${process.env.BACKEND_HOST}/api/orgs/${oid}/vouchers`,
     {
       method: "POST",
       body: JSON.stringify(values),

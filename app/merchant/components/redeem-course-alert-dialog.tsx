@@ -11,7 +11,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { redeemCourse } from "@/app/merchant/components/actions/redeem-course";
+import { redeemVoucher } from "@/app/merchant/components/actions/redeem-course";
 import { toast } from "sonner";
 
 export function RedeemCourseAlertDialog({
@@ -36,7 +36,7 @@ export function RedeemCourseAlertDialog({
           <AlertDialogCancel>取消</AlertDialogCancel>
           <AlertDialogAction
             onClick={async () => {
-              const status = await redeemCourse({
+              const status = await redeemVoucher({
                 clientId,
                 orgId,
                 courseId,

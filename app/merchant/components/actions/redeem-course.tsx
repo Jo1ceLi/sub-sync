@@ -3,7 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 
-export const redeemCourse = async ({
+export const redeemVoucher = async ({
   orgId,
   courseId,
   clientId,

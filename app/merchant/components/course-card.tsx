@@ -20,7 +20,7 @@ export default async function CourseCard() {
       const splits = url.split("/orgs/");
       const orgId = splits[1].substring(0, 36);
       const res = await fetch(
-        `${process.env.BACKEND_HOST}/api/orgs/${orgId}/courses`,
+        `${process.env.BACKEND_HOST}/api/orgs/${orgId}/vouchers`,
         {
           headers: {
             Authorization: "Bearer " + token!.value,
