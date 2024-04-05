@@ -6,13 +6,12 @@ import {
   Card,
   CardFooter,
 } from "@/components/ui/card";
-import { Button } from "@/registry/new-york/ui/button";
 import { cookies, headers } from "next/headers";
 import { Plan } from "@/types/index";
-import { CreatePlanDialog } from "../orgs/components/create-plan-dialog";
+import { DialogParent } from "@/app/merchant/orgs/components/dialog-parent";
 import { postPlanAction, updatePlanAction } from "../orgs/plan-server-action";
-import { EditPlanDialog } from "./edit-plan-dialog";
-import { H2, H3 } from "@/components/typography";
+import { EditPlanDialog } from "@/app/merchant/components/edit-plan-dialog";
+import { H3 } from "@/components/typography";
 import { CreateSubPlanForm } from "@/app/merchant/components/create-sub-plan-form copy";
 
 export default async function PlansCard() {
@@ -43,9 +42,9 @@ export default async function PlansCard() {
         <CardTitle className="flex items-center justify-between">
           <H3>訂閱方案</H3>
           <div>
-            <CreatePlanDialog text={"新增訂閱方案"}>
+            <DialogParent text={"新增訂閱方案"}>
               <CreateSubPlanForm action={postPlanAction} />
-            </CreatePlanDialog>
+            </DialogParent>
           </div>
         </CardTitle>
         {/* <CardContent className="text-sm">

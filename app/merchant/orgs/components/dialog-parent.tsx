@@ -7,21 +7,24 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { cn } from "@/lib/utils";
 import { Button } from "@/registry/new-york/ui/button";
 import { cloneElement, useState } from "react";
 
-export function CreatePlanDialog({
+interface DialogProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+export function DialogParent({
   text,
+  className,
   children,
-}: {
-  text: string;
-  children: any;
-}) {
+}: DialogProps & { text: string; children: React.ReactElement }) {
   const [open, setOpen] = useState(false);
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline">{text}</Button>
+        <Button className={cn(className)} variant="outline">
+          {text}
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

@@ -7,10 +7,11 @@ import {
 } from "@/components/ui/card";
 import { cookies, headers } from "next/headers";
 import { Voucher } from "@/types/index";
-import { CreatePlanDialog } from "@/app/merchant/orgs/components/create-plan-dialog";
+import { DialogParent } from "@/app/merchant/orgs/components/dialog-parent";
 import { postVoucherAction } from "@/app/merchant/orgs/plan-server-action";
 import { H2, H3, H4, TP } from "@/components/typography";
 import { CreateVoucherForm } from "@/app/merchant/components/create-voucher-form";
+import { EditVoucherForm } from "@/app/merchant/components/edit-voucher-form";
 
 export default async function VoucherCard() {
   const getVouchers = async () => {
@@ -41,9 +42,9 @@ export default async function VoucherCard() {
         <CardTitle className="flex items-center justify-between">
           <H3>課程</H3>
           <div>
-            <CreatePlanDialog text={"新增課程"}>
+            <DialogParent text={"新增課程"}>
               <CreateVoucherForm action={postVoucherAction} />
-            </CreatePlanDialog>
+            </DialogParent>
           </div>
         </CardTitle>
       </CardHeader>
@@ -78,6 +79,9 @@ export default async function VoucherCard() {
                     </div>
                   </CardContent>
                   <CardFooter>
+                    <DialogParent className={"w-full"} text="編輯票券">
+                      <EditVoucherForm voucher={v} />
+                    </DialogParent>
                     {/* <EditPlanDialog action={updatePlanAction} plan={p} /> */}
                   </CardFooter>
                 </Card>
