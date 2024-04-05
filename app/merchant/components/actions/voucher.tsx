@@ -32,3 +32,30 @@ export const redeemVoucher = async ({
     }
   }
 };
+
+export const editVoucher = async (
+  orgId: string,
+  voucherId: string,
+  body: any
+) => {
+  "use server";
+  const token = cookies().get("utoken");
+  if (token) {
+    const res = await fetch(
+      `${process.env.BACKEND_HOST}/api/orgs/${orgId}/vouchers/${voucherId}`,
+      {
+        method: "PUT",
+        body: JSON.stringify(body),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token.value,
+        },
+      }
+    );
+    if (res.ok) {
+      revalidatePath("/merchant/orgs/[id]/plans", "page");
+      return res.status;
+    }
+  }
+  return;
+};

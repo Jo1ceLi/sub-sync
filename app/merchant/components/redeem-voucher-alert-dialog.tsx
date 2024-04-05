@@ -11,7 +11,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { redeemVoucher } from "@/app/merchant/components/actions/redeem-voucher";
+import { redeemVoucher } from "@/app/merchant/components/actions/voucher";
 import { toast } from "sonner";
 
 export function RedeemVoucherAlertDialog({
