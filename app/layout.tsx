@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { Inter as FontSans } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -41,6 +42,7 @@ export default function RootLayout({
         {children}
         <Toaster />
       </body>
+      <GoogleAnalytics gaId="G-EVMH9XYP5S" />
     </html>
   );
 }
